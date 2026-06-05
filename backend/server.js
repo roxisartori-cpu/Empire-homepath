@@ -56,6 +56,19 @@ app.get('/api/status/:id', (req, res) => {
   }
 });
 
+app.post('/api/lender-inquiry', (req, res) => {
+  const { program_name, name, email, phone, message } = req.body;
+  const id = crypto.randomUUID();
+  const created_at = new Date().toISOString();
+  
+  try {
+    runDb(`INSERT INTO lender_inquiries (id, program_name, name, email, phone, message, created_at) VALUES ('${id}', '${program_name.replace(/'/g, "''")}', '${name.replace(/'/g, "''")}', '${email.replace(/'/g, "''")}', '${phone.replace(/'/g, "''")}', '${message.replace(/'/g, "''")}', '${created_at}')`);
+    res.json({ success: true, id });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Bridge server listening on http://0.0.0.0:${PORT}`);
 });

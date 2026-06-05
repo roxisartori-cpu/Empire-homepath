@@ -5,15 +5,15 @@
       "items": [
         {
           "task": "Check your credit score",
-          "details": "Most help programs need a score of 620 or higher. A higher score often means you'll pay less to borrow money."
+          "details": "Most assistance programs require a score of 620 or higher. A higher score often leads to better interest rates."
         },
         {
-          "task": "See how much you've saved for a down payment",
-          "details": "Try to save at least 1% to 3% of the home's price, even if you plan to use a grant. It shows lenders you are ready for this big step."
+          "task": "Calculate your down payment savings",
+          "details": "Aim for at least 1% to 3% of the home price, even if you plan to use a grant. Lenders like to see that you have your own 'skin in the game'."
         },
         {
           "task": "Review your monthly debts",
-          "details": "Lenders look at how much of your monthly income goes to paying debts. Ideally, this should be less than 43% of what you earn before taxes."
+          "details": "Lenders look at your Debt-to-Income (DTI) ratio. Ideally, your total monthly debt payments should be less than 43% of your gross monthly income."
         }
       ]
     },
@@ -22,7 +22,7 @@
       "items": [
         {
           "task": "Tax Returns",
-          "details": "Gather your signed Federal tax returns for the last two years."
+          "details": "Gather your signed Federal tax returns for the last two years, including all schedules."
         },
         {
           "task": "W-2 Statements",
@@ -30,15 +30,15 @@
         },
         {
           "task": "Pay Stubs",
-          "details": "Save your most recent pay stubs covering at least the last 30 days."
+          "details": "Save your most recent consecutive pay stubs covering at least the last 30 days."
         },
         {
           "task": "Bank Statements",
-          "details": "Get the last two months of statements for all your bank and investment accounts."
+          "details": "Provide the last two months of statements for all your bank and investment accounts (all pages included)."
         },
         {
           "task": "Identification",
-          "details": "Make sure you have a valid, unexpired ID, such as a Driver's License or Passport."
+          "details": "Ensure you have a valid, unexpired government-issued ID, such as a Driver's License or Passport."
         }
       ]
     },
@@ -47,7 +47,7 @@
       "items": [
         {
           "task": "Complete Homebuyer Education",
-          "details": "Many programs require you to take a class on how to buy a home. You must use an approved housing agency."
+          "details": "Mandatory for SONYMA and most grant programs. You must use a HUD-approved housing counseling agency."
         }
       ]
     }
@@ -55,15 +55,15 @@
   "glossary": [
     {
       "term": "PMI (Private Mortgage Insurance)",
-      "definition": "An extra monthly fee you pay if your down payment is less than 20%. It protects the lender, but it adds to your monthly cost."
+      "definition": "An extra monthly fee you pay if your down payment is less than 20%. It protects the lender if you stop making payments, but it adds to your monthly cost."
     },
     {
       "term": "Escrow",
-      "definition": "A safe account where the lender holds some of your monthly payment to pay for your property taxes and home insurance when they are due."
+      "definition": "A neutral account where the lender holds a portion of your monthly payment to pay for your property taxes and home insurance when they are due."
     },
     {
-      "term": "Your area's typical income (AMI)",
-      "definition": "A number your area uses to decide if you qualify for help. If your income is below this, more programs may help you."
+      "term": "DTI (Debt-to-Income) Ratio",
+      "definition": "The percentage of your monthly income (before taxes) that goes toward paying debts like credit cards, student loans, and your future mortgage."
     },
     {
       "term": "Fixed-Rate Mortgage",
@@ -71,11 +71,11 @@
     },
     {
       "term": "Adjustable-Rate Mortgage (ARM)",
-      "definition": "A loan where the interest rate can go up or down. While it may start lower, your monthly payment can go up a lot later."
+      "definition": "A loan where the interest rate can go up or down over time. While it may start lower than a fixed rate, your monthly payment can increase significantly later."
     },
     {
-      "term": "Fees for getting your keys (Closing Costs)",
-      "definition": "One-time fees paid at the very end when you buy the home. These include things like lawyer fees, taxes, and paperwork."
+      "term": "Closing Costs",
+      "definition": "One-time fees paid at the very end of the home buying process. These include things like lawyer fees, taxes, and title insurance, usually totaling 2% to 5% of the home's price."
     }
   ]
 }

@@ -182,10 +182,11 @@ function App() {
         formData={formData}
       />
 
-      <LenderModal 
-        isOpen={isLenderModalOpen} 
-        onClose={() => setIsLenderModalOpen(false)} 
+      <LenderModal
+        isOpen={isLenderModalOpen}
+        onClose={() => setIsLenderModalOpen(false)}
         programName={selectedProgramForLender}
+        apiUrl={API_BASE_URL}
       />
     </div>
   );

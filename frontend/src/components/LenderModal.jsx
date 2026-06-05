@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { X, Send, Phone, Mail, Building2, CheckCircle2 } from 'lucide-react';
+import { X, Send, Phone, Mail, Building2, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
-const LenderModal = ({ isOpen, onClose, programName }) => {
+const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,14 +15,33 @@ const LenderModal = ({ isOpen, onClose, programName }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would send the data to a backend or CRM
-    setSubmitted(true);
-    setTimeout(() => {
-      // Auto-close after success message
-      // onClose();
-    }, 3000);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${apiUrl}/api/lender-inquiry`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          program_name: programName
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit inquiry. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -91,6 +112,13 @@ const LenderModal = ({ isOpen, onClose, programName }) => {
                 <>
                   <h3 className="text-xl font-bold text-brand-800 mb-6">Inquire about this program</h3>
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
+                        <AlertCircle size={16} />
+                        {error}
+                      </div>
+                    )}
+                    
                     <div className="space-y-1">
                       <label className="text-xs font-bold text-warm-500 uppercase tracking-wider ml-1">Full Name</label>
                       <input
@@ -145,9 +173,15 @@ const LenderModal = ({ isOpen, onClose, programName }) => {
 
                     <button
                       type="submit"
-                      className="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/20 active:scale-[0.98] mt-2"
+                      disabled={loading}
+                      className="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-brand-300 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/20 active:scale-[0.98] mt-2"
                     >
-                      <Send size={18} /> Connect Me with a Specialist
+                      {loading ? (
+                        <Loader2 className="animate-spin" size={18} />
+                      ) : (
+                        <Send size={18} />
+                      )}
+                      {loading ? 'Submitting...' : 'Connect Me with a Specialist'}
                     </button>
                     <p className="text-[10px] text-center text-warm-400 px-4">
                       By clicking, you agree to be contacted by an Empire HomePath partner specialist. We never sell your data to third parties.
