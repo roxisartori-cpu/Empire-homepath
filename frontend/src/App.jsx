@@ -36,6 +36,8 @@ function App() {
     return matchPrograms(programsData, formData);
   }, [formData, showResults]);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
   // Poll for verification updates
   useEffect(() => {
     const pendingRequests = Object.values(verificationStates).filter(v => v.status === 'pending');
@@ -46,7 +48,7 @@ function App() {
         const state = verificationStates[programId];
         if (state.status === 'pending') {
           try {
-            const res = await fetch(`/api/status/${state.requestId}`);
+            const res = await fetch(`${API_BASE_URL}/api/status/${state.requestId}`);
             if (res.ok) {
               const data = await res.json();
               if (data.status !== 'pending') {
@@ -73,7 +75,7 @@ function App() {
 
   const handleVerifyLive = async (programId) => {
     try {
-      const res = await fetch('/api/verify', {
+      const res = await fetch(`${API_BASE_URL}/api/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

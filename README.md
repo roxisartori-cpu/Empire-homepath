@@ -28,5 +28,5 @@ A user-friendly web app that simplifies the search for first-time homebuyer assi
 
 ## Deployment
 
-- **Frontend**: Deploy to Vercel by connecting the `frontend/` directory.
+- **Frontend**: Deploy to Vercel by connecting the `frontend/` directory. Set the environment variable `VITE_API_URL` to your backend's URL.
 - **Backend**: Deploy to Render by connecting the `backend/` directory.
