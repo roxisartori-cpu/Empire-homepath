@@ -1,0 +1,81 @@
+{
+  "checklist": [
+    {
+      "category": "Financial Readiness",
+      "items": [
+        {
+          "task": "Check your credit score",
+          "details": "Most help programs need a score of 620 or higher. A higher score often means you'll pay less to borrow money."
+        },
+        {
+          "task": "See how much you've saved for a down payment",
+          "details": "Try to save at least 1% to 3% of the home's price, even if you plan to use a grant. It shows lenders you are ready for this big step."
+        },
+        {
+          "task": "Review your monthly debts",
+          "details": "Lenders look at how much of your monthly income goes to paying debts. Ideally, this should be less than 43% of what you earn before taxes."
+        }
+      ]
+    },
+    {
+      "category": "Necessary Documents",
+      "items": [
+        {
+          "task": "Tax Returns",
+          "details": "Gather your signed Federal tax returns for the last two years."
+        },
+        {
+          "task": "W-2 Statements",
+          "details": "Collect your W-2 forms from all employers for the last two years."
+        },
+        {
+          "task": "Pay Stubs",
+          "details": "Save your most recent pay stubs covering at least the last 30 days."
+        },
+        {
+          "task": "Bank Statements",
+          "details": "Get the last two months of statements for all your bank and investment accounts."
+        },
+        {
+          "task": "Identification",
+          "details": "Make sure you have a valid, unexpired ID, such as a Driver's License or Passport."
+        }
+      ]
+    },
+    {
+      "category": "Education & Assistance",
+      "items": [
+        {
+          "task": "Complete Homebuyer Education",
+          "details": "Many programs require you to take a class on how to buy a home. You must use an approved housing agency."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "PMI (Private Mortgage Insurance)",
+      "definition": "An extra monthly fee you pay if your down payment is less than 20%. It protects the lender, but it adds to your monthly cost."
+    },
+    {
+      "term": "Escrow",
+      "definition": "A safe account where the lender holds some of your monthly payment to pay for your property taxes and home insurance when they are due."
+    },
+    {
+      "term": "Your area's typical income (AMI)",
+      "definition": "A number your area uses to decide if you qualify for help. If your income is below this, more programs may help you."
+    },
+    {
+      "term": "Fixed-Rate Mortgage",
+      "definition": "A loan where the interest rate never changes. Your monthly payment for the loan itself stays the same for 15 or 30 years."
+    },
+    {
+      "term": "Adjustable-Rate Mortgage (ARM)",
+      "definition": "A loan where the interest rate can go up or down. While it may start lower, your monthly payment can go up a lot later."
+    },
+    {
+      "term": "Fees for getting your keys (Closing Costs)",
+      "definition": "One-time fees paid at the very end when you buy the home. These include things like lawyer fees, taxes, and paperwork."
+    }
+  ]
+}

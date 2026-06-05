@@ -1,0 +1,117 @@
+[
+  {
+    "id": "sonyma-atd",
+    "category": "State",
+    "program_name": "SONYMA Achieving the Dream",
+    "description": "A low-interest mortgage program specifically designed for lower-income first-time homebuyers to make homeownership more affordable.",
+    "income_limits": {
+      "Westchester": {
+        "1-2_persons": 130000,
+        "3+_persons": 150000
+      },
+      "Dutchess": {
+        "1-2_persons": 98000,
+        "3+_persons": 112000
+      },
+      "Note": "Limits vary by county and family size. These are estimates based on 2024 data."
+    },
+    "purchase_price_limits": {
+      "Westchester": 800000,
+      "Dutchess": 500000,
+      "Note": "Limits vary by county and property type (1-unit vs 2-unit)."
+    },
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Move-in ready single-family homes, condos, co-ops, and 2-4 unit properties.",
+    "official_url": "https://hcr.ny.gov/achieving-dream"
+  },
+  {
+    "id": "sonyma-dpal",
+    "category": "State",
+    "program_name": "SONYMA Down Payment Assistance Loan (DPAL)",
+    "description": "A second loan that provides help with your down payment and fees for getting your keys. It has 0% interest and no monthly payments, and goes away after 10 years if you stay in the home.",
+    "income_limits": "Same as the SONYMA mortgage program being used (e.g., Achieving the Dream).",
+    "purchase_price_limits": "Same as the SONYMA mortgage program being used.",
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Move-in ready properties eligible for SONYMA financing.",
+    "official_url": "https://hcr.ny.gov/down-payment-assistance-loan-dpal"
+  },
+  {
+    "id": "sonyma-remodel",
+    "category": "State",
+    "program_name": "SONYMA RemodelNY",
+    "description": "A program that allows first-time homebuyers to combine a mortgage with extra funds to fix up or repair a home.",
+    "income_limits": "Varies by county; generally aligned with SONYMA Low Interest Rate program limits.",
+    "purchase_price_limits": "Varies by county; includes both the home's price and cost of fixing it up.",
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Fixer-upper properties that need repair to meet standard living conditions.",
+    "official_url": "https://hcr.ny.gov/remodel-ny"
+  },
+  {
+    "id": "chi-grant",
+    "category": "Regional",
+    "program_name": "Community Housing Innovations (CHI) Grant",
+    "description": "Provides grants to help with your down payment and fees for getting your keys to help bridge the affordability gap.",
+    "income_limits": {
+      "Westchester (80% AMI)": {
+        "1_person": 95200,
+        "2_persons": 108800,
+        "3_persons": 122400,
+        "4_persons": 136000
+      },
+      "Dutchess (80% AMI)": {
+        "1_person": 68900,
+        "2_persons": 78750,
+        "3_persons": 88600,
+        "4_persons": 98400
+      }
+    },
+    "purchase_price_limits": "Varies based on specific grant funding cycles; generally follows HUD or SONYMA guidelines.",
+    "counties_served": "Westchester, Dutchess, Long Island (Nassau/Suffolk), and Hudson Valley counties.",
+    "property_type_eligibility": "Single-family homes, townhouses, and condos.",
+    "official_url": "https://www.communityhousing.org/homeownership/"
+  },
+  {
+    "id": "rupco-assistance",
+    "category": "Regional",
+    "program_name": "RUPCO First-Time Homebuyer Assistance",
+    "description": "Offers financial help and counseling for first-time homebuyers, specifically focusing on residents in Ulster County.",
+    "income_limits": "Generally 80% of your area's typical income (AMI) for Ulster County family sizes.",
+    "purchase_price_limits": "Aligned with Ulster County typical home prices and grant requirements.",
+    "counties_served": "Ulster County (primarily), with some programs extending to Sullivan and Orange counties.",
+    "property_type_eligibility": "Move-in ready single-family homes.",
+    "official_url": "https://rupco.org/"
+  },
+  {
+    "id": "buffalo-dpa",
+    "category": "Municipal",
+    "program_name": "City of Buffalo Down Payment Assistance",
+    "description": "Provides zero-interest, forgivable loans to eligible first-time homebuyers for down payment and closing costs for homes within Buffalo city limits.",
+    "income_limits": "Varies by family size; generally 80% AMI for Erie County.",
+    "purchase_price_limits": "Must meet HUD's FHA mortgage limits for Erie County.",
+    "counties_served": "Erie (City of Buffalo only)",
+    "property_type_eligibility": "Single-family homes within city limits.",
+    "official_url": "https://www.buffalony.gov/648/Home-Ownership-Assistance"
+  },
+  {
+    "id": "rochester-hba",
+    "category": "Municipal",
+    "program_name": "City of Rochester Homebuyer Assistance Program",
+    "description": "Provides grants to low-and-moderate income first-time homebuyers to assist with down payment and closing costs for properties in Rochester.",
+    "income_limits": "Up to 80% AMI for Monroe County.",
+    "purchase_price_limits": "Subject to HUD's HOME Program price limits.",
+    "counties_served": "Monroe (City of Rochester only)",
+    "property_type_eligibility": "Single-family homes, townhouses, and condos in the city.",
+    "official_url": "https://www.cityofrochester.gov/homebuyerassistance/"
+  },
+  {
+    "id": "albany-dpa",
+    "category": "Municipal",
+    "program_name": "City of Albany Down Payment Assistance",
+    "description": "Assistance for first-time homebuyers purchasing a home in the City of Albany. The program provides a grant to help with down payment and fees for getting your keys.",
+    "income_limits": "Based on 80% of Area Median Income for the Albany-Schenectady-Troy MSA.",
+    "purchase_price_limits": "Must not exceed HUD 203(b) mortgage limits for Albany County.",
+    "counties_served": "Albany (City of Albany only)",
+    "property_type_eligibility": "Single-family residential properties.",
+    "official_url": "https://www.albanyny.gov/housing"
+  }
+]
