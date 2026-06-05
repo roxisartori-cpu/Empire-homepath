@@ -1,5 +1,6 @@
 [
   {
+    "id": "sonyma-atd",
     "program_name": "SONYMA Achieving the Dream",
     "description": "A low-interest mortgage program specifically designed for lower-income first-time homebuyers to make homeownership more affordable.",
     "data_year": 2026,
@@ -18,7 +19,7 @@
       "Note": "Representative 2026 limits (approx 3% increase over 2025). Full matrix available in SONYMA Program Bulletin 2026-02."
     },
     "counties_served": "All 62 counties in New York State",
-    "official_url": "https://hcr.ny.gov/achieving-dream"
+    "official_url": "https://hcr.ny.gov/homebuyers"
   },
   {
     "program_id": "buffalo-hoap",

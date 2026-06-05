@@ -1,7 +1,7 @@
 import React from 'react';
 import { NY_COUNTIES } from '../counties';
 
-const EligibilityForm = ({ formData, handleInputChange, handleSubmit }) => {
+const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearching }) => {
   return (
     <section id="form" className="px-4 pb-12 -mt-8">
       <div className="max-w-2xl mx-auto">

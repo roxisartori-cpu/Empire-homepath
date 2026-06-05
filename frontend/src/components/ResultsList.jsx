@@ -29,7 +29,9 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
         </div>
 
         <div className="space-y-4">
-          {programs.map((program, idx) => (
+          {programs.map((program, idx) => {
+            const programId = program.program_id || program.id || `prog-${idx}`;
+            return (
             <div 
               key={idx} 
               className="bg-white rounded-2xl border border-warm-200 p-6 hover:shadow-md transition-shadow animate-slide-up"
@@ -61,9 +63,9 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
                 <div>
                   <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Yearly income limit</p>
                   <p className="text-sm font-medium text-warm-800">
-                    {verificationStates[program.id]?.resultData?.verified_income_limit ? (
+                    {verificationStates[programId]?.resultData?.verified_income_limit ? (
                       <span className="text-leaf-600 font-bold">
-                        ${verificationStates[program.id].resultData.verified_income_limit.toLocaleString()}*
+                        ${verificationStates[programId].resultData.verified_income_limit.toLocaleString()}*
                       </span>
                     ) : (
                       typeof program.income_limits === 'string' ? program.income_limits : 'Varies by county'
@@ -73,9 +75,9 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
                 <div>
                   <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Home price limit</p>
                   <p className="text-sm font-medium text-warm-800">
-                    {verificationStates[program.id]?.resultData?.verified_price_cap ? (
+                    {verificationStates[programId]?.resultData?.verified_price_cap ? (
                       <span className="text-leaf-600 font-bold">
-                        ${verificationStates[program.id].resultData.verified_price_cap.toLocaleString()}*
+                        ${verificationStates[programId].resultData.verified_price_cap.toLocaleString()}*
                       </span>
                     ) : (
                       typeof program.purchase_price_limits === 'string' ? program.purchase_price_limits : 'Varies by county'
@@ -105,23 +107,23 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
 
                   {/* Live Verify Button / Status */}
                   <div className="flex items-center">
-                    {verificationStates[program.id] ? (
+                    {verificationStates[programId] ? (
                       <div className="flex items-center gap-3">
-                        {verificationStates[program.id].status === 'pending' ? (
+                        {verificationStates[programId].status === 'pending' ? (
                           <span className="inline-flex items-center gap-2 text-brand-600 text-sm font-medium animate-pulse">
                             <RefreshCw size={14} className="animate-spin" /> Verifying...
                           </span>
-                        ) : verificationStates[program.id].status === 'verified' ? (
+                        ) : verificationStates[programId].status === 'verified' ? (
                           <div className="flex flex-col">
                             <span className="inline-flex items-center gap-1.5 text-leaf-600 text-sm font-bold bg-leaf-50 px-2 py-0.5 rounded-md">
                               <CheckCircle size={14} /> Live Verified
                             </span>
                             <span className="text-[10px] text-warm-400 mt-0.5">
-                              Checked {verificationStates[program.id].resultData?.timestamp || 'Just now'}
+                              Checked {verificationStates[programId].resultData?.timestamp || 'Just now'}
                             </span>
-                            {verificationStates[program.id].resultData?.source_url && (
+                            {verificationStates[programId].resultData?.source_url && (
                               <a 
-                                href={verificationStates[program.id].resultData.source_url}
+                                href={verificationStates[programId].resultData.source_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-[10px] text-brand-400 underline hover:text-brand-500"
@@ -138,7 +140,7 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
                       </div>
                     ) : (
                       <button 
-                        onClick={() => onVerifyLive(program.id)}
+                        onClick={() => onVerifyLive(programId)}
                         className="inline-flex items-center gap-2 text-warm-500 hover:text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-transparent hover:border-brand-200"
                       >
                         <RefreshCw size={14} /> Verify Live Now
