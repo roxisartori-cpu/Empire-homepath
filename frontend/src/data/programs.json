@@ -1,28 +1,185 @@
 [
   {
-    "id": "sonyma-atd",
+    "id": "sonyma-dream",
     "category": "State",
     "program_name": "SONYMA Achieving the Dream",
     "description": "A low-interest mortgage program specifically designed for lower-income first-time homebuyers to make homeownership more affordable.",
     "income_limits": {
+      "Cattaraugus": {
+        "1-2_persons": 91000,
+        "3+_persons": 104500,
+        "target_area_1-2_persons": 109000,
+        "target_area_3+_persons": 127000
+      },
+      "Chautauqua": {
+        "1-2_persons": 91000,
+        "3+_persons": 104500,
+        "target_area_1-2_persons": 109000,
+        "target_area_3+_persons": 127000
+      },
+      "Erie": {
+        "1-2_persons": 112000,
+        "3+_persons": 128500,
+        "target_area_1-2_persons": 134000,
+        "target_area_3+_persons": 156500
+      },
+      "Niagara": {
+        "1-2_persons": 112000,
+        "3+_persons": 128500,
+        "target_area_1-2_persons": 134000,
+        "target_area_3+_persons": 156500
+      },
+      "Monroe": {
+        "1-2_persons": 112000,
+        "3+_persons": 128500,
+        "target_area_1-2_persons": 134000,
+        "target_area_3+_persons": 156500
+      },
+      "Onondaga": {
+        "1-2_persons": 103000,
+        "3+_persons": 118000,
+        "target_area_1-2_persons": 123500,
+        "target_area_3+_persons": 144000
+      },
+      "Albany": {
+        "1-2_persons": 110000,
+        "3+_persons": 126500,
+        "target_area_1-2_persons": 132000,
+        "target_area_3+_persons": 154000
+      },
       "Westchester": {
-        "1-2_persons": 130000,
-        "3+_persons": 150000
+        "1-2_persons": 168000,
+        "3+_persons": 196000,
+        "target_area_1-2_persons": 168000,
+        "target_area_3+_persons": 196000
       },
-      "Dutchess": {
-        "1-2_persons": 98000,
-        "3+_persons": 112000
+      "New York City": {
+        "1-2_persons": 160000,
+        "3+_persons": 187000,
+        "target_area_1-2_persons": 160000,
+        "target_area_3+_persons": 187000
       },
-      "Note": "Limits vary by county and family size. These are estimates based on 2024 data."
+      "Suffolk/Nassau": {
+        "1-2_persons": 163000,
+        "3+_persons": 190000,
+        "target_area_1-2_persons": 163000,
+        "target_area_3+_persons": 190000
+      },
+      "Note": "Representative 2026 limits (approx 3% increase over 2025). Full matrix available in SONYMA Program Bulletin 2026-02."
     },
-    "purchase_price_limits": {
-      "Westchester": 800000,
-      "Dutchess": 500000,
-      "Note": "Limits vary by county and property type (1-unit vs 2-unit)."
-    },
+    "purchase_price_limits": "N/A",
     "counties_served": "All 62 counties in New York State",
-    "property_type_eligibility": "Move-in ready single-family homes, condos, co-ops, and 2-4 unit properties.",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
     "official_url": "https://hcr.ny.gov/achieving-dream"
+  },
+  {
+    "id": "buffalo-hoap",
+    "category": "Municipal",
+    "program_name": "Buffalo Home Ownership Assistance Program (HOAP)",
+    "description": "Provides down payment and closing cost assistance to eligible first-time homebuyers in the City of Buffalo.",
+    "income_limits": {
+      "1_person": 58600,
+      "2_persons": 67000,
+      "3_persons": 75350,
+      "4_persons": 83700,
+      "Basis": "80% of AMI for 2026."
+    },
+    "purchase_price_limits": "N/A",
+    "counties_served": "Erie (City of Buffalo only)",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
+    "official_url": "https://www.buffalony.gov/205/Homeownership",
+    "municipality": {
+      "city": "Buffalo",
+      "county": "Erie",
+      "city_website": "https://www.buffalony.gov/205/Homeownership"
+    }
+  },
+  {
+    "id": "rochester-dpa",
+    "category": "Municipal",
+    "program_name": "City of Rochester Homebuyer Assistance Program",
+    "description": "Grants to assist low-to-moderate income first-time homebuyers with the purchase of their first home in the City of Rochester.",
+    "income_limits": {
+      "1_person": 58100,
+      "2_persons": 66400,
+      "3_persons": 74700,
+      "4_persons": 83000,
+      "Basis": "80% of AMI for 2026."
+    },
+    "purchase_price_limits": "N/A",
+    "counties_served": "Monroe (City of Rochester only)",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
+    "official_url": "https://www.cityofrochester.gov/homebuyer/",
+    "municipality": {
+      "city": "Rochester",
+      "county": "Monroe",
+      "city_website": "https://www.cityofrochester.gov/homebuyer/"
+    }
+  },
+  {
+    "id": "yonkers-hcd",
+    "category": "Municipal",
+    "program_name": "Yonkers Down Payment Assistance Program",
+    "description": "Assistance for first-time homebuyers in the City of Yonkers to help with down payment and closing costs.",
+    "income_limits": {
+      "1_person": 98000,
+      "2_persons": 112000,
+      "3_persons": 126000,
+      "4_persons": 140000,
+      "Basis": "80% of AMI for Westchester County (2026)."
+    },
+    "purchase_price_limits": "N/A",
+    "counties_served": "Westchester (City of Yonkers only)",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
+    "official_url": "https://www.yonkersny.gov/government/departments/housing-community-development",
+    "municipality": {
+      "city": "Yonkers",
+      "county": "Westchester",
+      "city_website": "https://www.yonkersny.gov/government/departments/housing-community-development"
+    }
+  },
+  {
+    "id": "syracuse-hoap",
+    "category": "Municipal",
+    "program_name": "Syracuse Home Ownership Assistance Program",
+    "description": "Provides subsidies to low-income first-time homebuyers for the purchase of homes within the City of Syracuse.",
+    "income_limits": {
+      "1_person": 54000,
+      "2_persons": 61700,
+      "3_persons": 69400,
+      "4_persons": 77100,
+      "Basis": "80% of AMI for 2026."
+    },
+    "purchase_price_limits": "N/A",
+    "counties_served": "Onondaga (City of Syracuse only)",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
+    "official_url": "https://www.syr.gov/Departments/Neighborhood-Business-Development",
+    "municipality": {
+      "city": "Syracuse",
+      "county": "Onondaga",
+      "city_website": "https://www.syr.gov/"
+    }
+  },
+  {
+    "id": "islip-dpa",
+    "category": "Municipal",
+    "program_name": "Town of Islip Down Payment Assistance",
+    "description": "Financial assistance for first-time homebuyers in the Town of Islip.",
+    "income_limits": {
+      "1_person": 92000,
+      "2_persons": 105000,
+      "3_persons": 118000,
+      "4_persons": 131000,
+      "Basis": "80% of AMI for Suffolk County (2026)."
+    },
+    "purchase_price_limits": "N/A",
+    "counties_served": "Suffolk (City of Islip only)",
+    "property_type_eligibility": "Single-family homes, condos, and townhouses.",
+    "official_url": "https://islipny.gov/community-development",
+    "municipality": {
+      "city": "Islip",
+      "county": "Suffolk"
+    }
   },
   {
     "id": "sonyma-dpal",
@@ -91,17 +248,6 @@
     "counties_served": "Erie (City of Buffalo only)",
     "property_type_eligibility": "Single-family homes within city limits.",
     "official_url": "https://www.buffalony.gov/648/Home-Ownership-Assistance"
-  },
-  {
-    "id": "rochester-hba",
-    "category": "Municipal",
-    "program_name": "City of Rochester Homebuyer Assistance Program",
-    "description": "Provides grants to low-and-moderate income first-time homebuyers to assist with down payment and closing costs for properties in Rochester.",
-    "income_limits": "Up to 80% AMI for Monroe County.",
-    "purchase_price_limits": "Subject to HUD's HOME Program price limits.",
-    "counties_served": "Monroe (City of Rochester only)",
-    "property_type_eligibility": "Single-family homes, townhouses, and condos in the city.",
-    "official_url": "https://www.cityofrochester.gov/homebuyerassistance/"
   },
   {
     "id": "albany-dpa",
