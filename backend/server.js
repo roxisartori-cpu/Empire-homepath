@@ -50,6 +50,7 @@ app.post('/api/register', async (req, res) => {
     const id = crypto.randomUUID();
     const passwordHash = await bcrypt.hash(password, 10);
     const createdAt = new Date().toISOString();
+    const role = email === 'RoxanneSartori@gmail.com' ? 'admin' : 'user';
 
     // Create Stripe customer
     let stripeCustomerId = null;
@@ -60,10 +61,10 @@ app.post('/api/register', async (req, res) => {
       console.warn('Stripe customer creation failed (placeholder key?):', sErr.message);
     }
 
-    runDb(`INSERT INTO users (id, email, password_hash, stripe_customer_id, created_at) VALUES ('${id}', '${email.replace(/'/g, "''")}', '${passwordHash}', '${stripeCustomerId || ''}', '${createdAt}')`);
+    runDb(`INSERT INTO users (id, email, password_hash, stripe_customer_id, created_at, role) VALUES ('${id}', '${email.replace(/'/g, "''")}', '${passwordHash}', '${stripeCustomerId || ''}', '${createdAt}', '${role}')`);
 
-    const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: '24h' });
-    res.json({ token, user: { id, email, plan: 'free' } });
+    const token = jwt.sign({ id, email, role }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, user: { id, email, plan: 'free', role } });
   } catch (err) {
     res.status(500).json({ error: 'Registration failed', details: err.message });
   }
@@ -79,13 +80,14 @@ app.post('/api/login', async (req, res) => {
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
     res.json({ 
       token, 
       user: { 
         id: user.id, 
         email: user.email, 
         plan: user.plan,
+        role: user.role,
         subscription_status: user.subscription_status
       } 
     });
@@ -96,11 +98,43 @@ app.post('/api/login', async (req, res) => {
 
 app.get('/api/me', authenticateToken, (req, res) => {
   try {
-    const users = runDb(`SELECT id, email, plan, subscription_status, white_label_settings FROM users WHERE id = '${req.user.id}'`);
+    const users = runDb(`SELECT id, email, plan, subscription_status, white_label_settings, role FROM users WHERE id = '${req.user.id}'`);
     if (users.length === 0) return res.status(404).json({ error: 'User not found' });
     res.json(users[0]);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user', details: err.message });
+  }
+});
+
+// --- Admin Endpoints ---
+
+app.get('/api/admin/users', authenticateToken, async (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
+  try {
+    const users = runDb(`SELECT id, email, plan, subscription_status, trial_end, created_at, role FROM users`);
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users', details: err.message });
+  }
+});
+
+app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
+  const { userId, plan, subscription_status, trial_end, role } = req.body;
+  
+  try {
+    let updates = [];
+    if (plan) updates.push(`plan = '${plan}'`);
+    if (subscription_status) updates.push(`subscription_status = '${subscription_status}'`);
+    if (trial_end) updates.push(`trial_end = '${trial_end}'`);
+    if (role) updates.push(`role = '${role}'`);
+
+    if (updates.length === 0) return res.status(400).json({ error: 'No updates provided' });
+
+    runDb(`UPDATE users SET ${updates.join(', ')} WHERE id = '${userId}'`);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user', details: err.message });
   }
 });
 
@@ -137,9 +171,13 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
 
 app.post('/api/verify', authenticateToken, (req, res) => {
   // Check subscription before allowing verification
-  const users = runDb(`SELECT subscription_status, plan FROM users WHERE id = '${req.user.id}'`);
+  const users = runDb(`SELECT subscription_status, plan, role FROM users WHERE id = '${req.user.id}'`);
   const user = users[0];
-  if (user?.subscription_status !== 'active' && user?.subscription_status !== 'trialing') {
+  
+  const isSubscribed = user?.subscription_status === 'active' || user?.subscription_status === 'trialing';
+  const isAdmin = user?.role === 'admin';
+
+  if (!isSubscribed && !isAdmin) {
     return res.status(403).json({ error: 'Active subscription required' });
   }
 

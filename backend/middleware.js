@@ -1,21 +1,35 @@
 import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = process.env.JWT_SECRET || 'empire-homepath-pro-secret-key-2026';
+
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (token == null) return res.sendStatus(401);
+  if (!token) return res.status(401).json({ error: 'Access denied' });
 
-  jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key', (err, user) => {
-    if (err) return res.sendStatus(403);
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
     req.user = user;
     next();
   });
 };
 
 export const checkSubscription = (req, res, next) => {
-  // Logic to check if user has an active subscription
-  // We'll fetch the user from DB in the actual route if needed, 
-  // or decode from token if we include it there.
+  // This middleware is used on routes that require an active subscription
+  // In a real app, you might fetch the user from DB here to check role/status
+  // For the SPA logic, we often check this in the route handler itself or 
+  // pass user data through the token.
+  
+  // Since we want to allow Admins to bypass subscription checks, 
+  // we should ideally have the role in the JWT or fetch user from DB.
   next();
+};
+
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Admin access required' });
+  }
 };

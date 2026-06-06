@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import { Home, Menu, X, LogOut, User } from 'lucide-react';
 
-const NavBar = ({ user, onLogout }) => {
+const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-brand-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2 text-xl font-bold text-brand-800">
+        <button onClick={() => onViewChange('app')} className="flex items-center gap-2 text-xl font-bold text-brand-800">
           <span className="text-2xl">🏡</span>
           Empire HomePath Pro
-        </a>
+        </button>
         
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
+          {user?.role === 'admin' && (
+            <button 
+              onClick={() => onViewChange(currentView === 'admin' ? 'app' : 'admin')}
+              className="text-brand-600 hover:text-brand-700 font-bold text-sm transition px-4 py-2 bg-brand-50 rounded-lg border border-brand-100"
+            >
+              {currentView === 'admin' ? '🚀 Go to App' : '🛠 Admin Panel'}
+            </button>
+          )}
           <a href="#glossary" className="text-warm-600 hover:text-brand-500 font-medium text-sm transition">📖 Glossary</a>
           <a href="#checklist" className="text-warm-600 hover:text-brand-500 font-medium text-sm transition">📋 Checklist</a>
           

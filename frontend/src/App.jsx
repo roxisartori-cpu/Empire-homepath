@@ -10,6 +10,7 @@ import Checklist from './components/Checklist';
 import Footer from './components/Footer';
 import Auth from './components/Auth';
 import SubscriptionPaywall from './components/SubscriptionPaywall';
+import AdminDashboard from './components/AdminDashboard';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -18,6 +19,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(!!token);
+  const [currentView, setCurrentView] = useState('app'); // 'app' or 'admin'
 
   const [formData, setFormData] = useState({
     county: '',
@@ -189,17 +191,27 @@ function App() {
     );
   }
 
-  const isSubscribed = user?.subscription_status === 'active' || user?.subscription_status === 'trialing';
+  const isSubscribed = useMemo(() => {
+    if (user?.role === 'admin') return true;
+    if (user?.subscription_status === 'active') return true;
+    if (user?.subscription_status === 'trialing') {
+      if (!user.trial_end) return true;
+      return new Date(user.trial_end) > new Date();
+    }
+    return false;
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-800 font-sans">
-      <NavBar user={user} onLogout={handleLogout} />
+      <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
       
       <main>
         {!token ? (
           <Auth onAuthSuccess={handleAuthSuccess} />
         ) : !isSubscribed ? (
           <SubscriptionPaywall user={user} />
+        ) : currentView === 'admin' && user?.role === 'admin' ? (
+          <AdminDashboard />
         ) : (
           <>
             {!showResults && <Hero />}
