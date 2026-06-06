@@ -120,7 +120,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
 
 app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
-  const { userId, plan, subscription_status, trial_end, role } = req.body;
+  const { userId, plan, subscription_status, trial_end, role, white_label_settings } = req.body;
   
   try {
     let updates = [];
@@ -128,6 +128,7 @@ app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
     if (subscription_status) updates.push(`subscription_status = '${subscription_status}'`);
     if (trial_end) updates.push(`trial_end = '${trial_end}'`);
     if (role) updates.push(`role = '${role}'`);
+    if (white_label_settings) updates.push(`white_label_settings = '${JSON.stringify(white_label_settings).replace(/'/g, "''")}'`);
 
     if (updates.length === 0) return res.status(400).json({ error: 'No updates provided' });
 
@@ -135,6 +136,23 @@ app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update user', details: err.message });
+  }
+});
+
+app.post('/api/user/settings', authenticateToken, async (req, res) => {
+  const { white_label_settings } = req.body;
+  // Only allow white-label plan or admin to update these
+  try {
+    const users = runDb(`SELECT plan, role FROM users WHERE id = '${req.user.id}'`);
+    const user = users[0];
+    if (user.plan !== 'white-label' && user.role !== 'admin') {
+      return res.status(403).json({ error: 'White Label plan required' });
+    }
+
+    runDb(`UPDATE users SET white_label_settings = '${JSON.stringify(white_label_settings).replace(/'/g, "''")}' WHERE id = '${req.user.id}'`);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update settings', details: err.message });
   }
 });
 
