@@ -754,26 +754,1524 @@
       }
     },
     "counties_served": "All 62 counties in New York State",
-    "official_url": "https://hcr.ny.gov/homebuyers"
+    "official_url": "https://hcr.ny.gov/homebuyers",
+    "category": "First-Time Buyer"
   },
   {
     "id": "sonyma-dpal",
     "program_name": "SONYMA Down Payment Assistance Loan (DPAL)",
-    "description": "A second mortgage that can be used for down payment and closing costs. It has no interest and no monthly payments.",
+    "description": "A second mortgage that can be used in conjunction with any SONYMA mortgage program to help with down payment and closing costs. It has no interest and no monthly payments, and is forgiven after 10 years.",
     "program_type": "state",
     "data_year": 2026,
-    "income_limits": "Same as Achieving the Dream",
+    "income_limits": {
+      "Cattaraugus": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chautauqua": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Erie": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Niagara": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Genesee": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Livingston": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Monroe": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ontario": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orleans": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Seneca": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wayne": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wyoming": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Yates": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cayuga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cortland": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Madison": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Onondaga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oswego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Allegany": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Broome": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chemung": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chenango": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Delaware": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Otsego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Schuyler": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Steuben": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tioga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tompkins": {
+        "1-2_persons": 96240,
+        "3+_persons": 110670,
+        "target_area_1-2_persons": 115480,
+        "target_area_3+_persons": 134730
+      },
+      "Columbia": {
+        "1-2_persons": 90160,
+        "3+_persons": 103680,
+        "target_area_1-2_persons": 108190,
+        "target_area_3+_persons": 126220
+      },
+      "Dutchess": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Greene": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orange": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Putnam": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Sullivan": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ulster": {
+        "1-2_persons": 95840,
+        "3+_persons": 110210,
+        "target_area_1-2_persons": 115000,
+        "target_area_3+_persons": 134170
+      },
+      "Albany": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Montgomery": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rensselaer": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Saratoga": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schenectady": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schoharie": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Clinton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Essex": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Franklin": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Fulton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Hamilton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Herkimer": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Jefferson": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Lewis": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oneida": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "St. Lawrence": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Warren": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Washington": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rockland": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Westchester": {
+        "1-2_persons": 163200,
+        "3+_persons": 190400,
+        "target_area_1-2_persons": 163200,
+        "target_area_3+_persons": 190400
+      },
+      "Nassau": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Suffolk": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Bronx": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Kings": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "New York": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Queens": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Richmond": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      }
+    },
     "counties_served": "All 62 counties in New York State",
-    "official_url": "https://hcr.ny.gov/homebuyers"
+    "official_url": "https://hcr.ny.gov/sonyma-down-payment-assistance-loan-dpal",
+    "category": "Down Payment Assistance",
+    "purchase_price_limits": {
+      "Cattaraugus": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chautauqua": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Erie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Niagara": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Genesee": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Livingston": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Monroe": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ontario": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orleans": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Seneca": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wayne": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wyoming": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Yates": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cayuga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cortland": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Madison": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Onondaga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oswego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Allegany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Broome": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chemung": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chenango": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Delaware": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Otsego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schuyler": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Steuben": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tioga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tompkins": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Columbia": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Dutchess": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Greene": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orange": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Putnam": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Sullivan": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ulster": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Albany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Montgomery": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rensselaer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Saratoga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schenectady": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schoharie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Clinton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Essex": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Franklin": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Fulton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Hamilton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Herkimer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Jefferson": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Lewis": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oneida": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "St. Lawrence": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Warren": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Washington": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rockland": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Westchester": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Nassau": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Suffolk": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Bronx": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Kings": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "New York": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Queens": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Richmond": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      }
+    }
   },
   {
     "id": "sonyma-remodel-ny",
     "program_name": "SONYMA RemodelNY",
-    "description": "Financing for both the purchase and renovation of a home.",
+    "description": "Provides mortgage financing to purchase and renovate a one-family home or to refinance and renovate a one-family home. This program allows homebuyers to combine the purchase price and renovation costs into a single fixed-rate mortgage.",
     "program_type": "state",
     "data_year": 2026,
     "counties_served": "All 62 counties in New York State",
-    "official_url": "https://hcr.ny.gov/homebuyers"
+    "official_url": "https://hcr.ny.gov/remodelny",
+    "category": "Renovation",
+    "income_limits": {
+      "Cattaraugus": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chautauqua": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Erie": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Niagara": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Genesee": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Livingston": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Monroe": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ontario": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orleans": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Seneca": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wayne": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wyoming": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Yates": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cayuga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cortland": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Madison": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Onondaga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oswego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Allegany": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Broome": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chemung": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chenango": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Delaware": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Otsego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Schuyler": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Steuben": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tioga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tompkins": {
+        "1-2_persons": 96240,
+        "3+_persons": 110670,
+        "target_area_1-2_persons": 115480,
+        "target_area_3+_persons": 134730
+      },
+      "Columbia": {
+        "1-2_persons": 90160,
+        "3+_persons": 103680,
+        "target_area_1-2_persons": 108190,
+        "target_area_3+_persons": 126220
+      },
+      "Dutchess": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Greene": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orange": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Putnam": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Sullivan": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ulster": {
+        "1-2_persons": 95840,
+        "3+_persons": 110210,
+        "target_area_1-2_persons": 115000,
+        "target_area_3+_persons": 134170
+      },
+      "Albany": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Montgomery": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rensselaer": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Saratoga": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schenectady": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schoharie": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Clinton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Essex": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Franklin": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Fulton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Hamilton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Herkimer": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Jefferson": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Lewis": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oneida": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "St. Lawrence": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Warren": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Washington": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rockland": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Westchester": {
+        "1-2_persons": 163200,
+        "3+_persons": 190400,
+        "target_area_1-2_persons": 163200,
+        "target_area_3+_persons": 190400
+      },
+      "Nassau": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Suffolk": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Bronx": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Kings": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "New York": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Queens": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Richmond": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      }
+    },
+    "purchase_price_limits": {
+      "Cattaraugus": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chautauqua": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Erie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Niagara": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Genesee": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Livingston": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Monroe": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ontario": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orleans": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Seneca": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wayne": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wyoming": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Yates": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cayuga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cortland": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Madison": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Onondaga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oswego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Allegany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Broome": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chemung": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chenango": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Delaware": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Otsego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schuyler": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Steuben": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tioga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tompkins": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Columbia": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Dutchess": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Greene": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orange": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Putnam": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Sullivan": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ulster": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Albany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Montgomery": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rensselaer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Saratoga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schenectady": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schoharie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Clinton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Essex": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Franklin": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Fulton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Hamilton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Herkimer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Jefferson": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Lewis": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oneida": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "St. Lawrence": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Warren": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Washington": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rockland": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Westchester": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Nassau": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Suffolk": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Bronx": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Kings": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "New York": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Queens": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Richmond": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      }
+    }
   },
   {
     "id": "chi-grant",
@@ -782,7 +2280,8 @@
     "program_type": "regional",
     "data_year": 2025,
     "counties_served": "Westchester, Dutchess, Nassau, Suffolk, Orange, Putnam, Rockland, Sullivan, Ulster",
-    "official_url": "https://www.communityhousing.org/"
+    "official_url": "https://www.communityhousing.org/",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "rupco-dpa",
@@ -791,7 +2290,8 @@
     "program_type": "regional",
     "data_year": 2025,
     "counties_served": "Ulster, Sullivan, Orange",
-    "official_url": "https://rupco.org/"
+    "official_url": "https://rupco.org/",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "buffalo-hoap",
@@ -809,7 +2309,8 @@
       "3_persons": 75350,
       "4_persons": 83700
     },
-    "official_url": "https://www.buffalony.gov/205/Homeownership"
+    "official_url": "https://www.buffalony.gov/205/Homeownership",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "rochester-dpa",
@@ -827,7 +2328,8 @@
       "3_persons": 74700,
       "4_persons": 83000
     },
-    "official_url": "https://www.cityofrochester.gov/homebuyer/"
+    "official_url": "https://www.cityofrochester.gov/homebuyer/",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "yonkers-dpa",
@@ -845,7 +2347,8 @@
       "3_persons": 126000,
       "4_persons": 140000
     },
-    "official_url": "https://www.yonkersny.gov/government/departments/housing-community-development"
+    "official_url": "https://www.yonkersny.gov/government/departments/housing-community-development",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "syracuse-hoap",
@@ -863,7 +2366,8 @@
       "3_persons": 69400,
       "4_persons": 77100
     },
-    "official_url": "https://www.syr.gov/Departments/Neighborhood-Business-Development"
+    "official_url": "https://www.syr.gov/Departments/Neighborhood-Business-Development",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "islip-dpa",
@@ -881,7 +2385,8 @@
       "3_persons": 118000,
       "4_persons": 131000
     },
-    "official_url": "https://islipny.gov/community-development"
+    "official_url": "https://islipny.gov/community-development",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "nyc-homefirst",
@@ -894,7 +2399,8 @@
       "county": "New York, Kings, Queens, Bronx, Richmond"
     },
     "income_limits": "120% of Area Median Income (AMI)",
-    "official_url": "https://www.nyc.gov/site/hpd/services-and-information/homefirst-down-payment-assistance-program.page"
+    "official_url": "https://www.nyc.gov/site/hpd/services-and-information/homefirst-down-payment-assistance-program.page",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "erie-county-dpa",
@@ -904,7 +2410,8 @@
     "municipality": {
       "county": "Erie"
     },
-    "official_url": "https://www3.erie.gov/environment/housing-programs"
+    "official_url": "https://www3.erie.gov/environment/housing-programs",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "albany-dpa",
@@ -915,7 +2422,8 @@
       "city": "Albany",
       "county": "Albany"
     },
-    "official_url": "https://www.albanyny.gov/208/Housing-Community-Development"
+    "official_url": "https://www.albanyny.gov/208/Housing-Community-Development",
+    "category": "Down Payment Assistance"
   },
   {
     "id": "monroe-county-dpa",
@@ -925,6 +2433,1607 @@
     "municipality": {
       "county": "Monroe"
     },
-    "official_url": "https://www.monroecounty.gov/planning-community"
+    "official_url": "https://www.monroecounty.gov/planning-community",
+    "category": "Down Payment Assistance"
+  },
+  {
+    "id": "sonyma-veterans",
+    "program_name": "SONYMA Homes for Veterans",
+    "program_type": "state",
+    "description": "Offers fixed-rate mortgages with interest rates 0.375% lower than the standard SONYMA interest rates and no points or origination fees. Available to military veterans, active duty service members, and their spouses.",
+    "data_year": 2026,
+    "income_limits": {
+      "Cattaraugus": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chautauqua": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Erie": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Niagara": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Genesee": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Livingston": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Monroe": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ontario": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orleans": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Seneca": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wayne": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wyoming": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Yates": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cayuga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cortland": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Madison": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Onondaga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oswego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Allegany": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Broome": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chemung": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chenango": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Delaware": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Otsego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Schuyler": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Steuben": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tioga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tompkins": {
+        "1-2_persons": 96240,
+        "3+_persons": 110670,
+        "target_area_1-2_persons": 115480,
+        "target_area_3+_persons": 134730
+      },
+      "Columbia": {
+        "1-2_persons": 90160,
+        "3+_persons": 103680,
+        "target_area_1-2_persons": 108190,
+        "target_area_3+_persons": 126220
+      },
+      "Dutchess": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Greene": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orange": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Putnam": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Sullivan": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ulster": {
+        "1-2_persons": 95840,
+        "3+_persons": 110210,
+        "target_area_1-2_persons": 115000,
+        "target_area_3+_persons": 134170
+      },
+      "Albany": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Montgomery": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rensselaer": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Saratoga": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schenectady": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schoharie": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Clinton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Essex": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Franklin": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Fulton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Hamilton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Herkimer": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Jefferson": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Lewis": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oneida": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "St. Lawrence": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Warren": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Washington": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rockland": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Westchester": {
+        "1-2_persons": 163200,
+        "3+_persons": 190400,
+        "target_area_1-2_persons": 163200,
+        "target_area_3+_persons": 190400
+      },
+      "Nassau": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Suffolk": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Bronx": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Kings": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "New York": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Queens": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Richmond": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      }
+    },
+    "purchase_price_limits": {
+      "Cattaraugus": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chautauqua": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Erie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Niagara": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Genesee": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Livingston": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Monroe": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ontario": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orleans": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Seneca": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wayne": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wyoming": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Yates": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cayuga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cortland": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Madison": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Onondaga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oswego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Allegany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Broome": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chemung": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chenango": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Delaware": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Otsego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schuyler": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Steuben": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tioga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tompkins": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Columbia": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Dutchess": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Greene": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orange": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Putnam": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Sullivan": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ulster": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Albany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Montgomery": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rensselaer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Saratoga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schenectady": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schoharie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Clinton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Essex": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Franklin": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Fulton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Hamilton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Herkimer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Jefferson": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Lewis": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oneida": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "St. Lawrence": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Warren": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Washington": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rockland": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Westchester": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Nassau": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Suffolk": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Bronx": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Kings": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "New York": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Queens": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Richmond": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      }
+    },
+    "official_url": "https://hcr.ny.gov/homes-veterans",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Veterans"
+  },
+  {
+    "id": "nyserda-empower",
+    "program_name": "EmPower+ (NYSERDA)",
+    "program_type": "state",
+    "description": "Provides no-cost energy efficiency improvements to low- and moderate-income households. Improvements may include insulation, air sealing, energy-efficient lighting, and health and safety measures.",
+    "data_year": 2026,
+    "income_limits": {
+      "Basis": "60% of State Median Income (SMI) for low-income; up to 80% AMI for moderate-income.",
+      "1_person": 39500,
+      "2_persons": 51000,
+      "3_persons": 63000,
+      "4_persons": 75000
+    },
+    "official_url": "https://www.nyserda.ny.gov/All-Programs/EmPower-New-York-Next-Generation",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Energy Efficiency"
+  },
+  {
+    "id": "nyshcr-access-home",
+    "program_name": "Access to Home (NYSHCR)",
+    "program_type": "state",
+    "description": "Provides financial assistance to make residential units accessible for low- and moderate-income persons with disabilities. Grants are used for modifications such as ramps, lifts, and bathroom adaptations.",
+    "data_year": 2026,
+    "income_limits": "Up to 80% of Area Median Income (AMI).",
+    "official_url": "https://hcr.ny.gov/access-home",
+    "counties_served": "All 62 counties in New York State (via local nonprofit administrators)",
+    "category": "Accessibility"
+  },
+  {
+    "id": "fha-203k",
+    "program_name": "FHA 203(k) Rehabilitation Mortgage",
+    "program_type": "federal",
+    "description": "HUD's primary program for the rehabilitation and repair of single-family properties. Allows homebuyers to finance both the purchase and the repair of a home with a single mortgage loan.",
+    "data_year": 2026,
+    "income_limits": "No income limits. Eligibility is based on standard FHA credit and debt-to-income requirements.",
+    "purchase_price_limits": "Limited by FHA county loan limits (varies by county, approx. $498,000 to $1,150,000 in NY).",
+    "official_url": "https://www.hud.gov/program_offices/housing/sfh/203k",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Renovation"
+  },
+  {
+    "id": "fannie-mae-homestyle",
+    "program_name": "Fannie Mae HomeStyle Renovation",
+    "program_type": "federal",
+    "description": "A conventional mortgage that allows borrowers to purchase or refinance a property and include the cost of repairs, additions, or energy efficiency improvements in the loan.",
+    "data_year": 2026,
+    "income_limits": "No income limits for standard HomeStyle; HomeReady-eligible borrowers may have income limits (typically 80% AMI).",
+    "official_url": "https://singlefamily.fanniemae.com/originating-underwriting/mortgage-products/homestyle-renovation-mortgage",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Renovation"
+  },
+  {
+    "id": "usda-502-direct",
+    "program_name": "USDA Section 502 Direct Home Loan",
+    "program_type": "regional",
+    "description": "Provides payment assistance to low- and very-low-income applicants in eligible rural areas. The assistance reduces the mortgage payment to an effective interest rate as low as 1%.",
+    "data_year": 2026,
+    "income_limits": "Varies by county; typically 50% AMI (Very Low) to 80% AMI (Low).",
+    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-direct-home-loans/ny",
+    "counties_served": "Eligible rural areas in New York State (all counties except highly urbanized areas of NYC, Buffalo, etc.)",
+    "category": "USDA / Rural"
+  },
+  {
+    "id": "usda-504-repair",
+    "program_name": "USDA Section 504 Home Repair Program",
+    "program_type": "regional",
+    "description": "Provides loans to very-low-income homeowners to repair, improve or modernize their homes or grants to elderly very-low-income homeowners to remove health and safety hazards.",
+    "data_year": 2026,
+    "income_limits": "Household income must be below 50% of the Area Median Income (Very Low).",
+    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-repair-loans-grants/ny",
+    "counties_served": "Eligible rural areas in New York State",
+    "category": "Renovation"
+  },
+  {
+    "id": "sonyma-nrp",
+    "program_name": "SONYMA Neighborhood Revitalization Program",
+    "program_type": "regional",
+    "description": "Offers incentives for homebuyers purchasing homes in designated communities, including up to $20,000 for renovations. Provides lower interest rates and down payment assistance. This program is particularly beneficial for 'Next Step' borrowers and those in special occupations such as teachers, police officers, firefighters, and EMS personnel.",
+    "data_year": 2026,
+    "income_limits": {
+      "Cattaraugus": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chautauqua": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Erie": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Niagara": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Genesee": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Livingston": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Monroe": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ontario": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orleans": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Seneca": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wayne": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Wyoming": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Yates": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cayuga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Cortland": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Madison": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Onondaga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oswego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Allegany": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Broome": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chemung": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Chenango": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Delaware": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Otsego": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Schuyler": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Steuben": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tioga": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Tompkins": {
+        "1-2_persons": 96240,
+        "3+_persons": 110670,
+        "target_area_1-2_persons": 115480,
+        "target_area_3+_persons": 134730
+      },
+      "Columbia": {
+        "1-2_persons": 90160,
+        "3+_persons": 103680,
+        "target_area_1-2_persons": 108190,
+        "target_area_3+_persons": 126220
+      },
+      "Dutchess": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Greene": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Orange": {
+        "1-2_persons": 98400,
+        "3+_persons": 113160,
+        "target_area_1-2_persons": 118080,
+        "target_area_3+_persons": 137760
+      },
+      "Putnam": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Sullivan": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Ulster": {
+        "1-2_persons": 95840,
+        "3+_persons": 110210,
+        "target_area_1-2_persons": 115000,
+        "target_area_3+_persons": 134170
+      },
+      "Albany": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Montgomery": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rensselaer": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Saratoga": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schenectady": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Schoharie": {
+        "1-2_persons": 92880,
+        "3+_persons": 106810,
+        "target_area_1-2_persons": 111450,
+        "target_area_3+_persons": 130030
+      },
+      "Clinton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Essex": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Franklin": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Fulton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Hamilton": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Herkimer": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Jefferson": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Lewis": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Oneida": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "St. Lawrence": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Warren": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Washington": {
+        "1-2_persons": 88160,
+        "3+_persons": 101380,
+        "target_area_1-2_persons": 105790,
+        "target_area_3+_persons": 123420
+      },
+      "Rockland": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Westchester": {
+        "1-2_persons": 163200,
+        "3+_persons": 190400,
+        "target_area_1-2_persons": 163200,
+        "target_area_3+_persons": 190400
+      },
+      "Nassau": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Suffolk": {
+        "1-2_persons": 158300,
+        "3+_persons": 184680,
+        "target_area_1-2_persons": 158300,
+        "target_area_3+_persons": 184680
+      },
+      "Bronx": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Kings": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "New York": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Queens": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      },
+      "Richmond": {
+        "1-2_persons": 155520,
+        "3+_persons": 181440,
+        "target_area_1-2_persons": 155520,
+        "target_area_3+_persons": 181440
+      }
+    },
+    "official_url": "https://hcr.ny.gov/neighborhood-revitalization-program",
+    "counties_served": "Designated communities in Albany, Clinton, Dutchess, Erie, Monroe, Montgomery, Nassau, Niagara, Oneida, Onondaga, Orange, Rensselaer, Schenectady, Suffolk, and Westchester.",
+    "category": "Special Occupations",
+    "purchase_price_limits": {
+      "Cattaraugus": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chautauqua": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Erie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Niagara": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Genesee": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Livingston": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Monroe": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ontario": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orleans": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Seneca": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wayne": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Wyoming": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Yates": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cayuga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Cortland": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Madison": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Onondaga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oswego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Allegany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Broome": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chemung": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Chenango": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Delaware": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Otsego": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schuyler": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Steuben": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tioga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Tompkins": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Columbia": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Dutchess": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Greene": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Orange": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Putnam": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Sullivan": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Ulster": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Albany": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Montgomery": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rensselaer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Saratoga": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schenectady": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Schoharie": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Clinton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Essex": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Franklin": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Fulton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Hamilton": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Herkimer": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Jefferson": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Lewis": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Oneida": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "St. Lawrence": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Warren": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Washington": {
+        "1-family": 544230,
+        "target_area_1-family": 665170,
+        "2-family": 696810,
+        "target_area_2-family": 851660
+      },
+      "Rockland": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Westchester": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Nassau": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Suffolk": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Bronx": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Kings": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "New York": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Queens": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      },
+      "Richmond": {
+        "1-family": 1255920,
+        "target_area_1-family": 1535010,
+        "2-family": 1608090,
+        "target_area_2-family": 1965440
+      }
+    }
+  },
+  {
+    "id": "nys-home-cdbg",
+    "program_name": "Local HOME/CDBG Down Payment Assistance",
+    "program_type": "regional",
+    "description": "Federally funded programs (HOME Investment Partnerships and Community Development Block Grants) administered by local counties and municipalities. Typically provides $5,000 to $20,000 in deferred-payment loans for down payment and closing costs.",
+    "data_year": 2026,
+    "income_limits": "Usually capped at 80% of Area Median Income (AMI).",
+    "official_url": "Contact local county housing office (e.g., Erie County, Monroe County, Westchester County).",
+    "counties_served": "Many counties and larger 'Entitlement' cities across New York State.",
+    "category": "Down Payment Assistance"
   }
 ]

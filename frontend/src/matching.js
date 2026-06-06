@@ -1,131 +1,183 @@
 export const matchPrograms = (programs, userData) => {
   const {
-    county = "",
-    income = 0,
-    purchasePrice = 0,
-    isFirstTimeBuyer = false,
-    householdSize = 1,
-    isVeteran = false,
-    propertyType = "single-family"
+    county,
+    city,
+    income,
+    householdSize,
+    purchasePrice,
+    propertyType,
+    isFirstTimeBuyer,
+    isVeteran,
+    isInterestedInRenovation,
+    isInterestedInEnergy,
+    isInterestedInAccessibility
   } = userData;
 
   return programs.map(program => {
     let score = 100;
-    let reasons = [];
+    
+    const category = program.category || "";
+    const name = (program.program_name || "").toLowerCase();
+    const desc = (program.description || "").toLowerCase();
 
     // 1. County & City Filter
-    if (program.counties_served !== "All 62 counties in New York State") {
-      const userCounty = county.toLowerCase();
-      const userCity = (userData.city || "").toLowerCase();
+    if (program.counties_served && program.counties_served !== "All 62 counties in New York State") {
+      const servedStr = program.counties_served.toLowerCase();
+      const userCounty = (county || "").toLowerCase();
+      const userCity = (city || "").toLowerCase();
 
-      // Check for structured municipality data first
-      if (program.municipality) {
-        const m = program.municipality;
-        if (m.county.toLowerCase() !== userCounty) {
-          score -= 100;
-        } else if (m.city && userCity && m.city.toLowerCase() !== userCity) {
-          score -= 80; // In same county, but different city
-        } else if (m.city && !userCity) {
-          score -= 20; // City-specific program but city not provided
+      // Check if county matches
+      if (!servedStr.includes(userCounty)) {
+        // Special case for CHI and RUPCO
+        if (name.includes("community housing innovations") || name.includes("chi grant")) {
+           const chiCounties = ["westchester", "dutchess", "nassau", "suffolk", "orange", "putnam", "rockland", "sullivan", "ulster"];
+           if (!chiCounties.includes(userCounty)) score -= 100;
+        } else if (name.includes("rupco")) {
+           const rupcoCounties = ["ulster", "sullivan", "orange"];
+           if (!rupcoCounties.includes(userCounty)) score -= 100;
+        } else {
+           score -= 100;
         }
       } else {
-        // Fallback to string-based matching
-        const servedStr = (program.counties_served || "").toLowerCase();
-        if (!servedStr.includes(userCounty)) {
-          // Special case for CHI and RUPCO (existing logic)
-          if (program.program_name === "Community Housing Innovations (CHI) Grant") {
-            const chiCounties = ["westchester", "dutchess", "nassau", "suffolk", "orange", "putnam", "rockland", "sullivan", "ulster"];
-            if (!chiCounties.includes(userCounty)) score -= 100;
-          } else if (program.program_name === "RUPCO First-Time Homebuyer Assistance") {
-            const rupcoCounties = ["ulster", "sullivan", "orange"];
-            if (!rupcoCounties.includes(userCounty)) score -= 100;
+        // County matches, check for municipal restrictions
+        if (servedStr.includes("only") || servedStr.includes("city of")) {
+          if (userCity && servedStr.includes(userCity)) {
+            score += 10; // Boost for specific city match
+          } else if (userCity) {
+            score -= 50; // User in same county but different city? Match lower
           } else {
-            score -= 100;
-          }
-        } else {
-          // County matches, check for municipal restrictions in string
-          if (servedStr.includes("only") || servedStr.includes("city of")) {
-            if (userCity && servedStr.includes(userCity)) {
-              score += 10; // Boost for specific city match
-            } else if (userCity) {
-              score -= 50; 
-            } else {
-              score -= 20;
-            }
+            score -= 20; // User didn't specify city for a city-only program
           }
         }
+      }
+    } else if (program.municipality) {
+      // Municipal program match logic
+      const userCounty = (county || "").toLowerCase();
+      const userCity = (city || "").toLowerCase();
+      const progCounty = (program.municipality.county || "").toLowerCase();
+      const progCity = (program.municipality.city || "").toLowerCase();
+
+      if (!progCounty.includes(userCounty) && !userCounty.includes(progCounty)) {
+        score -= 100;
+      } else if (progCity && userCity !== progCity) {
+        score -= 80; // County match but city mismatch for city program
+      } else if (progCity && !userCity) {
+        score -= 20; // County match but city not specified
       }
     }
 
     // 2. First Time Buyer Filter
     if (!isFirstTimeBuyer) {
-      if (program.program_name.toLowerCase().includes("first-time") ||
-          program.description.toLowerCase().includes("first-time")) {
-        score -= 100;
-      }
+        if (name.includes("first-time") || desc.includes("first-time")) {
+            score -= 100;
+        } else if (category === "First-Time Buyer") {
+            score -= 100;
+        }
     }
 
-    // 3. Income Limit Filter
+    // 3. Category Specific Logic
+    if (category === "Veterans") {
+        if (isVeteran) {
+            score += 20;
+        } else {
+            score -= 100;
+        }
+    }
+
+    if (category === "Renovation") {
+        if (isInterestedInRenovation) {
+            score += 30;
+        } else {
+            score -= 20;
+        }
+    }
+
+    if (category === "Energy Efficiency") {
+        if (isInterestedInEnergy) {
+            score += 30;
+        } else {
+            score -= 20;
+        }
+    }
+
+    if (category === "Accessibility") {
+        if (isInterestedInAccessibility) {
+            score += 40;
+        } else {
+            score -= 60;
+        }
+    }
+
+    if (category === "USDA / Rural") {
+        const urbanCounties = ["new york", "kings", "queens", "bronx", "richmond", "erie", "monroe", "albany", "onondaga", "westchester", "nassau", "suffolk"];
+        if (urbanCounties.includes((county || "").toLowerCase())) {
+            score -= 100;
+        } else {
+            score += 10;
+        }
+    }
+
+    // 4. Income Limit Filter
     const incomeLimits = program.income_limits;
     if (typeof incomeLimits === 'object' && incomeLimits !== null) {
       let countyLimit = null;
+      const userCounty = (county || "").toLowerCase();
+      const countyKey = Object.keys(incomeLimits).find(k => k.toLowerCase().includes(userCounty));
       
-      // If structured municipality exists, check its county first
-      if (program.municipality) {
-          // Some municipal programs have income limits as direct keys (1_person, etc.)
-          if (incomeLimits["1_person"] || incomeLimits["1-2_persons"]) {
-              const limits = incomeLimits;
-              if (householdSize <= 2 && (limits["1-2_persons"] || (householdSize === 1 ? limits["1_person"] : limits["2_persons"]))) {
-                  countyLimit = limits["1-2_persons"] || (householdSize === 1 ? limits["1_person"] : limits["2_persons"]);
-              } else if (householdSize >= 3 && limits["3+_persons"]) {
-                  countyLimit = limits["3+_persons"];
-              } else {
-                  countyLimit = limits[`${householdSize}_person`] || limits[`${householdSize}_persons`];
-              }
-          }
-      }
-      
-      // Fallback or standard state program lookup
-      if (!countyLimit) {
-        const countyKey = Object.keys(incomeLimits).find(k => k.toLowerCase().includes(county.toLowerCase()));
-        if (countyKey) {
-          const limits = incomeLimits[countyKey];
-          if (typeof limits === 'object') {
-            if (householdSize <= 2 && limits["1-2_persons"]) {
-              countyLimit = limits["1-2_persons"];
-            } else if (householdSize >= 3 && limits["3+_persons"]) {
-              countyLimit = limits["3+_persons"];
-            } else if (limits[`${householdSize}_person`] || limits[`${householdSize}_persons`]) {
-              countyLimit = limits[`${householdSize}_person`] || limits[`${householdSize}_persons`];
-            } else if (householdSize > 4 && (limits["4_persons"] || limits["4_person"])) {
-               countyLimit = (limits["4_persons"] || limits["4_person"]) * 1.1;
-            }
+      if (countyKey) {
+        const limits = incomeLimits[countyKey];
+        if (typeof limits === 'object') {
+          if (householdSize <= 2 && limits["1-2_persons"]) {
+            countyLimit = limits["1-2_persons"];
+          } else if (householdSize >= 3 && limits["3+_persons"]) {
+            countyLimit = limits["3+_persons"];
+          } else if (limits[`${householdSize}_person`] || limits[`${householdSize}_persons`]) {
+            countyLimit = limits[`${householdSize}_person`] || limits[`${householdSize}_persons`];
+          } else if (householdSize > 4 && (limits["4_persons"] || limits["4_person"])) {
+             // Scale beyond 4 persons (8% per additional person is a common housing guideline)
+             const baseLimit = limits["4_persons"] || limits["4_person"];
+             countyLimit = baseLimit * (1 + (householdSize - 4) * 0.08);
           }
         }
+      } else if (incomeLimits["1_person"]) {
+          if (incomeLimits[`${householdSize}_person`] || incomeLimits[`${householdSize}_persons`]) {
+              countyLimit = incomeLimits[`${householdSize}_person`] || incomeLimits[`${householdSize}_persons`];
+          }
       }
-
+      
       if (countyLimit) {
         if (income > countyLimit) {
           score -= 100;
         } else if (income > countyLimit * 0.9) {
-          score -= 10; // Close to limit
+          score -= 10;
         }
       }
     }
 
-    // 4. Purchase Price Filter
+    // 5. Purchase Price Filter
     const priceLimits = program.purchase_price_limits;
     if (typeof priceLimits === 'object' && priceLimits !== null) {
-      const countyKey = Object.keys(priceLimits).find(k => k.toLowerCase().includes(county.toLowerCase()));
-      const countyPriceLimit = countyKey ? priceLimits[countyKey] : null;
-      
-      if (countyPriceLimit && typeof countyPriceLimit === 'number') {
-        if (purchasePrice > countyPriceLimit) {
-          score -= 100;
-        } else if (purchasePrice > countyPriceLimit * 0.9) {
-          score -= 10;
+        const userCounty = (county || "").toLowerCase();
+        const countyKey = Object.keys(priceLimits).find(k => k.toLowerCase().includes(userCounty));
+        
+        if (countyKey) {
+            const limits = priceLimits[countyKey];
+            let priceLimit = null;
+            
+            if (typeof limits === 'object') {
+                if (propertyType === 'Single Family' && limits["1-family"]) priceLimit = limits["1-family"];
+                else if (propertyType === '2-4 Unit' && limits["2-family"]) priceLimit = limits["2-family"];
+                else if (limits["1-family"]) priceLimit = limits["1-family"];
+            } else {
+                priceLimit = limits;
+            }
+
+            if (priceLimit && purchasePrice > priceLimit) {
+                score -= 100;
+            } else if (priceLimit && purchasePrice > priceLimit * 0.9) {
+                score -= 10;
+            }
         }
-      }
     }
 
     // Determine match strength

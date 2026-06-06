@@ -21,7 +21,10 @@ function App() {
     purchasePrice: '',
     propertyType: 'Single Family',
     isFirstTimeBuyer: true,
-    isVeteran: false
+    isVeteran: false,
+    isInterestedInRenovation: false,
+    isInterestedInEnergy: false,
+    isInterestedInAccessibility: false
   });
 
   const [showResults, setShowResults] = useState(false);

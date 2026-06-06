@@ -152,6 +152,60 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
               </div>
             </div>
 
+            {/* Additional Interests */}
+            <div className="pt-2">
+              <label className="block text-sm font-medium text-warm-600 mb-3">Optional: Are you interested in any of these?</label>
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input 
+                      type="checkbox" 
+                      name="isInterestedInRenovation"
+                      checked={formData.isInterestedInRenovation}
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInRenovation ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
+                      {formData.isInterestedInRenovation && <span className="text-white text-xs">✓</span>}
+                    </div>
+                  </div>
+                  <span className="text-sm text-warm-700">Fixing up a home that needs repairs (Renovation)</span>
+                </label>
+
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input 
+                      type="checkbox" 
+                      name="isInterestedInEnergy"
+                      checked={formData.isInterestedInEnergy}
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInEnergy ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
+                      {formData.isInterestedInEnergy && <span className="text-white text-xs">✓</span>}
+                    </div>
+                  </div>
+                  <span className="text-sm text-warm-700">Energy-saving upgrades (Solar, Insulation, etc.)</span>
+                </label>
+
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input 
+                      type="checkbox" 
+                      name="isInterestedInAccessibility"
+                      checked={formData.isInterestedInAccessibility}
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInAccessibility ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
+                      {formData.isInterestedInAccessibility && <span className="text-white text-xs">✓</span>}
+                    </div>
+                  </div>
+                  <span className="text-sm text-warm-700">Modifications for disabilities (Accessibility)</span>
+                </label>
+              </div>
+            </div>
+
             <button 
               type="submit" 
               disabled={isSearching}
