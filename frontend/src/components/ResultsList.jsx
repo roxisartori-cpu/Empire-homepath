@@ -167,7 +167,8 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
                 </a>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
 
         {/* Save button */}
