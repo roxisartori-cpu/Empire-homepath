@@ -8,11 +8,17 @@ import LenderModal from './components/LenderModal';
 import Glossary from './components/Glossary';
 import Checklist from './components/Checklist';
 import Footer from './components/Footer';
+import Auth from './components/Auth';
+import SubscriptionPaywall from './components/SubscriptionPaywall';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [loading, setLoading] = useState(!!token);
+
   const [formData, setFormData] = useState({
     county: '',
     city: '',
@@ -34,12 +40,47 @@ function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [verificationStates, setVerificationStates] = useState({});
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
+  // Fetch user profile if token exists
+  useEffect(() => {
+    if (token) {
+      fetch(`${API_BASE_URL}/api/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Session expired');
+        return res.json();
+      })
+      .then(userData => {
+        setUser(userData);
+        setLoading(false);
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setToken(null);
+        setLoading(false);
+      });
+    }
+  }, [token]);
+
+  const handleAuthSuccess = (data) => {
+    localStorage.setItem('token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    setUser(null);
+    setShowResults(false);
+  };
+
   const matchedPrograms = useMemo(() => {
     if (!showResults) return [];
     return matchPrograms(programsData, formData);
   }, [formData, showResults]);
-
-  const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
   // Poll for verification updates
   useEffect(() => {
@@ -51,7 +92,9 @@ function App() {
         const state = verificationStates[programId];
         if (state.status === 'pending') {
           try {
-            const res = await fetch(`${API_BASE_URL}/api/status/${state.requestId}`);
+            const res = await fetch(`${API_BASE_URL}/api/status/${state.requestId}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (res.ok) {
               const data = await res.json();
               if (data.status !== 'pending') {
@@ -74,13 +117,16 @@ function App() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [verificationStates]);
+  }, [verificationStates, token]);
 
   const handleVerifyLive = async (programId) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           program_id: programId,
           user_data: {
@@ -122,12 +168,10 @@ function App() {
     e.preventDefault();
     setIsSearching(true);
     
-    // Simulate a brief search delay for better UX
     setTimeout(() => {
       setShowResults(true);
       setIsSearching(false);
       
-      // Scroll to results
       setTimeout(() => {
         const resultsSection = document.getElementById('results');
         if (resultsSection) {
@@ -137,44 +181,61 @@ function App() {
     }, 800);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-warm-50">
+        <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const isSubscribed = user?.subscription_status === 'active' || user?.subscription_status === 'trialing';
+
   return (
     <div className="min-h-screen bg-warm-50 text-warm-800 font-sans">
-      <NavBar />
+      <NavBar user={user} onLogout={handleLogout} />
       
       <main>
-        {!showResults && <Hero />}
-        
-        <div className={showResults ? 'pt-8' : ''}>
-          <EligibilityForm 
-            formData={formData} 
-            handleInputChange={handleInputChange} 
-            handleSubmit={handleSubmit}
-            isSearching={isSearching}
-          />
-        </div>
-
-        {isSearching && (
-          <div className="max-w-4xl mx-auto px-4 py-12">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-              <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+        {!token ? (
+          <Auth onAuthSuccess={handleAuthSuccess} />
+        ) : !isSubscribed ? (
+          <SubscriptionPaywall user={user} />
+        ) : (
+          <>
+            {!showResults && <Hero />}
+            
+            <div className={showResults ? 'pt-8' : ''}>
+              <EligibilityForm 
+                formData={formData} 
+                handleInputChange={handleInputChange} 
+                handleSubmit={handleSubmit}
+                isSearching={isSearching}
+              />
             </div>
-          </div>
-        )}
 
-        {showResults && !isSearching && (
-          <ResultsList 
-            programs={matchedPrograms} 
-            onSaveClick={() => setIsSaveModalOpen(true)} 
-            verificationStates={verificationStates}
-            onVerifyLive={handleVerifyLive}
-            onLenderClick={handleLenderClick}
-          />
-        )}
+            {isSearching && (
+              <div className="max-w-4xl mx-auto px-4 py-12">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+                  <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                </div>
+              </div>
+            )}
 
-        <Glossary />
-        
-        <Checklist />
+            {showResults && !isSearching && (
+              <ResultsList 
+                programs={matchedPrograms} 
+                onSaveClick={() => setIsSaveModalOpen(true)} 
+                verificationStates={verificationStates}
+                onVerifyLive={handleVerifyLive}
+                onLenderClick={handleLenderClick}
+              />
+            )}
+
+            <Glossary />
+            <Checklist />
+          </>
+        )}
       </main>
 
       <Footer />

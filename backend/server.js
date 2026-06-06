@@ -2,12 +2,28 @@ import express from 'express';
 import cors from 'cors';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import Stripe from 'stripe';
+import { authenticateToken } from './middleware.js';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
+
+// Stripe webhook needs raw body
+app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  // Webhook handling will go here
+  res.send();
+});
+
 app.use(express.json());
 
 const PORT = 3001;
+const JWT_SECRET = process.env.JWT_SECRET || 'empire-homepath-pro-secret-key-2026';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 
 function runDb(query) {
   try {
@@ -21,7 +37,112 @@ function runDb(query) {
   }
 }
 
-app.post('/api/verify', (req, res) => {
+// --- Auth Endpoints ---
+
+app.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  try {
+    const existing = runDb(`SELECT id FROM users WHERE email = '${email.replace(/'/g, "''")}'`);
+    if (existing.length > 0) return res.status(400).json({ error: 'Email already registered' });
+
+    const id = crypto.randomUUID();
+    const passwordHash = await bcrypt.hash(password, 10);
+    const createdAt = new Date().toISOString();
+
+    // Create Stripe customer
+    let stripeCustomerId = null;
+    try {
+      const customer = await stripe.customers.create({ email });
+      stripeCustomerId = customer.id;
+    } catch (sErr) {
+      console.warn('Stripe customer creation failed (placeholder key?):', sErr.message);
+    }
+
+    runDb(`INSERT INTO users (id, email, password_hash, stripe_customer_id, created_at) VALUES ('${id}', '${email.replace(/'/g, "''")}', '${passwordHash}', '${stripeCustomerId || ''}', '${createdAt}')`);
+
+    const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, user: { id, email, plan: 'free' } });
+  } catch (err) {
+    res.status(500).json({ error: 'Registration failed', details: err.message });
+  }
+});
+
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const users = runDb(`SELECT * FROM users WHERE email = '${email.replace(/'/g, "''")}'`);
+    if (users.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const user = users[0];
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ 
+      token, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        plan: user.plan,
+        subscription_status: user.subscription_status
+      } 
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Login failed', details: err.message });
+  }
+});
+
+app.get('/api/me', authenticateToken, (req, res) => {
+  try {
+    const users = runDb(`SELECT id, email, plan, subscription_status, white_label_settings FROM users WHERE id = '${req.user.id}'`);
+    if (users.length === 0) return res.status(404).json({ error: 'User not found' });
+    res.json(users[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user', details: err.message });
+  }
+});
+
+// --- Subscription Endpoints ---
+
+app.post('/api/create-checkout-session', authenticateToken, async (req, res) => {
+  const { priceId } = req.body; // Price IDs for Standard ($150) or White Label ($375)
+  
+  try {
+    const users = runDb(`SELECT stripe_customer_id FROM users WHERE id = '${req.user.id}'`);
+    const customerId = users[0]?.stripe_customer_id;
+
+    if (!customerId) return res.status(400).json({ error: 'Stripe customer not found for user' });
+
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ['card'],
+      line_items: [{ price: priceId, quantity: 1 }],
+      mode: 'subscription',
+      subscription_data: {
+        trial_period_days: 7,
+      },
+      success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/pricing`,
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    res.status(500).json({ error: 'Stripe session creation failed', details: err.message });
+  }
+});
+
+// --- Existing Functionality (Protected) ---
+
+app.post('/api/verify', authenticateToken, (req, res) => {
+  // Check subscription before allowing verification
+  const users = runDb(`SELECT subscription_status, plan FROM users WHERE id = '${req.user.id}'`);
+  const user = users[0];
+  if (user?.subscription_status !== 'active' && user?.subscription_status !== 'trialing') {
+    return res.status(403).json({ error: 'Active subscription required' });
+  }
+
   const { program_id, user_data } = req.body;
   const id = crypto.randomUUID();
   const created_at = new Date().toISOString();
@@ -29,7 +150,6 @@ app.post('/api/verify', (req, res) => {
   try {
     runDb(`INSERT INTO verification_requests (id, program_id, user_data, status, created_at, updated_at) VALUES ('${id}', '${program_id}', '${JSON.stringify(user_data).replace(/'/g, "''")}', 'pending', '${created_at}', '${created_at}')`);
     
-    // Also notify the agent via inbox
     const messageId = crypto.randomUUID();
     runDb(`INSERT INTO inbox (id, from_agent, to_agent, body) VALUES ('${messageId}', 'agent-engineer', 'agent-live-verification-agent', 'New verification request: ${id} for program ${program_id}')`);
     
@@ -39,17 +159,13 @@ app.post('/api/verify', (req, res) => {
   }
 });
 
-app.get('/api/status/:id', (req, res) => {
+app.get('/api/status/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
   try {
     const results = runDb(`SELECT * FROM verification_requests WHERE id = '${id}'`);
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Not found' });
-    }
+    if (results.length === 0) return res.status(404).json({ error: 'Not found' });
     const row = results[0];
-    if (row.result_data) {
-        row.result_data = JSON.parse(row.result_data);
-    }
+    if (row.result_data) row.result_data = JSON.parse(row.result_data);
     res.json(row);
   } catch (err) {
     res.status(500).json({ error: 'Database error', details: err.message });
@@ -57,6 +173,9 @@ app.get('/api/status/:id', (req, res) => {
 });
 
 app.post('/api/lender-inquiry', (req, res) => {
+    // This might remain public if it's the end-customer (homebuyer) filling it out
+    // But in the SaaS model, maybe this is only for users on the LO/Agent's white-label portal
+    // For now, keep as is.
   const { program_name, name, email, phone, message } = req.body;
   const id = crypto.randomUUID();
   const created_at = new Date().toISOString();
