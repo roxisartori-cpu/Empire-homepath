@@ -39,7 +39,7 @@ const Auth = ({ onAuthSuccess }) => {
         {isLogin ? 'Welcome Back' : 'Create Account'}
       </h2>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg">
             {error}

@@ -44,7 +44,7 @@ app.post('/api/register', async (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
   try {
-    const existing = runDb(`SELECT id FROM users WHERE email = '${email.replace(/'/g, "''")}'`);
+    const existing = runDb(`SELECT id FROM users WHERE LOWER(email) = LOWER('${email.replace(/'/g, "''")}')`);
     if (existing.length > 0) return res.status(400).json({ error: 'Email already registered' });
 
     const id = crypto.randomUUID();
@@ -73,7 +73,7 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const users = runDb(`SELECT * FROM users WHERE email = '${email.replace(/'/g, "''")}'`);
+    const users = runDb(`SELECT * FROM users WHERE LOWER(email) = LOWER('${email.replace(/'/g, "''")}')`);
     if (users.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
     const user = users[0];
