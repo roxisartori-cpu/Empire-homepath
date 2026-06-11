@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import Auth from './components/Auth';
 import SubscriptionPaywall from './components/SubscriptionPaywall';
 import AdminDashboard from './components/AdminDashboard';
+import WhiteLabelSettings from './components/WhiteLabelSettings';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -19,7 +20,18 @@ function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(!!token);
-  const [currentView, setCurrentView] = useState('app'); // 'app' or 'admin'
+  const [currentView, setCurrentView] = useState('app'); // 'app', 'admin', 'branding'
+
+  const brandingStyles = useMemo(() => {
+    if (user?.plan !== 'white-label' || !user?.white_label_settings) return null;
+    try {
+      return typeof user.white_label_settings === 'string' 
+        ? JSON.parse(user.white_label_settings) 
+        : user.white_label_settings;
+    } catch (e) {
+      return null;
+    }
+  }, [user]);
 
   const [formData, setFormData] = useState({
     county: '',
@@ -66,7 +78,7 @@ function App() {
     }
   }, [token]);
 
-  const handleAuthSuccess = (data) => {
+  const handleAuthSuccess = (data) => { console.log('Login success:', data.user.email);
     localStorage.setItem('token', data.token);
     setToken(data.token);
     setUser(data.user);
@@ -203,49 +215,69 @@ function App() {
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-800 font-sans">
-      <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
+      {brandingStyles && (
+        <style>{`
+          :root {
+            --brand-primary: ${brandingStyles.primaryColor};
+            --brand-secondary: ${brandingStyles.secondaryColor};
+          }
+          .text-brand-600, .text-brand-700, .text-brand-800, .text-brand-900 { color: var(--brand-primary) !important; }
+          .bg-brand-600, .bg-brand-700, .bg-brand-800 { background-color: var(--brand-primary) !important; }
+          .border-brand-500, .border-brand-600 { border-color: var(--brand-primary) !important; }
+          .focus\\:ring-brand-400:focus { --tw-ring-color: var(--brand-primary) !important; }
+          .from-brand-900 { --tw-gradient-from: var(--brand-primary) !important; }
+        `}</style>
+      )}
       
       <main>
-        {!token ? (
+        {(!token || !user) ? (
           <Auth onAuthSuccess={handleAuthSuccess} />
-        ) : !isSubscribed ? (
-          <SubscriptionPaywall user={user} />
-        ) : currentView === 'admin' && user?.role === 'admin' ? (
-          <AdminDashboard />
         ) : (
           <>
-            {!showResults && <Hero />}
+            <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
             
-            <div className={showResults ? 'pt-8' : ''}>
-              <EligibilityForm 
-                formData={formData} 
-                handleInputChange={handleInputChange} 
-                handleSubmit={handleSubmit}
-                isSearching={isSearching}
-              />
-            </div>
-
-            {isSearching && (
-              <div className="max-w-4xl mx-auto px-4 py-12">
-                <div className="flex flex-col items-center justify-center space-y-4">
-                  <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-                  <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+            {!isSubscribed ? (
+              <SubscriptionPaywall user={user} />
+            ) : currentView === 'admin' && user?.role === 'admin' ? (
+              <AdminDashboard />
+            ) : currentView === 'branding' && user?.plan === 'white-label' ? (
+              <WhiteLabelSettings user={user} onUpdateUser={setUser} />
+            ) : (
+              <>
+                {!showResults && <Hero />}
+                
+                <div className={showResults ? 'pt-8' : ''}>
+                  <EligibilityForm 
+                    formData={formData} 
+                    handleInputChange={handleInputChange} 
+                    handleSubmit={handleSubmit}
+                    isSearching={isSearching}
+                  />
                 </div>
-              </div>
-            )}
 
-            {showResults && !isSearching && (
-              <ResultsList 
-                programs={matchedPrograms} 
-                onSaveClick={() => setIsSaveModalOpen(true)} 
-                verificationStates={verificationStates}
-                onVerifyLive={handleVerifyLive}
-                onLenderClick={handleLenderClick}
-              />
-            )}
+                {isSearching && (
+                  <div className="max-w-4xl mx-auto px-4 py-12">
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                      <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+                      <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                    </div>
+                  </div>
+                )}
 
-            <Glossary />
-            <Checklist />
+                {showResults && !isSearching && (
+                  <ResultsList 
+                    programs={matchedPrograms} 
+                    onSaveClick={() => setIsSaveModalOpen(true)} 
+                    verificationStates={verificationStates}
+                    onVerifyLive={handleVerifyLive}
+                    onLenderClick={handleLenderClick}
+                  />
+                )}
+
+                <Glossary />
+                <Checklist />
+              </>
+            )}
           </>
         )}
       </main>

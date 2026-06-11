@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, ChevronRight, Star, RefreshCw, CheckCircle, AlertCircle, Building2 } from 'lucide-react';
 
-const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyLive, onLenderClick }) => {
+const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyLive, onLenderClick, isAdminView = false }) => {
   if (programs.length === 0) {
     return (
       <section id="results" className="px-4 pb-16">
@@ -172,14 +172,16 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
         </div>
 
         {/* Save button */}
-        <div className="mt-12 text-center">
-          <button 
-            onClick={onSaveClick}
-            className="inline-flex items-center gap-2 bg-white border-2 border-brand-200 hover:border-brand-400 text-brand-800 px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all"
-          >
-            💾 Save My Results
-          </button>
-        </div>
+        {!isAdminView && (
+          <div className="mt-12 text-center">
+            <button 
+              onClick={onSaveClick}
+              className="inline-flex items-center gap-2 bg-white border-2 border-brand-200 hover:border-brand-400 text-brand-800 px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all"
+            >
+              💾 Save My Results
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -70,7 +70,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => { console.log('Login attempt:', req.body.email);
   const { email, password } = req.body;
   try {
     const users = runDb(`SELECT * FROM users WHERE LOWER(email) = LOWER('${email.replace(/'/g, "''")}')`);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Menu, X, LogOut, User } from 'lucide-react';
+import { Home, Menu, X, LogOut, User, Palette } from 'lucide-react';
 
 const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +20,14 @@ const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
               className="text-brand-600 hover:text-brand-700 font-bold text-sm transition px-4 py-2 bg-brand-50 rounded-lg border border-brand-100"
             >
               {currentView === 'admin' ? '🚀 Go to App' : '🛠 Admin Panel'}
+            </button>
+          )}
+          {user?.plan === 'white-label' && (
+            <button 
+              onClick={() => onViewChange(currentView === 'branding' ? 'app' : 'branding')}
+              className="text-amber-600 hover:text-amber-700 font-bold text-sm transition px-4 py-2 bg-amber-50 rounded-lg border border-amber-100 flex items-center gap-2"
+            >
+              <Palette size={16} /> Branding
             </button>
           )}
           <a href="#glossary" className="text-warm-600 hover:text-brand-500 font-medium text-sm transition">📖 Glossary</a>

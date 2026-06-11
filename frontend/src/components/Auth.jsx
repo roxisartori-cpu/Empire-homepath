@@ -16,7 +16,7 @@ const Auth = ({ onAuthSuccess }) => {
     const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
     try {
-      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+      console.log('Fetching:', `${endpoint}`); const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
