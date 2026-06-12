@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Hero from './components/Hero';
 import EligibilityForm from './components/EligibilityForm';
@@ -12,15 +13,22 @@ import Auth from './components/Auth';
 import SubscriptionPaywall from './components/SubscriptionPaywall';
 import AdminDashboard from './components/AdminDashboard';
 import WhiteLabelSettings from './components/WhiteLabelSettings';
+import ProfessionalDashboard from './components/ProfessionalDashboard';
+import PdfReport from './components/report/PdfReport';
+import WidgetEmbed from './pages/WidgetEmbed';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
 
 function App() {
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(!!token);
   const [currentView, setCurrentView] = useState('app'); // 'app', 'admin', 'branding'
+
+  const isWidgetRoute = location.pathname === '/widget/embed';
+  const isReportRoute = location.pathname === '/report';
 
   const brandingStyles = useMemo(() => {
     if (user?.plan !== 'white-label' || !user?.white_label_settings) return null;
@@ -215,7 +223,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-800 font-sans">
-      {brandingStyles && (
+      {!isWidgetRoute && !isReportRoute && brandingStyles && (
         <style>{`
           :root {
             --brand-primary: ${brandingStyles.primaryColor};
@@ -230,72 +238,86 @@ function App() {
       )}
       
       <main>
-        {(!token || !user) ? (
-          <Auth onAuthSuccess={handleAuthSuccess} />
-        ) : (
-          <>
-            <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
-            
-            {!isSubscribed ? (
-              <SubscriptionPaywall user={user} />
-            ) : currentView === 'admin' && user?.role === 'admin' ? (
-              <AdminDashboard />
-            ) : currentView === 'branding' && user?.plan === 'white-label' ? (
-              <WhiteLabelSettings user={user} onUpdateUser={setUser} />
+        <Routes>
+          <Route path="/report" element={<PdfReport />} />
+          <Route path="/widget/embed" element={<WidgetEmbed />} />
+          <Route path="*" element={
+            (!token || !user) ? (
+              <Auth onAuthSuccess={handleAuthSuccess} />
             ) : (
               <>
-                {!showResults && <Hero />}
+                <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
                 
-                <div className={showResults ? 'pt-8' : ''}>
-                  <EligibilityForm 
-                    formData={formData} 
-                    handleInputChange={handleInputChange} 
-                    handleSubmit={handleSubmit}
-                    isSearching={isSearching}
-                  />
-                </div>
-
-                {isSearching && (
-                  <div className="max-w-4xl mx-auto px-4 py-12">
-                    <div className="flex flex-col items-center justify-center space-y-4">
-                      <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-                      <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                {!isSubscribed ? (
+                  <SubscriptionPaywall user={user} />
+                ) : currentView === 'admin' && user?.role === 'admin' ? (
+                  <AdminDashboard />
+                ) : currentView === 'branding' && user?.plan === 'white-label' ? (
+                  <WhiteLabelSettings user={user} onUpdateUser={setUser} />
+                ) : currentView === 'dashboard' ? (
+                  <ProfessionalDashboard user={user} />
+                ) : (
+                  <>
+                    {!showResults && <Hero />}
+                    
+                    <div className={showResults ? 'pt-8' : ''}>
+                      <EligibilityForm 
+                        formData={formData} 
+                        handleInputChange={handleInputChange} 
+                        handleSubmit={handleSubmit}
+                        isSearching={isSearching}
+                      />
                     </div>
-                  </div>
-                )}
 
-                {showResults && !isSearching && (
-                  <ResultsList 
-                    programs={matchedPrograms} 
-                    onSaveClick={() => setIsSaveModalOpen(true)} 
-                    verificationStates={verificationStates}
-                    onVerifyLive={handleVerifyLive}
-                    onLenderClick={handleLenderClick}
-                  />
-                )}
+                    {isSearching && (
+                      <div className="max-w-4xl mx-auto px-4 py-12">
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                          <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+                          <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                        </div>
+                      </div>
+                    )}
 
-                <Glossary />
-                <Checklist />
+                    {showResults && !isSearching && (
+                      <ResultsList 
+                        programs={matchedPrograms} 
+                        onSaveClick={() => setIsSaveModalOpen(true)} 
+                        verificationStates={verificationStates}
+                        onVerifyLive={handleVerifyLive}
+                        onLenderClick={handleLenderClick}
+                        formData={formData}
+                        user={user}
+                      />
+                    )}
+
+                    <Glossary />
+                    <Checklist />
+                  </>
+                )}
               </>
-            )}
-          </>
-        )}
+            )
+          } />
+        </Routes>
       </main>
 
-      <Footer />
+      {!isWidgetRoute && !isReportRoute && <Footer />}
 
-      <SaveResults 
-        isOpen={isSaveModalOpen} 
-        onClose={() => setIsSaveModalOpen(false)} 
-        formData={formData}
-      />
+      {!isWidgetRoute && !isReportRoute && (
+        <>
+          <SaveResults 
+            isOpen={isSaveModalOpen} 
+            onClose={() => setIsSaveModalOpen(false)} 
+            formData={formData}
+          />
 
-      <LenderModal
-        isOpen={isLenderModalOpen}
-        onClose={() => setIsLenderModalOpen(false)}
-        programName={selectedProgramForLender}
-        apiUrl={API_BASE_URL}
-      />
+          <LenderModal
+            isOpen={isLenderModalOpen}
+            onClose={() => setIsLenderModalOpen(false)}
+            programName={selectedProgramForLender}
+            apiUrl={API_BASE_URL}
+          />
+        </>
+      )}
     </div>
   );
 }

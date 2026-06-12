@@ -1,0 +1,28 @@
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt !important;
+  }
+
+  .report-page {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  a {
+    color: #2563eb !important;
+    text-decoration: underline !important;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+}

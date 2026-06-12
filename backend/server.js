@@ -249,6 +249,31 @@ app.post('/api/lender-inquiry', async (req, res) => {
   }
 });
 
+// --- Leads Endpoints ---
+
+app.post('/api/leads', async (req, res) => {
+  const { pro_id, email, county, income, purchase_price, matched_count } = req.body;
+  const id = crypto.randomUUID();
+  const created_at = new Date().toISOString();
+  
+  try {
+    await runDb('INSERT INTO leads (id, pro_id, email, county, income, purchase_price, matched_count, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+      [id, pro_id, email, county, income, purchase_price, matched_count, created_at]);
+    res.json({ success: true, id });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
+app.get('/api/leads', authenticateToken, async (req, res) => {
+  try {
+    const leads = await runDb('SELECT * FROM leads WHERE pro_id = ? ORDER BY created_at DESC', [req.user.id]);
+    res.json(leads);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch leads', details: err.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Bridge server listening on http://0.0.0.0:${PORT}`);
 });

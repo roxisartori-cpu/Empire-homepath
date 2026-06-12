@@ -1,7 +1,10 @@
 import React from 'react';
-import { ExternalLink, ChevronRight, Star, RefreshCw, CheckCircle, AlertCircle, Building2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ExternalLink, ChevronRight, Star, RefreshCw, CheckCircle, AlertCircle, Building2, FileText } from 'lucide-react';
 
-const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyLive, onLenderClick, isAdminView = false }) => {
+const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyLive, onLenderClick, isAdminView = false, formData = {}, user = null }) => {
+  const navigate = useNavigate();
+
   if (programs.length === 0) {
     return (
       <section id="results" className="px-4 pb-16">
@@ -13,6 +16,26 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
       </section>
     );
   }
+
+  const handlePrintClick = () => {
+    const formattedResults = programs.map(p => ({
+      id: p.program_id || p.id,
+      name: p.program_name,
+      description: p.description,
+      matchScore: p.matchStrength,
+      incomeLimit: typeof p.income_limits === 'string' ? p.income_limits : 'Varies',
+      priceLimit: typeof p.purchase_price_limits === 'string' ? p.purchase_price_limits : 'Varies',
+      url: p.official_url
+    }));
+
+    navigate('/report', { 
+      state: { 
+        results: formattedResults, 
+        formData, 
+        user 
+      } 
+    });
+  };
 
   const badgeColors = {
     'Strong': 'bg-leaf-100 text-leaf-600',
@@ -171,12 +194,18 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
           })}
         </div>
 
-        {/* Save button */}
+        {/* Action buttons */}
         {!isAdminView && (
-          <div className="mt-12 text-center">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button 
+              onClick={handlePrintClick}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all active:scale-95"
+            >
+              <FileText size={20} /> Professional PDF Report
+            </button>
             <button 
               onClick={onSaveClick}
-              className="inline-flex items-center gap-2 bg-white border-2 border-brand-200 hover:border-brand-400 text-brand-800 px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white border-2 border-brand-200 hover:border-brand-400 text-brand-800 px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all"
             >
               💾 Save My Results
             </button>

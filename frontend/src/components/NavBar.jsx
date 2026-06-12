@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Home, Menu, X, LogOut, User, Palette } from 'lucide-react';
+import { Home, Menu, X, LogOut, User, Palette, LayoutDashboard } from 'lucide-react';
 
 const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isSubscribed = user?.role === 'admin' || user?.subscription_status === 'active' || (user?.subscription_status === 'trialing' && (!user.trial_end || new Date(user.trial_end) > new Date()));
 
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-brand-200 shadow-sm">
@@ -14,6 +16,16 @@ const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
         
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
+          {isSubscribed && (
+            <button 
+              onClick={() => onViewChange(currentView === 'dashboard' ? 'app' : 'dashboard')}
+              className={`text-sm font-bold transition flex items-center gap-2 px-4 py-2 rounded-lg border ${
+                currentView === 'dashboard' ? 'bg-brand-600 text-white border-brand-600' : 'text-brand-600 bg-brand-50 border-brand-100 hover:bg-brand-100'
+              }`}
+            >
+              <LayoutDashboard size={16} /> {currentView === 'dashboard' ? '🚀 Go to Search' : 'Dashboard'}
+            </button>
+          )}
           {user?.role === 'admin' && (
             <button 
               onClick={() => onViewChange(currentView === 'admin' ? 'app' : 'admin')}
@@ -63,6 +75,14 @@ const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-b border-warm-200 px-4 py-6 space-y-4 shadow-xl animate-fade-in">
+          {isSubscribed && (
+            <button 
+              onClick={() => { onViewChange('dashboard'); setIsMenuOpen(false); }}
+              className="block w-full text-left text-lg text-brand-700 hover:text-brand-800 font-bold flex items-center gap-2"
+            >
+              <LayoutDashboard size={20} /> Professional Dashboard
+            </button>
+          )}
           <a href="#glossary" className="block text-lg text-warm-700 hover:text-brand-600 font-semibold" onClick={() => setIsMenuOpen(false)}>📖 Glossary</a>
           <a href="#checklist" className="block text-lg text-warm-700 hover:text-brand-600 font-semibold" onClick={() => setIsMenuOpen(false)}>📋 Checklist</a>
           
