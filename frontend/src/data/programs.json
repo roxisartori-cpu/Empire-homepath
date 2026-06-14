@@ -183,17 +183,17 @@
     "property_type_eligibility": "See program guidelines."
   },
   {
-    "id": "fannie-mae-homestyle",
-    "program_name": "Fannie Mae HomeStyle Renovation",
-    "program_type": "Renovation",
-    "description": "A conventional mortgage that allows borrowers to purchase or refinance a property and include the cost of repairs, additions, or energy efficiency improvements in the loan.",
+    "id": "fannie-mae-resources",
+    "program_name": "Fannie Mae Homeownership & Rental Resources",
+    "program_type": "Resources & Education",
+    "description": "Comprehensive consumer portal providing resources, educational tools, and assistance options for homebuyers, homeowners, and renters. Covers mortgage products, foreclosure prevention, and rental assistance.",
     "data_year": 2026,
-    "income_limits": "No income limits for standard HomeStyle; HomeReady-eligible borrowers may have income limits (typically 80% AMI).",
-    "official_url": "https://singlefamily.fanniemae.com/originating-underwriting/mortgage-products/homestyle-renovation-mortgage",
+    "income_limits": "Varies by specific assistance program; general resources have no income limits.",
+    "official_url": "https://yourhome.fanniemae.com",
     "counties_served": "All 62 counties in New York State",
     "category": "Federal",
-    "purchase_price_limits": "Varies by county and property type.",
-    "property_type_eligibility": "See program guidelines."
+    "purchase_price_limits": "Varies by specific product.",
+    "property_type_eligibility": "Includes single-family homes, condos, co-ops, and rental properties."
   },
   {
     "id": "usda-502-direct",

@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-const hash = '$2b$10$yCr2wudvtG7iIreoCimh7.Ww5RRoiFjEqUFoH.26ZkqnToHrfr4Na';
+const hash = '$2b$10$fqF1YYJ4j5Nw7HsejX.0DO4x.YRR11lxlCJ5G/deJxRj7KKCxK1P.';
 const password = 'EmpireAdmin2026!';
-const matches = await bcrypt.compare(password, hash);
-console.log('Matches:', matches);
+bcrypt.compare(password, hash).then(res => console.log('Match:', res));

@@ -46,9 +46,17 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
   return (
     <section id="results" className="px-4 pb-16">
       <div className="max-w-4xl mx-auto animate-fade-in">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-brand-800">We found programs that match your info</h2>
-          <span className="text-sm text-warm-400">Showing {programs.length} programs</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-brand-800">We found programs that match your info</h2>
+            <span className="text-sm text-warm-400">Showing {programs.length} programs</span>
+          </div>
+          <button 
+            onClick={handlePrintClick}
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all active:scale-95"
+          >
+            <FileText size={16} /> Generate PDF
+          </button>
         </div>
 
         <div className="space-y-4">
@@ -201,7 +209,7 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
               onClick={handlePrintClick}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all active:scale-95"
             >
-              <FileText size={20} /> Professional PDF Report
+              <FileText size={20} /> Generate PDF Report
             </button>
             <button 
               onClick={onSaveClick}

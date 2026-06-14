@@ -58,10 +58,24 @@ app.post('/api/register', async (req, res) => {
     // Create Stripe customer
     let stripeCustomerId = null;
     try {
-      const customer = await stripe.customers.create({ email });
-      stripeCustomerId = customer.id;
+      console.log(`Creating Stripe customer for ${email}...`);
+      // Check if customer already exists in Stripe by email to avoid duplicates
+      const existingCustomers = await stripe.customers.list({ email: email.toLowerCase(), limit: 1 });
+      
+      if (existingCustomers.data.length > 0) {
+        stripeCustomerId = existingCustomers.data[0].id;
+        console.log(`Found existing Stripe customer for ${email}: ${stripeCustomerId}`);
+      } else {
+        const customer = await stripe.customers.create({ 
+          email: email.toLowerCase(),
+          metadata: { userId: id, source: 'registration' }
+        });
+        stripeCustomerId = customer.id;
+        console.log(`Stripe customer created: ${stripeCustomerId}`);
+      }
     } catch (sErr) {
-      console.warn('Stripe customer creation failed (placeholder key?):', sErr.message);
+      console.error('CRITICAL: Stripe customer operations failed during registration:', sErr.message);
+      // We don't block registration, the lazy logic in checkout will try again if needed.
     }
 
     await runDb('INSERT INTO users (id, email, password_hash, stripe_customer_id, created_at, role) VALUES (?, ?, ?, ?, ?, ?)', [id, email, passwordHash, stripeCustomerId || '', createdAt, role]);
@@ -73,11 +87,17 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => { console.log('Login attempt:', req.body.email); console.log('Querying DB...');
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log('Login attempt for:', email);
+  console.log('Password length:', password ? password.length : 0);
   try {
     const users = await runDb('SELECT * FROM users WHERE LOWER(email) = LOWER(?)', [email]);
-    if (users.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+    console.log('Users found:', users.length);
+    if (users.length === 0) {
+      console.log('No user found with email:', email);
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
     const user = users[0];
     const valid = await bcrypt.compare(password, user.password_hash);
@@ -167,10 +187,37 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
   const { priceId } = req.body; // Price IDs for Standard ($150) or White Label ($375)
   
   try {
-    const users = await runDb('SELECT stripe_customer_id FROM users WHERE id = ?', [req.user.id]);
-    const customerId = users[0]?.stripe_customer_id;
+    const users = await runDb('SELECT email, stripe_customer_id FROM users WHERE id = ?', [req.user.id]);
+    if (users.length === 0) return res.status(404).json({ error: 'User not found' });
+    
+    let customerId = users[0].stripe_customer_id;
+    const email = users[0].email;
 
-    if (!customerId) return res.status(400).json({ error: 'Stripe customer not found for user' });
+    if (!customerId || customerId.trim() === '') {
+      console.log(`User ${req.user.id} missing Stripe customer ID. Attempting lazy creation for ${email}...`);
+      try {
+        // First, check if customer already exists in Stripe by email to avoid duplicates
+        const existingCustomers = await stripe.customers.list({ email: email.toLowerCase(), limit: 1 });
+        
+        if (existingCustomers.data.length > 0) {
+          customerId = existingCustomers.data[0].id;
+          console.log(`Found existing Stripe customer for ${email}: ${customerId}`);
+        } else {
+          const customer = await stripe.customers.create({ 
+            email: email.toLowerCase(),
+            metadata: { userId: req.user.id, source: 'lazy_creation' }
+          });
+          customerId = customer.id;
+          console.log(`Created new Stripe customer for ${email}: ${customerId}`);
+        }
+
+        // Update user in DB
+        await runDb('UPDATE users SET stripe_customer_id = ? WHERE id = ?', [customerId, req.user.id]);
+      } catch (sErr) {
+        console.error('CRITICAL: Lazy Stripe customer creation failed:', sErr.message);
+        return res.status(500).json({ error: 'Failed to initialize payment profile', details: sErr.message });
+      }
+    }
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
