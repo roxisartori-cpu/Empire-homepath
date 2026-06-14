@@ -55,7 +55,7 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
             onClick={handlePrintClick}
             className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all active:scale-95"
           >
-            <FileText size={16} /> Generate PDF
+            <FileText size={16} /> Generate PDF Report
           </button>
         </div>
 
