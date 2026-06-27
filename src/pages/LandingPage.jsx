@@ -58,9 +58,6 @@ const LandingPage = () => {
     window.closeOut = (e) => {
       if (e.target === document.getElementById('disc-modal')) window.closeModal();
     };
-    window.handleGetStarted = () => {
-      navigate('/search');
-    };
 
     // Attach listener for Escape key
     const handleKeyDown = (e) => {
@@ -75,7 +72,6 @@ const LandingPage = () => {
       delete window.openModal;
       delete window.closeModal;
       delete window.closeOut;
-      delete window.handleGetStarted;
 
       // Reset background color on unmount
       document.body.style.backgroundColor = '';

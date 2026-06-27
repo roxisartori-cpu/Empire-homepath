@@ -207,7 +207,7 @@ function App() {
 
   if (loading && !isLandingRoute) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-warm-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
         <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
       </div>
     );
@@ -224,7 +224,7 @@ function App() {
   }, [user]);
 
   return (
-    <div className={`min-h-screen ${isLandingRoute ? 'bg-transparent text-white' : 'bg-warm-50 text-warm-800'} font-sans`}>
+    <div className="min-h-screen bg-[#0A1628] font-sans">
       {!isWidgetRoute && !isReportRoute && brandingStyles && (
         <style>{`
           :root {
@@ -245,68 +245,77 @@ function App() {
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/search" element={
-            (!token || !user) ? (
-              <Auth onAuthSuccess={handleAuthSuccess} />
-            ) : (
-              <>
-                <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
-                
-                {!isSubscribed ? (
-                  <SubscriptionPaywall user={user} />
-                ) : currentView === 'admin' && user?.role === 'admin' ? (
-                  <AdminDashboard />
-                ) : currentView === 'branding' && user?.plan === 'white-label' ? (
-                  <WhiteLabelSettings user={user} onUpdateUser={setUser} />
-                ) : currentView === 'dashboard' ? (
-                  <ProfessionalDashboard user={user} />
-                ) : (
-                  <>
-                    {!showResults && <Hero />}
-                    
-                    <div className={showResults ? 'pt-8' : ''}>
-                      <EligibilityForm 
-                        formData={formData} 
-                        handleInputChange={handleInputChange} 
-                        handleSubmit={handleSubmit}
-                        isSearching={isSearching}
-                      />
-                    </div>
-
-                    {isSearching && (
-                      <div className="max-w-4xl mx-auto px-4 py-12">
-                        <div className="flex flex-col items-center justify-center space-y-4">
-                          <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-                          <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
-                        </div>
+            <div className="min-h-screen bg-warm-50 text-warm-800">
+              {(!token || !user) ? (
+                <Auth onAuthSuccess={handleAuthSuccess} />
+              ) : (
+                <>
+                  <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
+                  
+                  {!isSubscribed ? (
+                    <SubscriptionPaywall user={user} />
+                  ) : currentView === 'admin' && user?.role === 'admin' ? (
+                    <AdminDashboard />
+                  ) : currentView === 'branding' && user?.plan === 'white-label' ? (
+                    <WhiteLabelSettings user={user} onUpdateUser={setUser} />
+                  ) : currentView === 'dashboard' ? (
+                    <ProfessionalDashboard user={user} />
+                  ) : (
+                    <>
+                      {!showResults && <Hero />}
+                      
+                      <div className={showResults ? 'pt-8' : ''}>
+                        <EligibilityForm 
+                          formData={formData} 
+                          handleInputChange={handleInputChange} 
+                          handleSubmit={handleSubmit}
+                          isSearching={isSearching}
+                        />
                       </div>
-                    )}
 
-                    {showResults && !isSearching && (
-                      <ResultsList 
-                        programs={matchedPrograms} 
-                        onSaveClick={() => setIsSaveModalOpen(true)} 
-                        verificationStates={verificationStates}
-                        onVerifyLive={handleVerifyLive}
-                        onLenderClick={handleLenderClick}
-                        formData={formData}
-                        user={user}
-                      />
-                    )}
+                      {isSearching && (
+                        <div className="max-w-4xl mx-auto px-4 py-12">
+                          <div className="flex flex-col items-center justify-center space-y-4">
+                            <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+                            <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                          </div>
+                        </div>
+                      )}
 
-                    <Glossary />
-                    <Checklist />
-                  </>
-                )}
-              </>
-            )
+                      {showResults && !isSearching && (
+                        <ResultsList 
+                          programs={matchedPrograms} 
+                          onSaveClick={() => setIsSaveModalOpen(true)} 
+                          verificationStates={verificationStates}
+                          onVerifyLive={handleVerifyLive}
+                          onLenderClick={handleLenderClick}
+                          formData={formData}
+                          user={user}
+                        />
+                      )}
+
+                      <Glossary />
+                      <Checklist />
+                    </>
+                  )}
+                </>
+              )}
+            </div>
           } />
           <Route path="*" element={<LandingPage />} />
         </Routes>
       </main>
 
-      {!isWidgetRoute && !isReportRoute && !isLandingRoute && <Footer />}
+      {!isWidgetRoute && !isReportRoute && isLandingRoute && (
+        <style>{`
+          body { background-color: #0A1628 !important; }
+          html { background-color: #0A1628 !important; }
+        `}</style>
+      )}
 
-      {!isWidgetRoute && !isReportRoute && !isLandingRoute && (
+      {!isWidgetRoute && !isReportRoute && !isLandingRoute && location.pathname !== '/' && <Footer />}
+
+      {!isWidgetRoute && !isReportRoute && !isLandingRoute && location.pathname !== '/' && (
         <>
           <SaveResults 
             isOpen={isSaveModalOpen} 

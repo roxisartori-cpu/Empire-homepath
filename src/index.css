@@ -43,11 +43,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background: transparent;
+    background-color: #0A1628;
   }
   body {
     @apply antialiased;
-    background: transparent;
+    background-color: #0A1628;
+    color: white;
   }
 }
 
