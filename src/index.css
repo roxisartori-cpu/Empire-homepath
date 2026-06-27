@@ -43,9 +43,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background: transparent;
   }
   body {
-    @apply bg-warm-50 text-warm-800 antialiased;
+    @apply antialiased;
+    background: transparent;
   }
 }
 

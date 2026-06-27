@@ -8,7 +8,7 @@ const landingHtml = `
     <li><a href="#pricing">Pricing</a></li>
   </ul>
   <div class="nav-right">
-    <a href="#cta" class="btn-demo" onclick="handleGetStarted()">Request a Demo</a>
+    <a href="javascript:void(0)" onclick="handleGetStarted()" class="btn-demo" onclick="handleGetStarted()">Request a Demo</a>
   </div>
 </nav>
 
@@ -41,7 +41,7 @@ const landingHtml = `
     </p>
 
     <div class="hero-cta">
-      <a href="#cta" class="btn-hero">Request a Demo</a>
+      <a href="javascript:void(0)" class="btn-hero" onclick="handleGetStarted()">Request a Demo</a>
       <a href="#why" class="btn-hero-line">
         See how it works
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -292,7 +292,7 @@ const landingHtml = `
           <li><span class="ck">+</span>Program status alerts</li>
           <li><span class="ck">+</span>Email support</li>
         </ul>
-        <a href="#cta" class="btn-pc btn-pc-outline">Request a Demo</a>
+        <a href="javascript:void(0)" onclick="handleGetStarted()" class="btn-pc btn-pc-outline">Request a Demo</a>
       </div>
 
       
@@ -310,7 +310,7 @@ const landingHtml = `
           <li><span class="ck">+</span>CRM export (CSV)</li>
           <li><span class="ck">+</span>Priority support</li>
         </ul>
-        <a href="#cta" class="btn-pc btn-pc-gold">Request a Demo</a>
+        <a href="javascript:void(0)" onclick="handleGetStarted()" class="btn-pc btn-pc-gold">Request a Demo</a>
       </div>
 
       
@@ -326,7 +326,7 @@ const landingHtml = `
           <li><span class="ck">+</span>Dedicated account manager</li>
           <li><span class="ck">+</span>Custom onboarding</li>
         </ul>
-        <a href="#cta" class="btn-pc btn-pc-outline">Contact Us</a>
+        <a href="javascript:void(0)" onclick="handleGetStarted()" class="btn-pc btn-pc-outline">Contact Us</a>
       </div>
 
     </div>

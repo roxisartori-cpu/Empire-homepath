@@ -205,7 +205,7 @@ function App() {
     }, 800);
   };
 
-  if (loading) {
+  if (loading && !isLandingRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-warm-50">
         <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
@@ -224,7 +224,7 @@ function App() {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-800 font-sans">
+    <div className={`min-h-screen ${isLandingRoute ? 'bg-transparent text-white' : 'bg-warm-50 text-warm-800'} font-sans`}>
       {!isWidgetRoute && !isReportRoute && brandingStyles && (
         <style>{`
           :root {

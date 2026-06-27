@@ -10,6 +10,10 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Force background color on mount
+    document.body.style.backgroundColor = '#0A1628';
+    document.documentElement.style.backgroundColor = '#0A1628';
+
     // Reveal animations
     const revs = document.querySelectorAll('.reveal');
     const ro = new IntersectionObserver(entries => {
@@ -72,6 +76,10 @@ const LandingPage = () => {
       delete window.closeModal;
       delete window.closeOut;
       delete window.handleGetStarted;
+
+      // Reset background color on unmount
+      document.body.style.backgroundColor = '';
+      document.documentElement.style.backgroundColor = '';
     };
   }, [navigate]);
 
