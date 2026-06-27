@@ -16,6 +16,7 @@ import WhiteLabelSettings from './components/WhiteLabelSettings';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
 import WidgetEmbed from './pages/WidgetEmbed';
+import LandingPage from './pages/LandingPage';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -29,6 +30,7 @@ function App() {
 
   const isWidgetRoute = location.pathname === '/widget/embed';
   const isReportRoute = location.pathname === '/report';
+  const isLandingRoute = location.pathname === '/';
 
   const brandingStyles = useMemo(() => {
     if (user?.plan !== 'white-label' || !user?.white_label_settings) return null;
@@ -239,9 +241,10 @@ function App() {
       
       <main>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
-          <Route path="*" element={
+          <Route path="/search" element={
             (!token || !user) ? (
               <Auth onAuthSuccess={handleAuthSuccess} />
             ) : (
@@ -297,12 +300,13 @@ function App() {
               </>
             )
           } />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       </main>
 
-      {!isWidgetRoute && !isReportRoute && <Footer />}
+      {!isWidgetRoute && !isReportRoute && !isLandingRoute && <Footer />}
 
-      {!isWidgetRoute && !isReportRoute && (
+      {!isWidgetRoute && !isReportRoute && !isLandingRoute && (
         <>
           <SaveResults 
             isOpen={isSaveModalOpen} 
