@@ -215,7 +215,7 @@ const landingHtml = `
     <div class="who-header">
       <div class="reveal">
         <div class="eyebrow">Who It's For</div>
-        <h2 class="sec-title">For professionals who refuse<br/>to leave a buyer behind.</h2>
+        <h2 class="sec-title">For professionals who won't<br/>leave a buyer behind.</h2>
       </div>
       <div class="who-header-right reveal rd1">
         Empire HomePath was built for the mortgage and real estate professionals who believe every qualified buyer deserves a shot at homeownership — and who want the tools to make it happen.
