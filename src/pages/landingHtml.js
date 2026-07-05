@@ -292,7 +292,7 @@ const landingHtml = `
           <li><span class="ck">+</span>Program status alerts</li>
           <li><span class="ck">+</span>Email support</li>
         </ul>
-        <a href="#cta"  class="btn-pc btn-pc-outline">Request a Demo</a>
+        <a href="https://buy.stripe.com/6oUaEW4656qY3pMguCbMQ00" target="_blank" class="btn-pc btn-pc-outline">Get Started</a>
       </div>
 
       
@@ -310,7 +310,7 @@ const landingHtml = `
           <li><span class="ck">+</span>CRM export (CSV)</li>
           <li><span class="ck">+</span>Priority support</li>
         </ul>
-        <a href="#cta"  class="btn-pc btn-pc-gold">Request a Demo</a>
+        <a href="https://buy.stripe.com/fZu3cugSR6qYf8u0vEbMQ01" target="_blank" class="btn-pc btn-pc-gold">Get Started</a>
       </div>
 
       
