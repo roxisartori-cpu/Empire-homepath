@@ -17,6 +17,10 @@ import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
 import WidgetEmbed from './pages/WidgetEmbed';
 import LandingPage from './pages/LandingPage';
+import LegalPage from './pages/LegalPage';
+import privacyHtml from './pages/legal/privacyHtml';
+import termsHtml from './pages/legal/termsHtml';
+import disclaimerHtml from './pages/legal/disclaimerHtml';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -31,6 +35,8 @@ function App() {
   const isWidgetRoute = location.pathname === '/widget/embed';
   const isReportRoute = location.pathname === '/report';
   const isLandingRoute = location.pathname === '/';
+  const isLegalRoute = ['/privacy', '/terms', '/disclaimer'].includes(location.pathname);
+  const isMarketingRoute = isLandingRoute || isLegalRoute;
 
   const brandingStyles = useMemo(() => {
     if (user?.plan !== 'white-label' || !user?.white_label_settings) return null;
@@ -205,7 +211,7 @@ function App() {
     }, 800);
   };
 
-  if (loading && !isLandingRoute) {
+  if (loading && !isMarketingRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
         <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
@@ -242,6 +248,9 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/privacy" element={<LegalPage html={privacyHtml} title="Privacy Policy — Empire HomePath" />} />
+          <Route path="/terms" element={<LegalPage html={termsHtml} title="Terms of Service — Empire HomePath" />} />
+          <Route path="/disclaimer" element={<LegalPage html={disclaimerHtml} title="Disclaimer — Empire HomePath" />} />
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/search" element={
@@ -306,16 +315,16 @@ function App() {
         </Routes>
       </main>
 
-      {!isWidgetRoute && !isReportRoute && isLandingRoute && (
+      {!isWidgetRoute && !isReportRoute && isMarketingRoute && (
         <style>{`
           body { background-color: #0A1628 !important; }
           html { background-color: #0A1628 !important; }
         `}</style>
       )}
 
-      {!isWidgetRoute && !isReportRoute && !isLandingRoute && location.pathname !== '/' && <Footer />}
+      {!isWidgetRoute && !isReportRoute && !isMarketingRoute && <Footer />}
 
-      {!isWidgetRoute && !isReportRoute && !isLandingRoute && location.pathname !== '/' && (
+      {!isWidgetRoute && !isReportRoute && !isMarketingRoute && (
         <>
           <SaveResults 
             isOpen={isSaveModalOpen} 
