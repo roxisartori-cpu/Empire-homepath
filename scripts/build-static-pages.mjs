@@ -33,6 +33,7 @@ function transformLinks(content) {
     .replace(/empirehomepath-privacy\.html/g, '/privacy')
     .replace(/empirehomepath-terms\.html/g, '/terms')
     .replace(/empirehomepath-disclaimer\.html/g, '/disclaimer')
+    .replace(/function restartDemo\(\)\{[^}]*\}/g, "function restartDemo(){ goToStep(1); updateProgress(1); document.getElementById('successOverlay')?.classList.remove('show'); }")
     .replace(/<li><a href="#">Privacy Policy<\/a><\/li>/g, '<li><a href="/privacy">Privacy Policy</a></li>')
     .replace(/<li><a href="#">Terms of Service<\/a><\/li>/g, '<li><a href="/terms">Terms of Service</a></li>')
     .replace(/<li><button class="footer-disc" onclick="openModal\(\)">Disclaimer<\/button><\/li>/g, '<li><a href="/disclaimer" class="footer-disc">Disclaimer</a></li>')

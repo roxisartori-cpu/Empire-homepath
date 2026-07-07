@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const isExternalHref = (href) => /^(https?:|mailto:|tel:)/i.test(href);
@@ -11,7 +11,6 @@ const scrollToHash = (hash) => {
 
 const StaticHtmlPage = ({ page }) => {
   const containerRef = useRef(null);
-  const styleRef = useRef(null);
   const scriptRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,19 +18,14 @@ const StaticHtmlPage = ({ page }) => {
   const spaNavigate = useCallback((href) => {
     const url = new URL(href, window.location.origin);
     const path = url.pathname || '/';
-    const hash = url.hash;
+    const hash = url.hash ? url.hash.slice(1) : '';
 
-    if (location.pathname === path) {
-      if (hash) {
-        window.history.replaceState(null, '', path + hash);
-        scrollToHash(hash);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+    if (location.pathname === path && !hash) {
+      navigate(path);
       return;
     }
 
-    navigate(hash ? `${path}${hash}` : path);
+    navigate(hash ? { pathname: path, hash } : path);
   }, [location.pathname, navigate]);
 
   useLayoutEffect(() => {
@@ -42,25 +36,6 @@ const StaticHtmlPage = ({ page }) => {
 
     window.__spaNavigate = spaNavigate;
 
-    document.querySelectorAll('[data-static-page-style]').forEach((el) => el.remove());
-    document.querySelectorAll('[data-static-page-script]').forEach((el) => el.remove());
-
-    if (page.css) {
-      const styleEl = document.createElement('style');
-      styleEl.setAttribute('data-static-page-style', 'true');
-      styleEl.textContent = page.css;
-      document.head.appendChild(styleEl);
-      styleRef.current = styleEl;
-    }
-
-    return () => {
-      delete window.__spaNavigate;
-      styleRef.current?.remove();
-      styleRef.current = null;
-    };
-  }, [page, spaNavigate]);
-
-  useEffect(() => {
     let scriptEl = null;
     if (page.scripts && containerRef.current) {
       scriptEl = document.createElement('script');
@@ -71,16 +46,13 @@ const StaticHtmlPage = ({ page }) => {
     }
 
     return () => {
+      delete window.__spaNavigate;
       scriptRef.current?.remove();
       scriptRef.current = null;
+      document.body.style.backgroundColor = '';
+      document.documentElement.style.backgroundColor = '';
     };
-  }, [page]);
-
-  useEffect(() => {
-    if (!location.hash) return;
-    const timer = window.setTimeout(() => scrollToHash(location.hash), 0);
-    return () => window.clearTimeout(timer);
-  }, [location.pathname, location.hash, page]);
+  }, [page, spaNavigate]);
 
   const handleClick = useCallback((event) => {
     const anchor = event.target.closest('a[href]');
@@ -89,16 +61,14 @@ const StaticHtmlPage = ({ page }) => {
     const href = anchor.getAttribute('href');
     if (!href || isExternalHref(href)) return;
 
-    if (href === '#') {
-      event.preventDefault();
-      return;
-    }
+    event.preventDefault();
+
+    if (href === '#') return;
 
     if (href.startsWith('#')) {
-      event.preventDefault();
       if (location.pathname === '/') {
-        window.history.replaceState(null, '', href);
-        scrollToHash(href);
+        navigate({ pathname: '/', hash: href.slice(1) });
+        requestAnimationFrame(() => scrollToHash(href));
       } else {
         spaNavigate(`/${href}`);
       }
@@ -106,19 +76,22 @@ const StaticHtmlPage = ({ page }) => {
     }
 
     if (href.startsWith('/')) {
-      event.preventDefault();
       spaNavigate(href);
     }
-  }, [location.pathname, spaNavigate]);
+  }, [location.pathname, navigate, spaNavigate]);
 
   return (
     <div
-      ref={containerRef}
       className="static-page-wrapper"
       style={{ minHeight: '100vh', background: '#0A1628' }}
       onClick={handleClick}
-      dangerouslySetInnerHTML={{ __html: page.html }}
-    />
+    >
+      {page.css ? <style dangerouslySetInnerHTML={{ __html: page.css }} /> : null}
+      <div
+        ref={containerRef}
+        dangerouslySetInnerHTML={{ __html: page.html }}
+      />
+    </div>
   );
 };
 

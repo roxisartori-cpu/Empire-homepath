@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Hero from './components/Hero';
 import EligibilityForm from './components/EligibilityForm';
@@ -16,18 +16,12 @@ import WhiteLabelSettings from './components/WhiteLabelSettings';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
 import WidgetEmbed from './pages/WidgetEmbed';
-import StaticHtmlPage from './pages/StaticHtmlPage';
-import homePage from './pages/static/homePage';
-import demoPage from './pages/static/demoPage';
-import searchPage from './pages/static/searchPage';
-import privacyPage from './pages/static/privacyPage';
-import termsPage from './pages/static/termsPage';
-import disclaimerPage from './pages/static/disclaimerPage';
+import StaticPagesLayout, { STATIC_ROUTE_PATHS } from './pages/StaticPagesLayout';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
 
-const STATIC_ROUTES = ['/', '/demo', '/search', '/privacy', '/terms', '/disclaimer'];
+const STATIC_ROUTES = STATIC_ROUTE_PATHS;
 
 function App() {
   const location = useLocation();
@@ -249,12 +243,14 @@ function App() {
       
       <main>
         <Routes>
-          <Route path="/" element={<StaticHtmlPage page={homePage} />} />
-          <Route path="/demo" element={<StaticHtmlPage page={demoPage} />} />
-          <Route path="/search" element={<StaticHtmlPage page={searchPage} />} />
-          <Route path="/privacy" element={<StaticHtmlPage page={privacyPage} />} />
-          <Route path="/terms" element={<StaticHtmlPage page={termsPage} />} />
-          <Route path="/disclaimer" element={<StaticHtmlPage page={disclaimerPage} />} />
+          <Route element={<StaticPagesLayout />}>
+            <Route path="/" />
+            <Route path="/demo" />
+            <Route path="/search" />
+            <Route path="/privacy" />
+            <Route path="/terms" />
+            <Route path="/disclaimer" />
+          </Route>
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/app" element={
@@ -315,7 +311,7 @@ function App() {
               )}
             </div>
           } />
-          <Route path="*" element={<StaticHtmlPage page={homePage} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 

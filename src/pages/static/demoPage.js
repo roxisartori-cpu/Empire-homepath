@@ -597,7 +597,7 @@ function startDemo(){
   setTimeout(()=>document.getElementById('welcomeScreen').style.display='none', 500);
   updateProgress(1);
 }
-function restartDemo(){ location.reload(); }
+function restartDemo(){ goToStep(1); updateProgress(1); document.getElementById('successOverlay')?.classList.remove('show'); }
 
 // ══ NAVIGATION ══
 function goToStep(n){
