@@ -1,28 +1,27 @@
 import { useLocation } from 'react-router-dom';
-import StaticHtmlPage from './StaticHtmlPage';
-import homePage from './static/homePage';
-import demoPage from './static/demoPage';
-import searchPage from './static/searchPage';
-import privacyPage from './static/privacyPage';
-import termsPage from './static/termsPage';
-import disclaimerPage from './static/disclaimerPage';
+import HomePage from './static/HomePage';
+import DemoPage from './static/DemoPage';
+import SearchPage from './static/SearchPage';
+import PrivacyPage from './static/PrivacyPage';
+import TermsPage from './static/TermsPage';
+import DisclaimerPage from './static/DisclaimerPage';
 
 export const STATIC_PAGES = {
-  '/': homePage,
-  '/demo': demoPage,
-  '/search': searchPage,
-  '/privacy': privacyPage,
-  '/terms': termsPage,
-  '/disclaimer': disclaimerPage,
+  '/': HomePage,
+  '/demo': DemoPage,
+  '/search': SearchPage,
+  '/privacy': PrivacyPage,
+  '/terms': TermsPage,
+  '/disclaimer': DisclaimerPage,
 };
 
 export const STATIC_ROUTE_PATHS = Object.keys(STATIC_PAGES);
 
 const StaticPagesLayout = () => {
   const { pathname } = useLocation();
-  const page = STATIC_PAGES[pathname];
-  if (!page) return null;
-  return <StaticHtmlPage page={page} />;
+  const Page = STATIC_PAGES[pathname];
+  if (!Page) return null;
+  return <Page />;
 };
 
 export default StaticPagesLayout;

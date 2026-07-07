@@ -1,0 +1,817 @@
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useStaticPageScript } from './useStaticPageScript';
+
+const PAGE_SCRIPTS = `// ══ SAMPLE DATA — fixed regardless of county selected ══
+// Deliberately incomplete — no contact info, no application links, no full eligibility
+const SAMPLE_PROGRAMS = [
+  { id:1, name:'County Down Payment Assistance Program', type:'dpa', amount:'$10,000', income:'≤ 120% AMI', status:'open', forgivable:true,
+    facts:[{k:'Type',v:'Deferred DPA Loan'},{k:'Forgiveness',v:'After 10 years'},{k:'Income Limit',v:'120% AMI'},{k:'Status',v:'Accepting Applications'}],
+    eligibility:['Must purchase within eligible county boundaries','Income at or below area median income limit','Complete HUD-approved homebuyer counseling','Minimum credit score required — contact agency for details'] },
+  { id:2, name:'State Low Interest Rate Mortgage', type:'rate', amount:'Below-market rate', income:'≤ 115% AMI', status:'open', forgivable:false,
+    facts:[{k:'Type',v:'Below-Market Mortgage'},{k:'Term',v:'30-year fixed'},{k:'Income Limit',v:'115% AMI'},{k:'Paired w/ DPA',v:'Yes — compatible'}],
+    eligibility:['Primary residence purchase only','Income within state program limits','Must use approved participating lender','Purchase price within program caps'] },
+  { id:3, name:'HOME Investment Grant Program', type:'grant', amount:'$15,000', income:'≤ 80% AMI', status:'open', forgivable:false,
+    facts:[{k:'Type',v:'Non-Repayable Grant'},{k:'Repayment',v:'None required'},{k:'Income Limit',v:'80% AMI'},{k:'Property',v:'Inspection required'}],
+    eligibility:['First-time homebuyer or 3-year rule applies','Income at or below 80% AMI','Property must pass inspection','Pre-purchase counseling required'] },
+  { id:4, name:'Forgivable Homebuyer Assistance Loan', type:'forgivable', amount:'$20,000', income:'≤ 100% AMI', status:'limited', forgivable:true,
+    facts:[{k:'Type',v:'Forgivable Loan'},{k:'Forgiveness',v:'100% after 5 years'},{k:'Income Limit',v:'100% AMI'},{k:'Funds',v:'Limited — apply early'}],
+    eligibility:['Must remain as primary residence for 5 years','Income at or below program limit','Must use approved lender for first mortgage','HUD counseling required prior to closing'] },
+  { id:5, name:'USDA Rural Development Loan', type:'dpa', amount:'100% financing', income:'≤ 80% AMI', status:'open', forgivable:false,
+    facts:[{k:'Type',v:'Direct Mortgage Loan'},{k:'Down Payment',v:'None required'},{k:'Income Limit',v:'80% AMI'},{k:'Area',v:'USDA-eligible zones only'}],
+    eligibility:['Property must be in USDA-eligible rural area','Income at or below 80% AMI','Primary residence purchase only','U.S. citizenship or permanent residency required'] },
+  { id:6, name:'First Home Club Savings Match Grant', type:'grant', amount:'Up to $7,500', income:'≤ 80% AMI', status:'open', forgivable:false,
+    facts:[{k:'Type',v:'Matched Savings Grant'},{k:'Match Ratio',v:'4:1 on savings'},{k:'Income Limit',v:'80% AMI'},{k:'Required',v:'Participating lender enrollment'}],
+    eligibility:['Open savings account with participating lender','Earn 4:1 match on personal savings up to $1,875','Income at or below 80% AMI','First-time homebuyer required'] },
+];
+
+const COUNTY_NAMES = {
+  orange:'Orange County', westchester:'Westchester County', suffolk:'Suffolk County',
+  nassau:'Nassau County', albany:'Albany County', erie:'Erie County',
+  monroe:'Monroe County', dutchess:'Dutchess County', ulster:'Ulster County',
+  rockland:'Rockland County', other:'Your County'
+};
+
+// ══ STATE ══
+let currentStep = 1;
+let completedSteps = [];
+let selectedProgram = null;
+let selectedCounty = '';
+
+// ══ WELCOME ══
+function startDemo(){
+  document.getElementById('welcomeScreen').classList.add('hidden');
+  setTimeout(()=>document.getElementById('welcomeScreen').style.display='none', 500);
+  updateProgress(1);
+}
+function restartDemo(){ goToStep(1); updateProgress(1); document.getElementById('successOverlay')?.classList.remove('show'); }
+
+// ══ NAVIGATION ══
+function goToStep(n){
+  document.getElementById('step-'+currentStep).classList.remove('active');
+  if(!completedSteps.includes(currentStep)) completedSteps.push(currentStep);
+  currentStep = n;
+  document.getElementById('step-'+n).classList.add('active');
+  updateProgress(n);
+  window.scrollTo(0,0);
+  if(n===2) renderStep2();
+  if(n===3) renderStep3();
+  if(n===4) renderStep4();
+}
+
+function updateProgress(active){
+  for(let i=1;i<=5;i++){
+    const el=document.getElementById('prog-'+i);
+    el.classList.remove('active','done');
+    if(i===active) el.classList.add('active');
+    else if(completedSteps.includes(i)||i<active) el.classList.add('done');
+  }
+}
+
+// ══ STEP 1 ══
+function onCountySelect(){
+  const v = document.getElementById('countySelect').value;
+  selectedCounty = v;
+  selectedProgram = null;
+  const btn = document.getElementById('step1Next');
+  if(!v){ btn.disabled=true; return; }
+
+  // Show extra fields
+  const ef = document.getElementById('extraFields');
+  ef.style.display='flex';
+
+  // Show county stat card
+  const countyName = COUNTY_NAMES[v]||'Your County';
+  document.getElementById('s2county').textContent = countyName;
+  const statsDiv = document.getElementById('countyStats');
+  statsDiv.style.display='block';
+  statsDiv.innerHTML=\`
+    <div style="background:var(--ink-mid);border:1px solid var(--border);border-radius:6px;padding:16px 18px;display:flex;align-items:center;gap:16px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;"></div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px;">\${countyName} — Data Available</div>
+        <div style="font-size:11px;color:var(--muted);">Multiple active programs found · Updated July 2026 · Subscribe to see all</div>
+      </div>
+    </div>\`;
+
+  btn.disabled=false;
+}
+
+// ══ STEP 2 ══
+function renderStep2(){
+  const countyName = COUNTY_NAMES[selectedCounty]||'Your County';
+  const VISIBLE = 2; // only show first 2 fully, rest are blurred
+
+  let html = \`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+    <div style="font-size:13px;color:var(--body);">Showing <strong style="color:var(--gold);">\${SAMPLE_PROGRAMS.length} programs</strong> found for \${countyName} · <span style="color:var(--muted);font-size:12px;">Sample data only</span></div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);">Updated July 2026</div>
+  </div>
+  <div class="program-list">\`;
+
+  // First 2 fully visible and clickable
+  SAMPLE_PROGRAMS.slice(0,VISIBLE).forEach(p=>{
+    const typeLabel={dpa:'Down Payment Assist.',grant:'Grant',forgivable:'Forgivable Loan',rate:'Rate Program'}[p.type]||p.type;
+    html+=\`<div class="prog-card visible" onclick="selectProgramCard(\${p.id},this)" id="pc\${p.id}">
+      <div>
+        <div class="prog-name">\${p.name}</div>
+        <div class="prog-tags">
+          <span class="prog-type">\${typeLabel}</span>
+          <span class="prog-income">Income: \${p.income}</span>
+          \${p.forgivable?'<span style="font-size:11px;color:var(--success);font-weight:600;">✓ Forgivable</span>':''}
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-amount">\${p.amount}</div>
+        <div class="prog-status \${p.status}"><span class="status-dot"></span>\${p.status==='open'?'Open':'Limited Funds'}</div>
+      </div>
+    </div>\`;
+  });
+
+  html+=\`</div>\`;
+
+  // Remaining programs blurred with gate overlay
+  const remaining = SAMPLE_PROGRAMS.length - VISIBLE;
+  html+=\`<div class="locked-stack" style="position:relative;margin-top:10px;">\`;
+  SAMPLE_PROGRAMS.slice(VISIBLE).forEach(p=>{
+    const typeLabel={dpa:'Down Payment Assist.',grant:'Grant',forgivable:'Forgivable Loan',rate:'Rate Program'}[p.type]||p.type;
+    html+=\`<div class="prog-card locked" style="margin-bottom:10px;">
+      <div>
+        <div class="prog-name">\${p.name}</div>
+        <div class="prog-tags"><span class="prog-type">\${typeLabel}</span><span class="prog-income">Income: \${p.income}</span></div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-amount">\${p.amount}</div>
+        <div class="prog-status open"><span class="status-dot"></span>Open</div>
+      </div>
+    </div>\`;
+  });
+  html+=\`<div class="locked-gate">
+    <div class="locked-gate-title">🔒 <span>\${remaining} more programs</span> available in \${countyName}</div>
+    <div class="locked-gate-sub">Subscribers see every program with full eligibility details, income limits, agency contacts, and application links — for all 62 counties.</div>
+    <a href="/#pricing" class="btn-subscribe-big" style="margin-top:4px;">Subscribe for Full Access</a>
+  </div></div>\`;
+
+  document.getElementById('step2Content').innerHTML = html;
+}
+
+function selectProgramCard(id, el){
+  document.querySelectorAll('.prog-card.visible').forEach(c=>{
+    c.style.borderColor='';c.style.background='';
+  });
+  el.style.borderColor='var(--gold)';
+  el.style.background='var(--ink-lift)';
+  selectedProgram = SAMPLE_PROGRAMS.find(p=>p.id===id);
+  const btn=document.getElementById('step2Next');
+  btn.disabled=false;
+}
+
+// ══ STEP 3 ══
+function renderStep3(){
+  if(!selectedProgram) return;
+  const p=selectedProgram;
+  document.getElementById('s3title').innerHTML=\`<span>\${p.name}</span>\`;
+  const factsHtml=p.facts.map(f=>\`<div class="detail-row"><span class="dk">\${f.k}</span><span class="dv \${f.k==='Status'?'green':f.k==='Amount'?'gold':''}">\${f.v}</span></div>\`).join('');
+  const eligHtml=p.eligibility.map(e=>\`<div class="elig-item"><span class="elig-check">✓</span>\${e}</div>\`).join('');
+
+  document.getElementById('step3Content').innerHTML=\`
+    <div class="detail-grid">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="detail-hero">
+          <div class="detail-amount">\${p.amount}</div>
+          <div class="detail-amount-label">\${{dpa:'In down payment assistance',grant:'Non-repayable grant award',forgivable:'Forgivable after occupancy period',rate:'Below-market rate mortgage'}[p.type]}</div>
+          <div class="detail-agency-name">Administering Agency</div>
+          <div class="detail-agency-label">Full agency name and contact info available to subscribers</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-label">Program Facts</div>
+          \${factsHtml}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="detail-card">
+          <div class="detail-card-label">Sample Eligibility Requirements</div>
+          <div class="elig-list">\${eligHtml}</div>
+        </div>
+        <div class="detail-gated">
+          <div class="detail-gated-inner">
+            <div class="detail-card" style="border:none;padding:0;">
+              <div class="detail-card-label">Agency Contact &amp; Application</div>
+              <div class="detail-row"><span class="dk">Phone</span><span class="dv">(XXX) XXX-XXXX</span></div>
+              <div class="detail-row"><span class="dk">Email</span><span class="dv">agency@county.gov</span></div>
+              <div class="detail-row"><span class="dk">Apply Online</span><span class="dv gold">agency-portal.gov/apply</span></div>
+              <div class="detail-row"><span class="dk">Office Hours</span><span class="dv">Mon–Fri 9am–5pm</span></div>
+            </div>
+          </div>
+          <div class="detail-gated-overlay">
+            <div class="detail-gated-title">🔒 Agency contact &amp; application details<br/><span>available to subscribers</span></div>
+            <div class="detail-gated-sub">Subscribe to see direct phone, email, and application portal links for every program in all 62 counties.</div>
+            <a href="/#pricing" class="btn-gate" style="margin-top:4px;">Subscribe Now</a>
+          </div>
+        </div>
+      </div>
+    </div>\`;
+}
+
+// ══ STEP 4 ══
+function renderStep4(){
+  const countyName=COUNTY_NAMES[selectedCounty]||'Your County';
+  document.getElementById('reportLoading').style.display='flex';
+  document.getElementById('reportContent').style.display='none';
+  document.getElementById('loadingText').textContent=\`Compiling sample programs for \${countyName}…\`;
+  const now=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('reportDate').textContent=\`Generated \${now}\`;
+  document.getElementById('reportCounty').textContent=\`\${countyName} — Homebuyer Programs\`;
+
+  setTimeout(()=>{
+    document.getElementById('reportLoading').style.display='none';
+    document.getElementById('reportContent').style.display='block';
+    document.getElementById('reportRows').innerHTML=SAMPLE_PROGRAMS.slice(0,3).map(p=>\`
+      <div class="report-row">
+        <div><div class="rr-name">\${p.name}</div><div class="rr-agency">Agency details available to subscribers · \${p.status==='open'?'Accepting Applications':'Limited Funds'}</div></div>
+        <div class="rr-amount">\${p.amount}</div>
+      </div>\`).join('');
+  }, 1800);
+}
+
+// ══ STEP 5 ══
+function selectPlan(name){
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+updateProgress(1);`;
+
+const DemoPage = () => {
+  const containerRef = useRef(null);
+  useStaticPageScript({
+    title: "Empire HomePath — Interactive Demo",
+    scripts: PAGE_SCRIPTS,
+    containerRef,
+  });
+
+  return (
+    <div
+      ref={containerRef}
+      className="static-page-wrapper"
+      style={{ minHeight: '100vh', background: '#0A1628' }}
+    >
+      <style dangerouslySetInnerHTML={{ __html: `*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0A1628;--ink-deep:#060E1C;--ink-mid:#102038;--ink-lift:#16284A;
+  --gold:#C9A84C;--gold-warm:#DDB85C;--gold-dim:rgba(201,168,76,0.12);
+  --white:#FFFFFF;--body:rgba(255,255,255,0.65);--muted:rgba(255,255,255,0.35);
+  --border:rgba(201,168,76,0.16);--border-mid:rgba(201,168,76,0.28);
+  --success:#4ADE80;--danger:#FF5C5C;--warning:#FBB924;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* NAV */
+.demo-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(6,14,28,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.demo-nav-logo{font-size:18px;font-weight:700;color:var(--white);text-decoration:none;}
+.demo-nav-logo span{color:var(--gold);}
+.demo-badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border-mid);padding:5px 14px;border-radius:20px;background:var(--gold-dim);}
+.demo-nav-right{display:flex;align-items:center;gap:16px;}
+.demo-restart{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:8px 20px;border-radius:5px;border:1px solid rgba(255,255,255,0.08);transition:all 0.2s;cursor:pointer;background:none;font-family:'Inter',sans-serif;}
+.demo-restart:hover{color:var(--white);border-color:var(--border-mid);}
+
+/* PROGRESS */
+.demo-progress{position:fixed;top:64px;left:0;right:0;z-index:199;background:rgba(6,14,28,0.95);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;height:52px;}
+.prog-step{display:flex;align-items:center;gap:10px;padding:0 20px;flex:1;position:relative;cursor:pointer;}
+.prog-step:not(:last-child)::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:20px;background:var(--border);}
+.prog-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all 0.3s;border:1px solid var(--border);color:var(--muted);}
+.prog-step.active .prog-num{background:var(--gold);color:var(--ink-deep);border-color:var(--gold);}
+.prog-step.done .prog-num{background:var(--success);color:var(--ink-deep);border-color:var(--success);}
+.prog-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.04em;transition:color 0.2s;white-space:nowrap;}
+.prog-step.active .prog-label{color:var(--white);font-weight:600;}
+.prog-step.done .prog-label{color:var(--success);}
+
+/* MAIN */
+.demo-main{padding-top:116px;min-height:100vh;display:flex;flex-direction:column;}
+.step-panel{display:none;flex:1;animation:fadeIn 0.35s ease;}
+.step-panel.active{display:flex;flex-direction:column;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* STEP LAYOUT */
+.step-header{padding:32px 40px 24px;border-bottom:1px solid var(--border);background:var(--ink-deep);}
+.step-eyebrow{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.step-eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--gold);}
+.step-title{font-size:clamp(20px,2.5vw,30px);font-weight:800;letter-spacing:-0.02em;color:var(--white);margin-bottom:6px;}
+.step-title span{color:var(--gold);}
+.step-subtitle{font-size:14px;font-weight:400;color:var(--body);line-height:1.6;}
+.step-content{flex:1;padding:28px 40px;display:flex;flex-direction:column;gap:20px;}
+.step-footer{padding:18px 40px;border-top:1px solid var(--border);background:var(--ink-deep);display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.step-hint{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+.step-nav{display:flex;gap:12px;align-items:center;}
+
+/* BUTTONS */
+.btn-back{padding:10px 24px;border:1px solid var(--border-mid);color:var(--body);background:none;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-back:hover{color:var(--white);border-color:var(--gold);}
+.btn-next{padding:12px 32px;background:var(--gold);color:var(--ink-deep);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:none;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.btn-next:hover{background:var(--gold-warm);transform:translateY(-1px);}
+.btn-next:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-subscribe-big{display:inline-block;padding:14px 40px;background:var(--gold);color:var(--ink-deep);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;text-decoration:none;}
+.btn-subscribe-big:hover{background:var(--gold-warm);transform:translateY(-2px);}
+
+/* FORM */
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);opacity:0.8;}
+.select-wrap{position:relative;}
+.select-wrap::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:13px;pointer-events:none;}
+.field-select{width:100%;background:var(--ink-mid);border:1px solid var(--border-mid);color:var(--white);padding:13px 16px;border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;transition:border-color 0.2s;appearance:none;-webkit-appearance:none;cursor:pointer;}
+.field-select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+.field-select option{background:var(--ink-mid);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* STEP 1 LAYOUT */
+.step1-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+
+/* STATS PANEL */
+.stats-panel{background:var(--ink-mid);border:1px solid var(--border-mid);border-radius:8px;overflow:hidden;}
+.stats-panel-header{background:var(--ink-lift);padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.stats-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.stats-panel-title{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);opacity:0.8;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.stat-cell{background:var(--ink-mid);padding:18px 16px;}
+.stat-num{font-size:32px;font-weight:900;color:var(--gold);letter-spacing:-0.02em;line-height:1;}
+.stat-num.green{color:var(--success);font-size:22px;}
+.stat-label{font-size:11px;font-weight:400;color:var(--muted);margin-top:4px;}
+
+/* GATED FACT */
+.gated-fact{margin-top:12px;position:relative;border-radius:6px;overflow:hidden;}
+.gated-fact-inner{padding:16px 18px;background:var(--ink-mid);border:1px solid var(--border);border-left:3px solid var(--border-mid);border-radius:0 6px 6px 0;filter:blur(4px);user-select:none;pointer-events:none;}
+.gated-fact-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:8px;}
+.gated-fact-text{font-size:12px;font-weight:400;color:var(--body);line-height:1.65;}
+.gated-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(6,14,28,0.78);backdrop-filter:blur(2px);}
+.gated-overlay-text{font-size:12px;font-weight:700;color:var(--white);text-align:center;padding:0 20px;line-height:1.5;}
+.btn-gate{padding:8px 22px;background:var(--gold);color:var(--ink-deep);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-gate:hover{background:var(--gold-warm);}
+
+/* PROGRAM CARDS */
+.program-list{display:flex;flex-direction:column;gap:10px;}
+.prog-card{background:var(--ink-mid);border:1px solid var(--border);border-radius:8px;padding:18px 22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;position:relative;overflow:hidden;transition:all 0.2s;}
+.prog-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform 0.25s;}
+.prog-card.visible:hover{background:var(--ink-lift);border-color:var(--border-mid);}
+.prog-card.visible:hover::before{transform:scaleY(1);}
+.prog-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:5px;}
+.prog-tags{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.prog-type{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.7;}
+.prog-income{font-size:12px;color:var(--muted);}
+.prog-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.prog-amount{font-size:18px;font-weight:900;color:var(--gold);letter-spacing:-0.02em;white-space:nowrap;}
+.prog-status{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;}
+.prog-status.open{background:rgba(74,222,128,0.12);color:var(--success);border:1px solid rgba(74,222,128,0.25);}
+.prog-status.limited{background:rgba(251,185,36,0.12);color:var(--warning);border:1px solid rgba(251,185,36,0.25);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* BLURRED LOCKED CARDS */
+.prog-card.locked{filter:blur(4px);pointer-events:none;user-select:none;}
+.locked-stack{position:relative;}
+.locked-gate{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(6,14,28,0.85);backdrop-filter:blur(3px);border-radius:8px;padding:28px;}
+.locked-gate-title{font-size:16px;font-weight:800;color:var(--white);text-align:center;line-height:1.4;}
+.locked-gate-title span{color:var(--gold);}
+.locked-gate-sub{font-size:13px;font-weight:400;color:var(--body);text-align:center;line-height:1.65;max-width:380px;}
+
+/* DETAIL VIEW */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.detail-card{background:var(--ink-mid);border:1px solid var(--border);border-radius:8px;padding:22px;}
+.detail-card-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:14px;}
+.detail-hero{background:linear-gradient(135deg,var(--ink-lift) 0%,var(--ink-mid) 100%);border:1px solid var(--border-mid);border-radius:8px;padding:24px;position:relative;overflow:hidden;}
+.detail-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.detail-amount{font-size:48px;font-weight:900;color:var(--gold);letter-spacing:-0.03em;line-height:1;margin-bottom:6px;}
+.detail-amount-label{font-size:13px;font-weight:400;color:var(--body);margin-bottom:18px;}
+.detail-agency-name{font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px;}
+.detail-agency-label{font-size:11px;color:var(--muted);}
+.detail-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(201,168,76,0.08);font-size:12px;}
+.detail-row:last-child{border-bottom:none;}
+.dk{color:var(--muted);flex-shrink:0;}
+.dv{color:var(--white);font-weight:600;text-align:right;}
+.dv.gold{color:var(--gold);}
+.dv.green{color:var(--success);}
+.elig-list{display:flex;flex-direction:column;gap:8px;}
+.elig-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--body);line-height:1.5;}
+.elig-check{color:var(--success);font-weight:700;flex-shrink:0;}
+
+/* GATED DETAIL */
+.detail-gated{position:relative;border-radius:8px;overflow:hidden;}
+.detail-gated-inner{filter:blur(5px);pointer-events:none;user-select:none;}
+.detail-gated-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(6,14,28,0.82);backdrop-filter:blur(3px);padding:24px;text-align:center;}
+.detail-gated-title{font-size:15px;font-weight:800;color:var(--white);line-height:1.4;}
+.detail-gated-title span{color:var(--gold);}
+.detail-gated-sub{font-size:12px;font-weight:400;color:var(--body);line-height:1.65;max-width:300px;}
+
+/* REPORT */
+.report-wrap{max-width:640px;margin:0 auto;}
+.report-preview{background:#f8f8f8;border-radius:8px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);position:relative;}
+.report-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;}
+.report-watermark-text{font-size:48px;font-weight:900;color:rgba(201,168,76,0.18);transform:rotate(-35deg);letter-spacing:0.05em;text-align:center;line-height:1.2;font-family:'Inter',sans-serif;}
+.report-header{background:#1B2A4A;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;}
+.report-logo{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#fff;}
+.report-logo span{color:#C9A84C;}
+.report-date{font-size:11px;color:rgba(255,255,255,0.45);font-family:'DM Mono',monospace;}
+.report-body{padding:24px 28px;}
+.report-county{font-size:20px;font-weight:800;color:#1B2A4A;margin-bottom:4px;}
+.report-sub{font-size:11px;color:#888;margin-bottom:20px;font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;}
+.report-row{border:1px solid #e5e5e5;border-radius:5px;padding:14px 18px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;}
+.rr-name{font-size:13px;font-weight:700;color:#1B2A4A;margin-bottom:2px;}
+.rr-agency{font-size:11px;color:#999;}
+.rr-amount{font-size:16px;font-weight:900;color:#C9A84C;}
+.report-footer-bar{background:#f0f0f0;padding:12px 28px;font-size:10px;color:#aaa;font-family:'DM Mono',monospace;}
+.report-gate{margin-top:20px;background:var(--ink-mid);border:1px solid var(--border-mid);border-radius:8px;padding:24px;text-align:center;}
+.report-gate-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.report-gate-sub{font-size:13px;color:var(--body);line-height:1.65;margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto;}
+
+/* PLANS */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px;margin:0 auto;}
+.plan-card{background:var(--ink-mid);border:1px solid var(--border);border-radius:10px;padding:26px 20px;position:relative;transition:all 0.2s;cursor:pointer;}
+.plan-card:hover{border-color:var(--border-mid);transform:translateY(-3px);}
+.plan-card.featured{border-color:var(--gold);background:var(--ink-lift);}
+.plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink-deep);font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 14px;border-radius:20px;white-space:nowrap;}
+.plan-tier{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.plan-price{font-size:44px;font-weight:900;color:var(--white);letter-spacing:-0.03em;line-height:1;}
+.plan-curr{font-size:20px;font-weight:500;color:var(--gold);vertical-align:super;line-height:1;}
+.plan-period{font-size:12px;color:var(--muted);margin:6px 0 18px;}
+.plan-divider{height:1px;background:var(--border);margin-bottom:14px;}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px;}
+.plan-feats li{font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;}
+.ck{color:var(--gold);font-size:11px;flex-shrink:0;}
+.btn-plan{display:block;text-align:center;padding:11px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;text-decoration:none;border:none;width:100%;}
+.btn-plan-outline{border:1px solid var(--border-mid)!important;color:var(--gold);background:none;}
+.btn-plan-outline:hover{border-color:var(--gold)!important;background:var(--gold-dim);}
+.btn-plan-gold{background:var(--gold);color:var(--ink-deep);}
+.btn-plan-gold:hover{background:var(--gold-warm);}
+
+/* WELCOME */
+.welcome-screen{position:fixed;inset:0;z-index:400;background:var(--ink-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;transition:opacity 0.5s,transform 0.5s;}
+.welcome-screen.hidden{opacity:0;transform:scale(0.96);pointer-events:none;}
+.w-eyebrow{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:20px;display:flex;align-items:center;gap:16px;}
+.w-eyebrow::before,.w-eyebrow::after{content:'';display:block;width:32px;height:1px;background:var(--gold);opacity:0.5;}
+.w-title{font-size:clamp(30px,5vw,56px);font-weight:800;letter-spacing:-0.02em;margin-bottom:16px;line-height:1.05;}
+.w-title span{color:var(--gold);}
+.w-sub{font-size:16px;font-weight:400;color:var(--body);max-width:500px;line-height:1.75;margin-bottom:36px;}
+.w-steps{display:flex;gap:20px;margin-bottom:44px;flex-wrap:wrap;justify-content:center;}
+.w-step{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:110px;}
+.w-step-num{width:34px;height:34px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--border-mid);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:var(--gold);}
+.w-step-label{font-size:11px;font-weight:500;color:var(--muted);text-align:center;line-height:1.4;}
+.w-note{font-size:12px;font-weight:500;color:var(--muted);margin-top:16px;font-family:'DM Mono',monospace;letter-spacing:0.04em;}
+
+/* SUCCESS */
+.success-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(6,14,28,0.96);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;}
+.success-overlay.show{display:flex;}
+.success-title{font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px;}
+.success-title span{color:var(--gold);}
+.success-sub{font-size:15px;color:var(--body);max-width:460px;line-height:1.7;margin-bottom:32px;}
+.btn-close-success{padding:14px 40px;background:var(--gold);color:var(--ink-deep);font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-close-success:hover{background:var(--gold-warm);}
+
+/* LOADING */
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:20px;}
+.spinner{width:40px;height:40px;border:3px solid var(--border-mid);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;color:var(--body);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .demo-nav{padding:0 20px;}
+  .demo-progress{padding:0 10px;}
+  .prog-label{display:none;}
+  .step-header,.step-content,.step-footer{padding-left:20px;padding-right:20px;}
+  .step1-grid{grid-template-columns:1fr;}
+  .detail-grid{grid-template-columns:1fr;}
+  .plan-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
+@keyframes pop{from{transform:scale(0);}to{transform:scale(1);}}` }} />
+      <div>{/* WELCOME */}
+      <div className="welcome-screen" id="welcomeScreen">
+        <div className="w-eyebrow">Interactive Demo</div>
+        <h1 className="w-title">See Empire <span>HomePath</span><br/>in Action</h1>
+        <p className="w-sub">Experience the platform that gives New York's real estate and mortgage professionals instant access to every homebuyer assistance program in the state.</p>
+        <div className="w-steps">
+          <div className="w-step"><div className="w-step-num">1</div><div className="w-step-label">Select County</div></div>
+          <div className="w-step"><div className="w-step-num">2</div><div className="w-step-label">Browse Programs</div></div>
+          <div className="w-step"><div className="w-step-num">3</div><div className="w-step-label">Program Details</div></div>
+          <div className="w-step"><div className="w-step-num">4</div><div className="w-step-label">Generate Report</div></div>
+          <div className="w-step"><div className="w-step-num">5</div><div className="w-step-label">Choose a Plan</div></div>
+        </div>
+        <button className="btn-subscribe-big" onClick={() => { try { (0, eval)("startDemo()") } catch (e) { /* noop */ } }}>Start the Demo →</button>
+        <div className="w-note">Demo uses sample data · Subscribe for full access to all 62 counties</div>
+      </div>
+      
+      {/* NAV */}
+      <nav className="demo-nav">
+        <Link to="/" className="demo-nav-logo">Empire<span>Home</span>Path</Link>
+        <div className="demo-nav-right">
+          <div className="demo-badge">Sample Demo</div>
+          <button className="demo-restart" onClick={() => { try { (0, eval)("restartDemo()") } catch (e) { /* noop */ } }}>Restart</button>
+        </div>
+      </nav>
+      
+      {/* PROGRESS */}
+      <div className="demo-progress">
+        <div className="prog-step" id="prog-1"><div className="prog-num">1</div><div className="prog-label">Select County</div></div>
+        <div className="prog-step" id="prog-2"><div className="prog-num">2</div><div className="prog-label">Browse Programs</div></div>
+        <div className="prog-step" id="prog-3"><div className="prog-num">3</div><div className="prog-label">Program Details</div></div>
+        <div className="prog-step" id="prog-4"><div className="prog-num">4</div><div className="prog-label">Generate Report</div></div>
+        <div className="prog-step" id="prog-5"><div className="prog-num">5</div><div className="prog-label">Get Full Access</div></div>
+      </div>
+      
+      {/* MAIN */}
+      <div className="demo-main">
+      
+      {/* ══ STEP 1 ══ */}
+      <div className="step-panel active" id="step-1">
+        <div className="step-header">
+          <div className="step-eyebrow">Step 1 of 5</div>
+          <h2 className="step-title">Choose Your <span>County</span></h2>
+          <p className="step-subtitle">Empire HomePath covers all 62 New York counties. Select one below along with your buyer's income and purchase price to see matching programs.</p>
+        </div>
+        <div className="step-content">
+          <div className="step1-grid">
+            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+              <div className="field-group">
+                <div className="field-label">County</div>
+                <div className="select-wrap">
+                  <select className="field-select" id="countySelect" onChange={() => { try { (0, eval)("onCountySelect()") } catch (e) { /* noop */ } }}>
+                    <option value="">— Select any of the 62 NY Counties —</option>
+                    <option value="orange">Orange County</option>
+                    <option value="westchester">Westchester County</option>
+                    <option value="suffolk">Suffolk County</option>
+                    <option value="nassau">Nassau County</option>
+                    <option value="albany">Albany County</option>
+                    <option value="erie">Erie County</option>
+                    <option value="monroe">Monroe County</option>
+                    <option value="dutchess">Dutchess County</option>
+                    <option value="ulster">Ulster County</option>
+                    <option value="rockland">Rockland County</option>
+                    <option value="other">Any Other NY County</option>
+                  </select>
+                </div>
+              </div>
+              <div id="extraFields" style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                <div className="form-row">
+                  <div className="field-group">
+                    <div className="field-label">Household Income</div>
+                    <div className="select-wrap">
+                      <select className="field-select" id="incomeSelect">
+                        <option value="">— Select range —</option>
+                        <option value="under40">Under $40,000</option>
+                        <option value="40to60">$40,000 – $60,000</option>
+                        <option value="60to80">$60,000 – $80,000</option>
+                        <option value="80to100">$80,000 – $100,000</option>
+                        <option value="100to120">$100,000 – $120,000</option>
+                        <option value="120to150">$120,000 – $150,000</option>
+                        <option value="over150">Over $150,000</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="field-group">
+                    <div className="field-label">Estimated Purchase Price</div>
+                    <div className="select-wrap">
+                      <select className="field-select" id="priceSelect">
+                        <option value="">— Select range —</option>
+                        <option value="under150">Under $150,000</option>
+                        <option value="150to250">$150,000 – $250,000</option>
+                        <option value="250to350">$250,000 – $350,000</option>
+                        <option value="350to500">$350,000 – $500,000</option>
+                        <option value="500to750">$500,000 – $750,000</option>
+                        <option value="over750">Over $750,000</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="field-group">
+                    <div className="field-label">Buyer Type (Optional)</div>
+                    <div className="select-wrap">
+                      <select className="field-select" id="buyerType">
+                        <option value="">All Buyers</option>
+                        <option value="firsttime">First-Time Buyer</option>
+                        <option value="veteran">Veteran</option>
+                        <option value="educator">Educator</option>
+                        <option value="lowmod">Low-Mod Income</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="field-group">
+                    <div className="field-label">Program Type (Optional)</div>
+                    <div className="select-wrap">
+                      <select className="field-select" id="programType">
+                        <option value="">All Types</option>
+                        <option value="grant">Grants</option>
+                        <option value="dpa">Down Payment Assist.</option>
+                        <option value="forgivable">Forgivable Loans</option>
+                        <option value="rate">Rate Buydowns</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="countyStats" style={{display: 'none'}}></div>
+            </div>
+            <div>
+              {/* Stats panel */}
+              <div className="stats-panel">
+                <div className="stats-panel-header"><div className="stats-dot"></div><div className="stats-panel-title">New York State — Full Platform</div></div>
+                <div className="stats-grid">
+                  <div className="stat-cell"><div className="stat-num">62</div><div className="stat-label">Counties Covered</div></div>
+                  <div className="stat-cell"><div className="stat-num">500+</div><div className="stat-label">Active Programs</div></div>
+                  <div className="stat-cell"><div className="stat-num">7</div><div className="stat-label">Program Categories</div></div>
+                  <div className="stat-cell"><div className="stat-num green">Live</div><div className="stat-label">Continuously Updated</div></div>
+                </div>
+              </div>
+              {/* Gated fact */}
+              <div className="gated-fact">
+                <div className="gated-fact-inner">
+                  <div className="gated-fact-label">Professional Insight</div>
+                  <div className="gated-fact-text">New York State has one of the highest concentrations of DPA programs in the country. The average eligible buyer in a mid-size NY county qualifies for 3 to 5 programs simultaneously — but fewer than 12% of real estate and mortgage professionals can name them all. Empire HomePath closes that gap in seconds.</div>
+                </div>
+                <div className="gated-overlay">
+                  <div className="gated-overlay-text">🔒 Subscribe to unlock professional insights</div>
+                  <Link to="/#pricing" className="btn-gate">View Plans</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="step-footer">
+          <div className="step-hint">This demo uses sample data — subscribe for live results</div>
+          <div className="step-nav">
+            <button className="btn-next" id="step1Next" onClick={() => { try { (0, eval)("goToStep(2)") } catch (e) { /* noop */ } }} disabled="">
+              View Sample Programs
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* ══ STEP 2 ══ */}
+      <div className="step-panel" id="step-2">
+        <div className="step-header">
+          <div className="step-eyebrow">Step 2 of 5</div>
+          <h2 className="step-title">Sample Programs — <span id="s2county">Your County</span></h2>
+          <p className="step-subtitle">This is a sample of what subscribers see instantly. Full program names, amounts, and funding status — for every county, every time.</p>
+        </div>
+        <div className="step-content" id="step2Content"></div>
+        <div className="step-footer">
+          <div className="step-hint">Subscribers see all programs with full contact details and eligibility rules</div>
+          <div className="step-nav">
+            <button className="btn-back" onClick={() => { try { (0, eval)("goToStep(1)") } catch (e) { /* noop */ } }}>← Back</button>
+            <button className="btn-next" id="step2Next" onClick={() => { try { (0, eval)("goToStep(3)") } catch (e) { /* noop */ } }} disabled="">
+              View Program Details
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* ══ STEP 3 ══ */}
+      <div className="step-panel" id="step-3">
+        <div className="step-header">
+          <div className="step-eyebrow">Step 3 of 5</div>
+          <h2 className="step-title" id="s3title">Program <span>Details</span></h2>
+          <p className="step-subtitle">Subscribers see complete eligibility rules, income limits, contact information, and application links — all verified and current.</p>
+        </div>
+        <div className="step-content" id="step3Content"></div>
+        <div className="step-footer">
+          <div className="step-hint">Full agency contact details and application links available to subscribers only</div>
+          <div className="step-nav">
+            <button className="btn-back" onClick={() => { try { (0, eval)("goToStep(2)") } catch (e) { /* noop */ } }}>← Back</button>
+            <button className="btn-next" onClick={() => { try { (0, eval)("goToStep(4)") } catch (e) { /* noop */ } }}>
+              Generate Sample Report
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* ══ STEP 4 ══ */}
+      <div className="step-panel" id="step-4">
+        <div className="step-header">
+          <div className="step-eyebrow">Step 4 of 5</div>
+          <h2 className="step-title">Client-Ready <span>PDF Report</span></h2>
+          <p className="step-subtitle">One click. A professional report your buyer can read — with every matching program, their amounts, and next steps. Subscribers can download and white-label all reports.</p>
+        </div>
+        <div className="step-content">
+          <div id="reportLoading" className="loading-state">
+            <div className="spinner"></div>
+            <div className="loading-text" id="loadingText">Compiling sample programs…</div>
+          </div>
+          <div id="reportContent" style={{display: 'none'}}>
+            <div className="report-wrap">
+              <div className="report-preview">
+                <div className="report-watermark"><div className="report-watermark-text">SAMPLE<br/>DEMO</div></div>
+                <div className="report-header">
+                  <div className="report-logo">Empire<span>Home</span>Path</div>
+                  <div className="report-date" id="reportDate"></div>
+                </div>
+                <div className="report-body">
+                  <div className="report-county" id="reportCounty"></div>
+                  <div className="report-sub">Sample Programs · For Demonstration Only</div>
+                  <div id="reportRows"></div>
+                  <div style={{marginTop: '14px', padding: '12px 14px', background: '#f5f5f5', borderRadius: '4px', fontSize: '11px', color: '#999', lineHeight: '1.5'}}>SAMPLE REPORT — Data shown for demonstration purposes only. Subscribe to Empire HomePath for verified program data, full eligibility details, agency contacts, and downloadable PDF reports.</div>
+                </div>
+                <div className="report-footer-bar">Empire HomePath LLC · empirehomepath.com · Sample Data — Not for Client Distribution</div>
+              </div>
+              <div className="report-gate">
+                <div className="report-gate-title">🔒 Download the Real Report</div>
+                <div className="report-gate-sub">Subscribers can download, save, and share professional reports with their buyers — with your firm's branding on every page.</div>
+                <Link to="/#pricing" className="btn-subscribe-big">Subscribe to Download</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="step-footer">
+          <div className="step-hint">Watermarked sample only — subscribers get clean downloadable PDFs</div>
+          <div className="step-nav">
+            <button className="btn-back" onClick={() => { try { (0, eval)("goToStep(3)") } catch (e) { /* noop */ } }}>← Back</button>
+            <button className="btn-next" onClick={() => { try { (0, eval)("goToStep(5)") } catch (e) { /* noop */ } }}>
+              Choose Your Plan
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* ══ STEP 5 ══ */}
+      <div className="step-panel" id="step-5">
+        <div className="step-header">
+          <div className="step-eyebrow">Step 5 of 5</div>
+          <h2 className="step-title">Get <span>Full Access</span></h2>
+          <p className="step-subtitle">You just saw a sample. Subscribers get every program, in every county, with full eligibility details, contact info, and PDF export — updated continuously.</p>
+        </div>
+        <div className="step-content">
+          <div className="plan-grid">
+            <div className="plan-card">
+              <div className="plan-tier">Individual</div>
+              <div className="plan-price"><span className="plan-curr">$</span>150</div>
+              <div className="plan-period">per month</div>
+              <div className="plan-divider"></div>
+              <ul className="plan-feats">
+                <li><span className="ck">+</span>All 62 counties — full access</li>
+                <li><span className="ck">+</span>Unlimited program searches</li>
+                <li><span className="ck">+</span>Client-ready PDF reports</li>
+                <li><span className="ck">+</span>Program status alerts</li>
+                <li><span className="ck">+</span>Email support</li>
+              </ul>
+              <button className="btn-plan btn-plan-outline" onClick={() => { try { (0, eval)("selectPlan('Individual')") } catch (e) { /* noop */ } }}>Get Started</button>
+            </div>
+            <div className="plan-card featured">
+              <div className="plan-badge">Most Popular</div>
+              <div className="plan-tier">Professional</div>
+              <div className="plan-price"><span className="plan-curr">$</span>375</div>
+              <div className="plan-period">per month</div>
+              <div className="plan-divider"></div>
+              <ul className="plan-feats">
+                <li><span className="ck">+</span>Everything in Individual</li>
+                <li><span className="ck">+</span>White-label client reports</li>
+                <li><span className="ck">+</span>Branded PDF exports</li>
+                <li><span className="ck">+</span>Priority data updates</li>
+                <li><span className="ck">+</span>CRM export (CSV)</li>
+                <li><span className="ck">+</span>Priority support</li>
+              </ul>
+              <button className="btn-plan btn-plan-gold" onClick={() => { try { (0, eval)("selectPlan('Professional')") } catch (e) { /* noop */ } }}>Get Started</button>
+            </div>
+            <div className="plan-card">
+              <div className="plan-tier">Enterprise</div>
+              <div className="plan-price" style={{fontSize: '32px', lineHeight: '1.2'}}>Custom</div>
+              <div className="plan-period">team pricing</div>
+              <div className="plan-divider"></div>
+              <ul className="plan-feats">
+                <li><span className="ck">+</span>Platform under your brand</li>
+                <li><span className="ck">+</span>Multi-user team access</li>
+                <li><span className="ck">+</span>API data integration</li>
+                <li><span className="ck">+</span>Dedicated account manager</li>
+                <li><span className="ck">+</span>Custom onboarding</li>
+              </ul>
+              <button className="btn-plan btn-plan-outline" onClick={() => { try { (0, eval)("selectPlan('Enterprise')") } catch (e) { /* noop */ } }}>Contact Us</button>
+            </div>
+          </div>
+          <div style={{textAlign: 'center', marginTop: '24px', padding: '18px', background: 'var(--ink-mid)', border: '1px solid var(--border)', borderRadius: '8px', maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto'}}>
+            <div style={{fontFamily: '"DM Mono",monospace', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)', opacity: '0.7', marginBottom: '6px'}}>Stop Searching. Start Closing.</div>
+            <div style={{fontSize: '13px', color: 'var(--body)', lineHeight: '1.65'}}>Questions? Email us at <a href="mailto:empirehomepath@gmail.com" style={{color: 'var(--gold)', textDecoration: 'none', fontWeight: 600}}>empirehomepath@gmail.com</a></div>
+          </div>
+        </div>
+        <div className="step-footer">
+          <div className="step-hint">No long-term contracts — cancel any time</div>
+          <div className="step-nav">
+            <button className="btn-back" onClick={() => { try { (0, eval)("goToStep(4)") } catch (e) { /* noop */ } }}>← Back</button>
+          </div>
+        </div>
+      </div>
+      
+      </div>{/* end demo-main */}
+      
+      {/* SUCCESS */}
+      <div className="success-overlay" id="successOverlay">
+        <div style={{fontSize: '56px', marginBottom: '20px', animation: 'pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275)'}}>🔑</div>
+        <h2 className="success-title">Welcome to Empire <span>HomePath</span></h2>
+        <p className="success-sub">You are one step away from full access to all 62 New York counties. We will be in touch within one business day to complete your setup.</p>
+        <button className="btn-close-success" onClick={() => { try { (0, eval)("document.getElementById('successOverlay').classList.remove('show')") } catch (e) { /* noop */ } }}>Back to Demo</button>
+        
+      </div></div>
+    </div>
+  );
+};
+
+export default DemoPage;

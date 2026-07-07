@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { buildStaticPageComponent } from './static-page-codegen.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -10,12 +11,12 @@ const htmlDir = process.argv[2] || '/tmp/empire-html';
 const homeHtmlPath = process.argv[3] || path.join(htmlDir, 'empirehomepath-v8.html');
 
 const pages = [
-  { file: 'empirehomepath-v8.html', exportName: 'homePage', out: 'homePage.js', htmlPath: homeHtmlPath },
-  { file: 'empirehomepath-demo.html', exportName: 'demoPage', out: 'demoPage.js' },
-  { file: 'empirehomepath-search.html', exportName: 'searchPage', out: 'searchPage.js' },
-  { file: 'empirehomepath-privacy.html', exportName: 'privacyPage', out: 'privacyPage.js' },
-  { file: 'empirehomepath-terms.html', exportName: 'termsPage', out: 'termsPage.js' },
-  { file: 'empirehomepath-disclaimer.html', exportName: 'disclaimerPage', out: 'disclaimerPage.js' },
+  { file: 'empirehomepath-v8.html', component: 'HomePage', out: 'HomePage.jsx', htmlPath: homeHtmlPath },
+  { file: 'empirehomepath-demo.html', component: 'DemoPage', out: 'DemoPage.jsx' },
+  { file: 'empirehomepath-search.html', component: 'SearchPage', out: 'SearchPage.jsx' },
+  { file: 'empirehomepath-privacy.html', component: 'PrivacyPage', out: 'PrivacyPage.jsx' },
+  { file: 'empirehomepath-terms.html', component: 'TermsPage', out: 'TermsPage.jsx' },
+  { file: 'empirehomepath-disclaimer.html', component: 'DisclaimerPage', out: 'DisclaimerPage.jsx' },
 ];
 
 function transformLinks(content) {
@@ -68,24 +69,11 @@ function parseHtml(htmlPath) {
   };
 }
 
-function escapeForTemplate(str) {
-  return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
-}
-
 fs.mkdirSync(srcDir, { recursive: true });
 
 for (const page of pages) {
   const parsed = parseHtml(page.htmlPath || path.join(htmlDir, page.file));
-  const content = `const ${page.exportName} = {
-  title: ${JSON.stringify(parsed.title)},
-  css: \`${escapeForTemplate(parsed.css)}\`,
-  html: \`${escapeForTemplate(parsed.html)}\`,
-  scripts: \`${escapeForTemplate(parsed.scripts)}\`,
-};
-
-export default ${page.exportName};
-`;
-
+  const content = buildStaticPageComponent({ component: page.component, page: parsed });
   fs.writeFileSync(path.join(srcDir, page.out), content);
   console.log(`Wrote ${page.out} (${(content.length / 1024).toFixed(1)} KB)`);
 }
