@@ -16,7 +16,13 @@ import WhiteLabelSettings from './components/WhiteLabelSettings';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
 import WidgetEmbed from './pages/WidgetEmbed';
-import StaticPagesLayout, { STATIC_ROUTE_PATHS } from './pages/StaticPagesLayout';
+import { STATIC_ROUTE_PATHS } from './pages/StaticPagesLayout';
+import HomePage from './pages/static/HomePage';
+import DemoPage from './pages/static/DemoPage';
+import SearchPage from './pages/static/SearchPage';
+import PrivacyPage from './pages/static/PrivacyPage';
+import TermsPage from './pages/static/TermsPage';
+import DisclaimerPage from './pages/static/DisclaimerPage';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -243,14 +249,12 @@ function App() {
       
       <main>
         <Routes>
-          <Route element={<StaticPagesLayout />}>
-            <Route path="/" />
-            <Route path="/demo" />
-            <Route path="/search" />
-            <Route path="/privacy" />
-            <Route path="/terms" />
-            <Route path="/disclaimer" />
-          </Route>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/app" element={
