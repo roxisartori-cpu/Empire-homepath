@@ -1048,10 +1048,13 @@ footer{
 }
 </style>
 <script>
-history.pushState(null, null, window.location.href);
-window.addEventListener('popstate', function() {
-  history.pushState(null, null, window.location.href);
-});
+// Prevent back button from causing blank page
+(function() {
+  window.history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', function() {
+    window.history.pushState(null, '', window.location.href);
+  });
+})();
 </script>
 </head>
 <body>
@@ -1060,13 +1063,13 @@ window.addEventListener('popstate', function() {
 <nav>
   <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nav-logo">Empire<span>Home</span>Path</a>
   <ul class="nav-links">
-   <li><a href="javascript:void(0)" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why It Works</a></li>
-<li><a href="javascript:void(0)" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</a></li>
-<li><a href="javascript:void(0)" onclick="document.getElementById('who').scrollIntoView({behavior:'smooth'})">Who It's For</a></li>
-<li><a href="javascript:void(0)" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a></li>
+    <li><a href="javascript:void(0)" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why It Works</a></li>
+    <li><a href="javascript:void(0)" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</a></li>
+    <li><a href="javascript:void(0)" onclick="document.getElementById('who').scrollIntoView({behavior:'smooth'})">Who It's For</a></li>
+    <li><a href="javascript:void(0)" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a></li>
   </ul>
   <div class="nav-right">
-    <a href="#" class="btn-signin">Sign In</a>
+    <a href="javascript:void(0)" class="btn-signin">Sign In</a>
     <a href="/empirehomepath-demo.html" class="btn-demo">Request a Demo</a>
   </div>
 </nav>
@@ -1101,7 +1104,7 @@ window.addEventListener('popstate', function() {
 
     <div class="hero-cta">
       <a href="/empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
-      <a href="#why" class="btn-hero-line">
+      <a href="javascript:void(0)" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})" class="btn-hero-line">
         See how it works
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1452,7 +1455,7 @@ window.addEventListener('popstate', function() {
           <li><span class="ck">+</span>Dedicated account manager</li>
           <li><span class="ck">+</span>Custom onboarding</li>
         </ul>
-        <a href="#cta" class="btn-pc btn-pc-outline">Contact Us</a>
+        <a href="mailto:empirehomepath@gmail.com" class="btn-pc btn-pc-outline">Contact Us</a>
       </div>
 
     </div>
@@ -1471,7 +1474,7 @@ window.addEventListener('popstate', function() {
     <p class="cta-sub">Let Empire HomePath provide the possibilities. You provide the keys. Request a demo today and see New York's most complete homebuyer assistance platform.</p>
     <div class="cta-btns">
       <a href="/empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
-      <a href="#features" class="btn-cta-ghost">Explore the Platform</a>
+      <a href="javascript:void(0)" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" class="btn-cta-ghost">Explore the Platform</a>
     </div>
   </div>
 </section>
@@ -1479,12 +1482,12 @@ window.addEventListener('popstate', function() {
 <!-- FOOTER -->
 <footer>
   <div class="footer-row">
-    <a href="#" class="footer-logo">Empire<span>Home</span>Path</a>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="footer-logo">Empire<span>Home</span>Path</a>
     <ul class="footer-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#">Privacy Policy</a></li>
-      <li><a href="#">Terms of Service</a></li>
+      <li><a href="javascript:void(0)" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</a></li>
+      <li><a href="javascript:void(0)" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a></li>
+      <li><a href="/empirehomepath-privacy.html">Privacy Policy</a></li>
+      <li><a href="/empirehomepath-terms.html">Terms of Service</a></li>
       <li><button class="footer-disc" onclick="openModal()">Disclaimer</button></li>
       <li><a href="mailto:empirehomepath@gmail.com">Contact</a></li>
     </ul>
