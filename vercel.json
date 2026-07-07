@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/", "destination": "/empirehomepath-v8.html" },
     { "source": "/demo", "destination": "/empirehomepath-demo.html" },
     { "source": "/search", "destination": "/empirehomepath-search.html" },
     { "source": "/privacy", "destination": "/empirehomepath-privacy.html" },
