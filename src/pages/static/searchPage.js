@@ -619,10 +619,7 @@ nav{
   html: `<!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">Empire<span>Home</span>Path</a>
-  <ul class="nav-links">
-    <li><a href="/#why">Why It Works</a></li>
-    <li><a href="/#pricing">Pricing</a></li>
-  </ul>
+  <ul class="nav-links"><li><a href="/#why">Why It Works</a></li><li><a href="/#features">Features</a></li><li><a href="/#who">Who It's For</a></li><li><a href="/#pricing">Pricing</a></li></ul>
   <div class="nav-right">
     <a href="#" class="btn-signin">Sign In</a>
     <a href="/demo" class="btn-demo">Live Demo</a>
@@ -864,7 +861,7 @@ nav{
     <div class="pro-gate" id="proGate">
       <div class="pro-gate-title">🔒 Unlock All <span id="gateCount">0</span> Programs</div>
       <div class="pro-gate-sub">You're seeing a preview. Subscribe to Empire HomePath to access every verified program with full eligibility details, contact information, and PDF export.</div>
-      <button class="btn-subscribe" onclick="window.location='/#pricing'">View Subscription Plans</button>
+      <button class="btn-subscribe" onclick="__spaNavigate('/#pricing'">View Subscription Plans</button>
     </div>
 
   </div>
