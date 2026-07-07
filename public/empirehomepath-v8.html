@@ -1047,12 +1047,18 @@ footer{
   *,*::before,*::after{transition:none!important;}
 }
 </style>
+<script>
+history.pushState(null, null, window.location.href);
+window.addEventListener('popstate', function() {
+  history.pushState(null, null, window.location.href);
+});
+</script>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">Empire<span>Home</span>Path</a>
+  <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nav-logo">Empire<span>Home</span>Path</a>
   <ul class="nav-links">
    <li><a href="javascript:void(0)" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why It Works</a></li>
 <li><a href="javascript:void(0)" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</a></li>
@@ -1061,7 +1067,7 @@ footer{
   </ul>
   <div class="nav-right">
     <a href="#" class="btn-signin">Sign In</a>
-    <a href="empirehomepath-demo.html" class="btn-demo">Request a Demo</a>
+    <a href="/empirehomepath-demo.html" class="btn-demo">Request a Demo</a>
   </div>
 </nav>
 
@@ -1094,7 +1100,7 @@ footer{
     </p>
 
     <div class="hero-cta">
-      <a href="empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
+      <a href="/empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
       <a href="#why" class="btn-hero-line">
         See how it works
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1352,7 +1358,7 @@ footer{
         <div class="demo-teaser-step"><div class="demo-teaser-step-num">3</div>Review eligibility and program details</div>
         <div class="demo-teaser-step"><div class="demo-teaser-step-num">4</div>Generate a sample client PDF report</div>
       </div>
-      <a href="empirehomepath-demo.html" class="btn-start-demo">
+      <a href="/empirehomepath-demo.html" class="btn-start-demo">
         Start the Demo →
       </a>
       <div class="demo-teaser-note">No account required · Takes under 3 minutes</div>
@@ -1412,7 +1418,7 @@ footer{
           <li><span class="ck">+</span>Program status alerts</li>
           <li><span class="ck">+</span>Email support</li>
         </ul>
-        <a href="empirehomepath-demo.html" class="btn-pc btn-pc-outline">Request a Demo</a>
+        <a href="/empirehomepath-demo.html" class="btn-pc btn-pc-outline">Request a Demo</a>
       </div>
 
       <!-- Professional -->
@@ -1430,7 +1436,7 @@ footer{
           <li><span class="ck">+</span>CRM export (CSV)</li>
           <li><span class="ck">+</span>Priority support</li>
         </ul>
-        <a href="empirehomepath-demo.html" class="btn-pc btn-pc-gold">Request a Demo</a>
+        <a href="/empirehomepath-demo.html" class="btn-pc btn-pc-gold">Request a Demo</a>
       </div>
 
       <!-- Enterprise -->
@@ -1464,7 +1470,7 @@ footer{
     </h2>
     <p class="cta-sub">Let Empire HomePath provide the possibilities. You provide the keys. Request a demo today and see New York's most complete homebuyer assistance platform.</p>
     <div class="cta-btns">
-      <a href="empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
+      <a href="/empirehomepath-demo.html" class="btn-hero">Request a Demo</a>
       <a href="#features" class="btn-cta-ghost">Explore the Platform</a>
     </div>
   </div>
