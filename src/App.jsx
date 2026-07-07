@@ -16,14 +16,18 @@ import WhiteLabelSettings from './components/WhiteLabelSettings';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
 import WidgetEmbed from './pages/WidgetEmbed';
-import LandingPage from './pages/LandingPage';
-import LegalPage from './pages/LegalPage';
-import privacyHtml from './pages/legal/privacyHtml';
-import termsHtml from './pages/legal/termsHtml';
-import disclaimerHtml from './pages/legal/disclaimerHtml';
+import StaticHtmlPage from './pages/StaticHtmlPage';
+import homePage from './pages/static/homePage';
+import demoPage from './pages/static/demoPage';
+import searchPage from './pages/static/searchPage';
+import privacyPage from './pages/static/privacyPage';
+import termsPage from './pages/static/termsPage';
+import disclaimerPage from './pages/static/disclaimerPage';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
+
+const STATIC_ROUTES = ['/', '/demo', '/search', '/privacy', '/terms', '/disclaimer'];
 
 function App() {
   const location = useLocation();
@@ -34,9 +38,7 @@ function App() {
 
   const isWidgetRoute = location.pathname === '/widget/embed';
   const isReportRoute = location.pathname === '/report';
-  const isLandingRoute = location.pathname === '/';
-  const isLegalRoute = ['/privacy', '/terms', '/disclaimer'].includes(location.pathname);
-  const isMarketingRoute = isLandingRoute || isLegalRoute;
+  const isStaticRoute = STATIC_ROUTES.includes(location.pathname);
 
   const brandingStyles = useMemo(() => {
     if (user?.plan !== 'white-label' || !user?.white_label_settings) return null;
@@ -211,7 +213,7 @@ function App() {
     }, 800);
   };
 
-  if (loading && !isMarketingRoute) {
+  if (loading && !isStaticRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
         <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
@@ -247,13 +249,15 @@ function App() {
       
       <main>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/privacy" element={<LegalPage html={privacyHtml} title="Privacy Policy — Empire HomePath" />} />
-          <Route path="/terms" element={<LegalPage html={termsHtml} title="Terms of Service — Empire HomePath" />} />
-          <Route path="/disclaimer" element={<LegalPage html={disclaimerHtml} title="Disclaimer — Empire HomePath" />} />
+          <Route path="/" element={<StaticHtmlPage page={homePage} />} />
+          <Route path="/demo" element={<StaticHtmlPage page={demoPage} />} />
+          <Route path="/search" element={<StaticHtmlPage page={searchPage} />} />
+          <Route path="/privacy" element={<StaticHtmlPage page={privacyPage} />} />
+          <Route path="/terms" element={<StaticHtmlPage page={termsPage} />} />
+          <Route path="/disclaimer" element={<StaticHtmlPage page={disclaimerPage} />} />
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
-          <Route path="/search" element={
+          <Route path="/app" element={
             <div className="min-h-screen bg-warm-50 text-warm-800">
               {(!token || !user) ? (
                 <Auth onAuthSuccess={handleAuthSuccess} />
@@ -311,20 +315,20 @@ function App() {
               )}
             </div>
           } />
-          <Route path="*" element={<LandingPage />} />
+          <Route path="*" element={<StaticHtmlPage page={homePage} />} />
         </Routes>
       </main>
 
-      {!isWidgetRoute && !isReportRoute && isMarketingRoute && (
+      {!isWidgetRoute && !isReportRoute && isStaticRoute && (
         <style>{`
           body { background-color: #0A1628 !important; }
           html { background-color: #0A1628 !important; }
         `}</style>
       )}
 
-      {!isWidgetRoute && !isReportRoute && !isMarketingRoute && <Footer />}
+      {!isWidgetRoute && !isReportRoute && !isStaticRoute && <Footer />}
 
-      {!isWidgetRoute && !isReportRoute && !isMarketingRoute && (
+      {!isWidgetRoute && !isReportRoute && !isStaticRoute && (
         <>
           <SaveResults 
             isOpen={isSaveModalOpen} 
