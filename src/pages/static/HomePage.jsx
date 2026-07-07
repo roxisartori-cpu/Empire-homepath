@@ -7,12 +7,6 @@ function closeModal(){document.getElementById('disc-modal').classList.remove('op
 function closeOut(e){if(e.target===document.getElementById('disc-modal'))closeModal();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-const revs=document.querySelectorAll('.reveal');
-const ro=new IntersectionObserver(en=>{
-  en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
-},{threshold:0.08});
-revs.forEach(r=>ro.observe(r));
-
 const secs=document.querySelectorAll('section[id]');
 const nls=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{
