@@ -1,6 +1,13 @@
 {
-  "outputDirectory": "public",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/sign-in", "destination": "/app.html" },
+    { "source": "/sign-up", "destination": "/app.html" },
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/app/(.*)", "destination": "/app.html" },
+    { "source": "/report", "destination": "/app.html" },
+    { "source": "/widget/embed", "destination": "/app.html" },
     { "source": "/", "destination": "/empirehomepath-v8.html" },
     { "source": "/demo", "destination": "/empirehomepath-demo.html" },
     { "source": "/search", "destination": "/empirehomepath-search.html" },
