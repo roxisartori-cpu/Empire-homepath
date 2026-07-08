@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/", "destination": "/empirehomepath-v8.html" },
     { "source": "/demo", "destination": "/empirehomepath-demo.html" },
