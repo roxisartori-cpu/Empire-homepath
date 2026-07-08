@@ -23,8 +23,6 @@ import SearchPage from './pages/static/SearchPage';
 import PrivacyPage from './pages/static/PrivacyPage';
 import TermsPage from './pages/static/TermsPage';
 import DisclaimerPage from './pages/static/DisclaimerPage';
-import ClerkSignIn from './pages/ClerkSignIn';
-import ClerkSignUp from './pages/ClerkSignUp';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
@@ -40,7 +38,6 @@ function App() {
 
   const isWidgetRoute = location.pathname === '/widget/embed';
   const isReportRoute = location.pathname === '/report';
-  const isAuthRoute = location.pathname === '/sign-in' || location.pathname === '/sign-up';
   const isStaticRoute = STATIC_ROUTES.includes(location.pathname);
 
   const brandingStyles = useMemo(() => {
@@ -258,8 +255,6 @@ function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
-          <Route path="/sign-in" element={<ClerkSignIn />} />
-          <Route path="/sign-up" element={<ClerkSignUp />} />
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/app" element={
@@ -324,7 +319,7 @@ function App() {
         </Routes>
       </main>
 
-      {!isWidgetRoute && !isReportRoute && (isStaticRoute || isAuthRoute) && (
+      {!isWidgetRoute && !isReportRoute && isStaticRoute && (
         <style>{`
           body { background-color: #0A1628 !important; }
           html { background-color: #0A1628 !important; }
