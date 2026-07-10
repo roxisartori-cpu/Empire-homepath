@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Empire HomePath</title>
+<script>
+(function(){
+  var pwd = sessionStorage.getItem('ehp_admin');
+  if(pwd !== 'EHP2026admin'){
+    var entered = prompt('Enter admin password:');
+    if(entered !== 'EHP2026admin'){
+      window.location.href = 'https://empirehomepath.com';
+    } else {
+      sessionStorage.setItem('ehp_admin','EHP2026admin');
+    }
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0A1628;--ink-deep:#060E1C;--ink-mid:#102038;--ink-lift:#16284A;
+  --gold:#C9A84C;--gold-warm:#DDB85C;--gold-dim:rgba(201,168,76,0.12);
+  --white:#FFFFFF;--body:rgba(255,255,255,0.65);--muted:rgba(255,255,255,0.35);
+  --border:rgba(201,168,76,0.16);--border-mid:rgba(201,168,76,0.28);
+  --success:#4ADE80;--danger:#FF5C5C;--warning:#FBB924;
+  --sidebar:200px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-webkit-font-smoothing:antialiased;display:flex;min-height:100vh;}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--ink-deep);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:100;
+}
+.sidebar-logo{
+  padding:24px 20px;
+  border-bottom:1px solid var(--border);
+  text-decoration:none;
+  display:block;
+}
+.sidebar-logo-text{font-size:15px;font-weight:700;color:var(--white);}
+.sidebar-logo-text span{color:var(--gold);}
+.sidebar-logo-sub{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);opacity:0.6;margin-top:3px;
+}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto;}
+.nav-section-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 20px 6px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 20px;
+  color:var(--muted);text-decoration:none;
+  font-size:13px;font-weight:500;
+  cursor:pointer;transition:all 0.2s;
+  border-left:2px solid transparent;
+  background:none;border-right:none;border-top:none;border-bottom:none;
+  width:100%;text-align:left;font-family:'Inter',sans-serif;
+}
+.nav-item:hover{color:var(--body);background:rgba(201,168,76,0.04);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim);}
+.nav-item svg{flex-shrink:0;opacity:0.7;}
+.nav-item.active svg{opacity:1;}
+.sidebar-bottom{
+  padding:16px 20px;
+  border-top:1px solid var(--border);
+}
+.admin-user{display:flex;align-items:center;gap:10px;}
+.admin-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--gold-dim);border:1px solid var(--border-mid);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;
+}
+.admin-name{font-size:12px;font-weight:600;color:var(--white);}
+.admin-role{font-size:10px;color:var(--muted);}
+.btn-signout{
+  margin-top:10px;width:100%;
+  padding:8px;border-radius:5px;
+  border:1px solid var(--border);
+  background:none;color:var(--muted);
+  font-size:11px;font-weight:500;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;transition:all 0.2s;
+  text-align:center;
+}
+.btn-signout:hover{color:var(--danger);border-color:var(--danger);}
+
+/* ══ MAIN ══ */
+.main{
+  margin-left:var(--sidebar);
+  flex:1;display:flex;flex-direction:column;
+  min-height:100vh;
+}
+
+/* ══ TOP BAR ══ */
+.topbar{
+  height:64px;
+  background:rgba(6,14,28,0.97);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(20px);
+}
+.topbar-title{font-size:16px;font-weight:700;color:var(--white);}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-date{
+  font-family:'DM Mono',monospace;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.1em;color:var(--muted);
+}
+.btn-refresh{
+  padding:8px 18px;
+  border:1px solid var(--border-mid);
+  background:none;color:var(--gold);
+  font-size:11px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  border-radius:5px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 0.2s;
+}
+.btn-refresh:hover{background:var(--gold-dim);}
+
+/* ══ CONTENT ══ */
+.content{padding:28px 32px;flex:1;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ══ STAT CARDS ══ */
+.stat-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;margin-bottom:28px;
+}
+.stat-card{
+  background:var(--ink-mid);
+  border:1px solid var(--border);
+  border-radius:8px;padding:22px 24px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.stat-card:hover{border-color:var(--border-mid);}
+.stat-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.stat-card:hover::before{opacity:1;}
+.stat-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;
+}
+.stat-value{
+  font-size:32px;font-weight:900;
+  color:var(--white);letter-spacing:-0.02em;
+  line-height:1;margin-bottom:8px;
+}
+.stat-value.gold{color:var(--gold);}
+.stat-value.green{color:var(--success);}
+.stat-value.red{color:var(--danger);}
+.stat-change{
+  font-size:11px;font-weight:500;
+  display:flex;align-items:center;gap:4px;
+}
+.stat-change.up{color:var(--success);}
+.stat-change.down{color:var(--danger);}
+.stat-change.neutral{color:var(--muted);}
+
+/* ══ SECTION HEADERS ══ */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.section-title{
+  font-size:16px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{
+  content:'';display:block;
+  width:3px;height:16px;
+  background:var(--gold);border-radius:2px;
+}
+
+/* ══ CARDS ══ */
+.card{
+  background:var(--ink-mid);
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.card-header{
+  padding:16px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{
+  font-size:13px;font-weight:700;color:var(--white);
+}
+.card-body{padding:0;}
+
+/* ══ TABLE ══ */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);padding:12px 22px;
+  text-align:left;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.data-table td{
+  font-size:13px;font-weight:400;
+  color:var(--body);padding:14px 22px;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  vertical-align:middle;
+}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--ink-lift);}
+.td-name{font-weight:600;color:var(--white);}
+.td-email{color:var(--muted);font-size:12px;}
+
+/* BADGES */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:600;
+  white-space:nowrap;
+}
+.badge-active{background:rgba(74,222,128,0.12);color:var(--success);border:1px solid rgba(74,222,128,0.25);}
+.badge-cancelled{background:rgba(255,92,92,0.12);color:var(--danger);border:1px solid rgba(255,92,92,0.25);}
+.badge-pastdue{background:rgba(251,185,36,0.12);color:var(--warning);border:1px solid rgba(251,185,36,0.25);}
+.badge-individual{background:var(--gold-dim);color:var(--gold);border:1px solid var(--border-mid);}
+.badge-professional{background:rgba(201,168,76,0.2);color:var(--gold-warm);border:1px solid var(--border-mid);}
+.badge-enterprise{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid rgba(255,255,255,0.12);}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ══ REVENUE CHART ══ */
+.chart-wrap{padding:24px 22px;}
+.chart-bars{
+  display:flex;align-items:flex-end;gap:8px;
+  height:140px;margin-bottom:8px;
+}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.chart-bar{
+  width:100%;border-radius:4px 4px 0 0;
+  background:linear-gradient(180deg,var(--gold) 0%,rgba(201,168,76,0.4) 100%);
+  transition:opacity 0.2s;cursor:pointer;
+  position:relative;
+}
+.chart-bar:hover{opacity:0.8;}
+.chart-bar-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;color:var(--muted);
+  letter-spacing:0.06em;
+}
+.chart-bar-val{
+  font-size:10px;font-weight:700;color:var(--gold);
+  white-space:nowrap;
+}
+
+/* ══ ACTIVITY FEED ══ */
+.activity-list{display:flex;flex-direction:column;}
+.activity-item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 22px;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  transition:background 0.2s;
+}
+.activity-item:last-child{border-bottom:none;}
+.activity-item:hover{background:var(--ink-lift);}
+.activity-icon{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;margin-top:2px;
+}
+.activity-icon.signup{background:rgba(74,222,128,0.12);}
+.activity-icon.payment{background:var(--gold-dim);}
+.activity-icon.cancel{background:rgba(255,92,92,0.12);}
+.activity-icon.demo{background:rgba(255,255,255,0.06);}
+.activity-content{flex:1;}
+.activity-text{font-size:13px;font-weight:400;color:var(--body);line-height:1.5;margin-bottom:3px;}
+.activity-text strong{color:var(--white);font-weight:600;}
+.activity-time{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);
+  letter-spacing:0.06em;
+}
+
+/* ══ SEARCH & FILTER ══ */
+.table-toolbar{
+  padding:14px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.search-input{
+  background:var(--ink);
+  border:1px solid var(--border-mid);
+  color:var(--white);
+  padding:9px 14px;border-radius:5px;
+  font-size:12px;font-family:'Inter',sans-serif;
+  width:220px;transition:border-color 0.2s;
+}
+.search-input:focus{outline:none;border-color:var(--gold);}
+.search-input::placeholder{color:var(--muted);}
+.filter-select{
+  background:var(--ink);
+  border:1px solid var(--border-mid);
+  color:var(--body);
+  padding:9px 14px;border-radius:5px;
+  font-size:12px;font-family:'Inter',sans-serif;
+  cursor:pointer;appearance:none;
+}
+.filter-select:focus{outline:none;border-color:var(--gold);}
+.table-count{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);
+  letter-spacing:0.08em;margin-left:auto;
+}
+
+/* ══ PROGRAM MANAGER ══ */
+.program-grid{display:flex;flex-direction:column;gap:0;}
+.program-row{
+  display:grid;
+  grid-template-columns:1fr auto auto auto;
+  gap:16px;align-items:center;
+  padding:16px 22px;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  transition:background 0.2s;
+}
+.program-row:last-child{border-bottom:none;}
+.program-row:hover{background:var(--ink-lift);}
+.prog-row-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px;}
+.prog-row-county{font-size:11px;color:var(--muted);}
+.prog-row-amount{font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap;}
+.btn-edit{
+  padding:6px 14px;border-radius:4px;
+  border:1px solid var(--border-mid);
+  background:none;color:var(--body);
+  font-size:11px;font-weight:500;
+  font-family:'Inter',sans-serif;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-edit:hover{border-color:var(--gold);color:var(--gold);}
+.btn-disable{
+  padding:6px 14px;border-radius:4px;
+  border:1px solid rgba(255,92,92,0.25);
+  background:none;color:var(--danger);
+  font-size:11px;font-weight:500;
+  font-family:'Inter',sans-serif;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-disable:hover{background:rgba(255,92,92,0.08);}
+
+/* ADD PROGRAM FORM */
+.add-program-form{
+  padding:22px;
+  border-top:1px solid var(--border);
+  display:none;
+}
+.add-program-form.open{display:block;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);opacity:0.8;
+}
+.field-input,.field-select-form{
+  background:var(--ink);
+  border:1px solid var(--border-mid);
+  color:var(--white);
+  padding:10px 14px;border-radius:5px;
+  font-size:13px;font-family:'Inter',sans-serif;
+  transition:border-color 0.2s;width:100%;
+}
+.field-input:focus,.field-select-form:focus{outline:none;border-color:var(--gold);}
+.field-input::placeholder{color:var(--muted);}
+.btn-add-program{
+  padding:11px 28px;
+  background:var(--gold);color:var(--ink-deep);
+  font-size:12px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  border:none;border-radius:5px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 0.2s;
+}
+.btn-add-program:hover{background:var(--gold-warm);}
+
+/* ══ DEMO REQUESTS ══ */
+.demo-row{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:16px;align-items:center;
+  padding:14px 22px;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  transition:background 0.2s;
+}
+.demo-row:last-child{border-bottom:none;}
+.demo-row:hover{background:var(--ink-lift);}
+.demo-name{font-size:13px;font-weight:600;color:var(--white);}
+.demo-email{font-size:11px;color:var(--muted);}
+.demo-time{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);
+  letter-spacing:0.06em;white-space:nowrap;
+}
+.btn-followup{
+  padding:6px 14px;border-radius:4px;
+  border:1px solid var(--border-mid);
+  background:none;color:var(--gold);
+  font-size:11px;font-weight:600;
+  font-family:'Inter',sans-serif;cursor:pointer;
+  transition:all 0.2s;text-decoration:none;
+  display:inline-block;
+}
+.btn-followup:hover{background:var(--gold-dim);}
+
+/* ══ SETTINGS ══ */
+.settings-grid{display:flex;flex-direction:column;gap:20px;}
+.settings-card{
+  background:var(--ink-mid);
+  border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.settings-card-header{
+  padding:16px 22px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;font-weight:700;color:var(--white);
+}
+.settings-card-body{padding:22px;}
+.settings-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  gap:16px;
+}
+.settings-row:last-child{border-bottom:none;}
+.settings-row-label{font-size:13px;font-weight:500;color:var(--white);}
+.settings-row-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.toggle{
+  width:40px;height:22px;
+  background:var(--border-mid);
+  border-radius:20px;cursor:pointer;
+  position:relative;transition:background 0.2s;
+  flex-shrink:0;border:none;
+}
+.toggle.on{background:var(--gold);}
+.toggle::after{
+  content:'';position:absolute;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--white);
+  top:3px;left:3px;
+  transition:transform 0.2s;
+}
+.toggle.on::after{transform:translateX(18px);}
+
+/* ══ EMPTY STATE ══ */
+.empty-state{
+  padding:48px;text-align:center;
+  color:var(--muted);
+}
+.empty-state-icon{font-size:32px;margin-bottom:12px;}
+.empty-state-text{font-size:13px;line-height:1.6;}
+
+/* ══ TWO COL LAYOUT ══ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+/* ══ PLAN BREAKDOWN ══ */
+.plan-bar-wrap{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.plan-bar-row{display:flex;flex-direction:column;gap:6px;}
+.plan-bar-top{display:flex;justify-content:space-between;align-items:center;}
+.plan-bar-name{font-size:12px;font-weight:600;color:var(--white);}
+.plan-bar-count{font-size:12px;font-weight:700;color:var(--gold);}
+.plan-bar-track{height:6px;background:var(--ink);border-radius:3px;overflow:hidden;}
+.plan-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-warm));}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1200px){
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .three-col{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:900px){
+  :root{--sidebar:0px;}
+  .sidebar{display:none;}
+  .main{margin-left:0;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a href="empirehomepath-v8.html" class="sidebar-logo">
+    <div class="sidebar-logo-text">Empire<span>Home</span>Path</div>
+    <div class="sidebar-logo-sub">Admin Panel</div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <button class="nav-item active" onclick="showSection('dashboard',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="showSection('activity',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1 8h2l2-5 3 10 2-7 2 4 1-2h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Activity Feed
+    </button>
+    <div class="nav-section-label">Subscribers</div>
+    <button class="nav-item" onclick="showSection('subscribers',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      All Subscribers
+    </button>
+    <button class="nav-item" onclick="showSection('revenue',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1 13L5 8l3 3 3-5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Revenue & Billing
+    </button>
+    <div class="nav-section-label">Platform</div>
+    <button class="nav-item" onclick="showSection('programs',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Program Data
+    </button>
+    <button class="nav-item" onclick="showSection('demos',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4l5 4-5 4V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
+      Demo Requests
+    </button>
+    <div class="nav-section-label">Account</div>
+    <button class="nav-item" onclick="showSection('settings',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Settings
+    </button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="admin-user">
+      <div class="admin-avatar">R</div>
+      <div>
+        <div class="admin-name">Roxanne Sartori</div>
+        <div class="admin-role">Administrator</div>
+      </div>
+    </div>
+    <button class="btn-signout" onclick="window.location='empirehomepath-v8.html'">← Back to Site</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbarDate"></div>
+      <button class="btn-refresh" onclick="refreshData()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="section active" id="section-dashboard">
+
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Subscribers</div>
+          <div class="stat-value gold" id="totalSubs">0</div>
+          <div class="stat-change neutral">Awaiting Stripe data</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Monthly Recurring Revenue</div>
+          <div class="stat-value gold" id="mrr">$0</div>
+          <div class="stat-change neutral">Awaiting Stripe data</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">New This Month</div>
+          <div class="stat-value green" id="newSubs">0</div>
+          <div class="stat-change neutral">Awaiting Stripe data</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cancellations</div>
+          <div class="stat-value" id="cancelled">0</div>
+          <div class="stat-change neutral">Awaiting Stripe data</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Revenue Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Revenue — Last 6 Months</div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="revenueChart">
+              <!-- Built by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan Breakdown -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Subscribers by Plan</div>
+          </div>
+          <div class="plan-bar-wrap">
+            <div class="plan-bar-row">
+              <div class="plan-bar-top">
+                <div class="plan-bar-name">Individual — $150/mo</div>
+                <div class="plan-bar-count" id="indCount">0</div>
+              </div>
+              <div class="plan-bar-track"><div class="plan-bar-fill" id="indBar" style="width:0%"></div></div>
+            </div>
+            <div class="plan-bar-row">
+              <div class="plan-bar-top">
+                <div class="plan-bar-name">Professional — $375/mo</div>
+                <div class="plan-bar-count" id="proCount">0</div>
+              </div>
+              <div class="plan-bar-track"><div class="plan-bar-fill" id="proBar" style="width:0%"></div></div>
+            </div>
+            <div class="plan-bar-row">
+              <div class="plan-bar-top">
+                <div class="plan-bar-name">Enterprise — Custom</div>
+                <div class="plan-bar-count" id="entCount">0</div>
+              </div>
+              <div class="plan-bar-track"><div class="plan-bar-fill" id="entBar" style="width:0%"></div></div>
+            </div>
+            <div style="margin-top:16px;padding:14px;background:var(--ink);border:1px solid var(--border);border-radius:6px;">
+              <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Note</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6;">Connect Stripe API to populate live subscriber and revenue data. Ask your developer to add <code style="color:var(--gold);font-size:11px;">STRIPE_SECRET_KEY</code> to the backend environment variables.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Quick Actions</div></div>
+        <div style="padding:20px;display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="https://dashboard.stripe.com" target="_blank" class="btn-edit" style="padding:10px 20px;font-size:12px;">Open Stripe Dashboard →</a>
+          <a href="https://dashboard.clerk.com" target="_blank" class="btn-edit" style="padding:10px 20px;font-size:12px;">Open Clerk Dashboard →</a>
+          <a href="https://vercel.com/dashboard" target="_blank" class="btn-edit" style="padding:10px 20px;font-size:12px;">Open Vercel Dashboard →</a>
+          <a href="empirehomepath-v8.html" class="btn-edit" style="padding:10px 20px;font-size:12px;">View Live Site →</a>
+          <a href="empirehomepath-demo.html" class="btn-edit" style="padding:10px 20px;font-size:12px;">View Demo →</a>
+          <a href="mailto:empirehomepath@gmail.com" class="btn-edit" style="padding:10px 20px;font-size:12px;">Send Email →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ ACTIVITY FEED ══ -->
+    <div class="section" id="section-activity">
+      <div class="section-header">
+        <div class="section-title">Recent Activity</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Events</div></div>
+        <div class="activity-list" id="activityList">
+          <div class="activity-item">
+            <div class="activity-icon signup">✓</div>
+            <div class="activity-content">
+              <div class="activity-text"><strong>New subscriber</strong> — Waiting for first signup</div>
+              <div class="activity-time">Activity will appear here once Stripe is connected</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon demo">▶</div>
+            <div class="activity-content">
+              <div class="activity-text"><strong>Demo viewed</strong> — Connect analytics to track demo engagement</div>
+              <div class="activity-time">Add Google Analytics or Mixpanel for event tracking</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon payment">$</div>
+            <div class="activity-content">
+              <div class="activity-text"><strong>Payment received</strong> — Connect Stripe webhooks to see payments here</div>
+              <div class="activity-time">Ask developer to set up Stripe webhook endpoint</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SUBSCRIBERS ══ -->
+    <div class="section" id="section-subscribers">
+      <div class="section-header">
+        <div class="section-title">All Subscribers</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;">CONNECT STRIPE TO POPULATE</div>
+      </div>
+      <div class="card">
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Search by name or email…" oninput="filterTable(this.value)"/>
+          <select class="filter-select" onchange="filterByPlan(this.value)">
+            <option value="">All Plans</option>
+            <option value="Individual">Individual</option>
+            <option value="Professional">Professional</option>
+            <option value="Enterprise">Enterprise</option>
+          </select>
+          <select class="filter-select" onchange="filterByStatus(this.value)">
+            <option value="">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Past Due">Past Due</option>
+          </select>
+          <div class="table-count" id="subCount">0 subscribers</div>
+        </div>
+        <div class="card-body">
+          <table class="data-table" id="subTable">
+            <thead>
+              <tr>
+                <th>Subscriber</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Signed Up</th>
+                <th>Last Payment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="subTableBody">
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">
+                    <div class="empty-state-icon">🔌</div>
+                    <div class="empty-state-text">No subscribers yet — or Stripe not connected.<br/>Subscribers will appear here automatically once payments come in.</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REVENUE ══ -->
+    <div class="section" id="section-revenue">
+      <div class="section-header">
+        <div class="section-title">Revenue & Billing</div>
+      </div>
+      <div class="three-col" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <div class="stat-label">Total Revenue (All Time)</div>
+          <div class="stat-value gold">$0</div>
+          <div class="stat-change neutral">Awaiting Stripe</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">MRR</div>
+          <div class="stat-value gold">$0</div>
+          <div class="stat-change neutral">Monthly Recurring</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">ARR (Projected)</div>
+          <div class="stat-value gold">$0</div>
+          <div class="stat-change neutral">Annual Run Rate</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Payment History</div></div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subscriber</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Invoice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">
+                    <div class="empty-state-icon">💳</div>
+                    <div class="empty-state-text">Payment history will appear here once Stripe is connected.<br/>Ask your developer to wire up the Stripe API to this dashboard.</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PROGRAMS ══ -->
+    <div class="section" id="section-programs">
+      <div class="section-header">
+        <div class="section-title">Program Data Manager</div>
+        <button class="btn-refresh" onclick="toggleAddProgram()">+ Add Program</button>
+      </div>
+      <div class="card">
+        <!-- Add Program Form -->
+        <div class="add-program-form" id="addProgramForm">
+          <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:16px;">Add New Program</div>
+          <div class="form-grid">
+            <div class="field-group">
+              <div class="field-label">Program Name</div>
+              <input type="text" class="field-input" placeholder="e.g. Orange County DPA Program"/>
+            </div>
+            <div class="field-group">
+              <div class="field-label">County</div>
+              <input type="text" class="field-input" placeholder="e.g. Orange County"/>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Program Type</div>
+              <select class="field-select-form">
+                <option>Down Payment Assistance</option>
+                <option>Grant</option>
+                <option>Forgivable Loan</option>
+                <option>Rate Buydown</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Amount</div>
+              <input type="text" class="field-input" placeholder="e.g. $10,000"/>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Income Limit</div>
+              <input type="text" class="field-input" placeholder="e.g. ≤ 80% AMI"/>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Administering Agency</div>
+              <input type="text" class="field-input" placeholder="e.g. Orange County Community Dev."/>
+            </div>
+          </div>
+          <div class="field-group" style="margin-bottom:16px;">
+            <div class="field-label">Eligibility Notes</div>
+            <input type="text" class="field-input" placeholder="Key eligibility requirements…"/>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <button class="btn-add-program" onclick="addProgram()">Save Program</button>
+            <button class="btn-edit" onclick="toggleAddProgram()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Search programs…"/>
+          <select class="filter-select">
+            <option>All Counties</option>
+            <option>Orange County</option>
+            <option>Westchester County</option>
+            <option>Nassau County</option>
+            <option>Suffolk County</option>
+          </select>
+          <select class="filter-select">
+            <option>All Types</option>
+            <option>Grants</option>
+            <option>Down Payment</option>
+            <option>Forgivable</option>
+            <option>Rate Programs</option>
+          </select>
+          <div class="table-count">7 sample programs shown</div>
+        </div>
+
+        <div class="program-grid" id="programGrid">
+          <!-- Programs rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DEMO REQUESTS ══ -->
+    <div class="section" id="section-demos">
+      <div class="section-header">
+        <div class="section-title">Demo Requests</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Warm Leads — People Who Requested a Demo</div>
+        </div>
+        <div class="demo-row" style="background:var(--ink-lift);border-bottom:1px solid var(--border);">
+          <div>
+            <div class="demo-name" style="color:var(--muted);font-size:11px;">NAME</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">TIME</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">ACTION</div>
+        </div>
+        <div id="demoList">
+          <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-text">Demo requests will appear here.<br/>Connect a form submission service like Formspree or Netlify Forms to the demo page to capture leads automatically.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="section" id="section-settings">
+      <div class="section-header">
+        <div class="section-title">Settings</div>
+      </div>
+      <div class="settings-grid">
+
+        <div class="settings-card">
+          <div class="settings-card-header">Business Information</div>
+          <div class="settings-card-body">
+            <div class="settings-row">
+              <div><div class="settings-row-label">Business Name</div><div class="settings-row-sub">Empire HomePath LLC</div></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Contact Email</div><div class="settings-row-sub">empirehomepath@gmail.com</div></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Website</div><div class="settings-row-sub">empirehomepath.com</div></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">State of Formation</div><div class="settings-row-sub">New York</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-header">Email Notifications</div>
+          <div class="settings-card-body">
+            <div class="settings-row">
+              <div><div class="settings-row-label">New Subscriber Alert</div><div class="settings-row-sub">Email me when someone subscribes</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Cancellation Alert</div><div class="settings-row-sub">Email me when someone cancels</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Failed Payment Alert</div><div class="settings-row-sub">Email me when a payment fails</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Demo Request Alert</div><div class="settings-row-sub">Email me when someone requests a demo</div></div>
+              <button class="toggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-header">Connected Services</div>
+          <div class="settings-card-body">
+            <div class="settings-row">
+              <div><div class="settings-row-label">Stripe</div><div class="settings-row-sub">Payment processing — needs API connection</div></div>
+              <span class="badge badge-pastdue">Pending</span>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Clerk</div><div class="settings-row-sub">Authentication — Production mode active</div></div>
+              <span class="badge badge-active">Connected</span>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Vercel</div><div class="settings-row-sub">Hosting — empirehomepath.com live</div></div>
+              <span class="badge badge-active">Connected</span>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Render</div><div class="settings-row-sub">Backend API hosting</div></div>
+              <span class="badge badge-active">Connected</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-header">Pricing Plans</div>
+          <div class="settings-card-body">
+            <div class="settings-row">
+              <div><div class="settings-row-label">Individual Plan</div><div class="settings-row-sub">$150/month — Single user access</div></div>
+              <span class="badge badge-active">Active</span>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Professional Plan</div><div class="settings-row-sub">$375/month — White-label reports</div></div>
+              <span class="badge badge-active">Active</span>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Enterprise Plan</div><div class="settings-row-sub">Custom pricing — Contact required</div></div>
+              <span class="badge badge-individual">Custom</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</main>
+
+<script>
+// ══ NAVIGATION ══
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  btn.classList.add('active');
+  const titles={dashboard:'Dashboard',activity:'Activity Feed',subscribers:'All Subscribers',revenue:'Revenue & Billing',programs:'Program Data Manager',demos:'Demo Requests',settings:'Settings'};
+  document.getElementById('topbarTitle').textContent=titles[id]||id;
+}
+
+// ══ DATE ══
+function setDate(){
+  const now=new Date();
+  document.getElementById('topbarDate').textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'});
+}
+setDate();
+
+// ══ CHART ══
+const months=['Jan','Feb','Mar','Apr','May','Jun'];
+const revenues=[0,0,0,0,0,0]; // Will be populated from Stripe
+function buildChart(){
+  const wrap=document.getElementById('revenueChart');
+  const max=Math.max(...revenues,1);
+  wrap.innerHTML=months.map((m,i)=>`
+    <div class="chart-bar-wrap">
+      <div class="chart-bar-val">${revenues[i]>0?'$'+revenues[i].toLocaleString():'-'}</div>
+      <div class="chart-bar" style="height:${Math.max((revenues[i]/max)*100,4)}px;" title="${m}: $${revenues[i]}"></div>
+      <div class="chart-bar-label">${m}</div>
+    </div>`).join('');
+}
+buildChart();
+
+// ══ PROGRAMS ══
+const samplePrograms=[
+  {name:'County Down Payment Assistance',county:'Orange County',type:'DPA Loan',amount:'$10,000',status:'open'},
+  {name:'SONYMA Low Interest Rate',county:'Statewide',type:'Rate Program',amount:'Below market',status:'open'},
+  {name:'HOME Investment Grant',county:'Multiple Counties',type:'Grant',amount:'$15,000',status:'open'},
+  {name:'Forgivable Homebuyer Loan',county:'Westchester County',type:'Forgivable',amount:'$20,000',status:'limited'},
+  {name:'USDA Rural Development',county:'Rural NY Counties',type:'DPA Loan',amount:'100% financing',status:'open'},
+  {name:'First Home Club Grant',county:'Statewide',type:'Grant',amount:'$7,500',status:'open'},
+  {name:'AccessAbility NY',county:'Statewide',type:'DPA Loan',amount:'$4,000',status:'open'},
+];
+function buildPrograms(){
+  const grid=document.getElementById('programGrid');
+  grid.innerHTML=samplePrograms.map((p,i)=>`
+    <div class="program-row">
+      <div>
+        <div class="prog-row-name">${p.name}</div>
+        <div class="prog-row-county">${p.county} · ${p.type}</div>
+      </div>
+      <div class="prog-row-amount">${p.amount}</div>
+      <span class="badge ${p.status==='open'?'badge-active':'badge-pastdue'}">${p.status==='open'?'Open':'Limited'}</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-edit" onclick="alert('Edit program: ${p.name}')">Edit</button>
+        <button class="btn-disable" onclick="alert('Disable program: ${p.name}')">Disable</button>
+      </div>
+    </div>`).join('');
+}
+buildPrograms();
+
+function toggleAddProgram(){
+  const form=document.getElementById('addProgramForm');
+  form.classList.toggle('open');
+}
+function addProgram(){
+  alert('Program saved! Connect to your database to persist this data.');
+  toggleAddProgram();
+}
+
+// ══ FILTER TABLE ══
+function filterTable(val){}
+function filterByPlan(val){}
+function filterByStatus(val){}
+
+// ══ REFRESH ══
+function refreshData(){
+  const btn=document.querySelector('.btn-refresh');
+  btn.textContent='↻ Refreshing…';
+  setTimeout(()=>btn.textContent='↻ Refresh',1500);
+}
+</script>
+</body>
+</html>
