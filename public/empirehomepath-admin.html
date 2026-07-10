@@ -478,6 +478,33 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
 }
 .empty-state-icon{font-size:32px;margin-bottom:12px;}
 .empty-state-text{font-size:13px;line-height:1.6;}
+.admin-loading{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(6,14,28,0.72);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;
+}
+.admin-loading.show{display:flex;}
+.admin-spinner{
+  width:36px;height:36px;border-radius:50%;
+  border:3px solid rgba(201,168,76,0.2);
+  border-top-color:var(--gold);
+  animation:adminSpin 0.8s linear infinite;
+}
+@keyframes adminSpin{to{transform:rotate(360deg);}}
+.admin-loading-text{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold);
+}
+.admin-error{
+  display:none;margin:0 0 20px;
+  padding:14px 16px;border-radius:6px;
+  border:1px solid rgba(255,92,92,0.35);
+  background:rgba(255,92,92,0.08);
+  color:#FF8A8A;font-size:13px;line-height:1.5;
+}
+.admin-error.show{display:block;}
 
 /* ══ TWO COL LAYOUT ══ */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -507,6 +534,10 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
 </style>
 </head>
 <body>
+<div class="admin-loading" id="adminLoading">
+  <div class="admin-spinner"></div>
+  <div class="admin-loading-text">Loading Stripe data…</div>
+</div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -574,6 +605,7 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
 
   <!-- CONTENT -->
   <div class="content">
+    <div class="admin-error" id="adminError"></div>
 
     <!-- ══ DASHBOARD ══ -->
     <div class="section active" id="section-dashboard">
@@ -583,22 +615,22 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
         <div class="stat-card">
           <div class="stat-label">Total Subscribers</div>
           <div class="stat-value gold" id="totalSubs">0</div>
-          <div class="stat-change neutral">Awaiting Stripe data</div>
+          <div class="stat-change neutral" id="totalSubsNote">Loading…</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Monthly Recurring Revenue</div>
           <div class="stat-value gold" id="mrr">$0</div>
-          <div class="stat-change neutral">Awaiting Stripe data</div>
+          <div class="stat-change neutral" id="mrrNote">Loading…</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">New This Month</div>
           <div class="stat-value green" id="newSubs">0</div>
-          <div class="stat-change neutral">Awaiting Stripe data</div>
+          <div class="stat-change neutral" id="newSubsNote">Loading…</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Cancellations</div>
           <div class="stat-value" id="cancelled">0</div>
-          <div class="stat-change neutral">Awaiting Stripe data</div>
+          <div class="stat-change neutral" id="cancelledNote">Loading…</div>
         </div>
       </div>
 
@@ -756,17 +788,17 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
       <div class="three-col" style="margin-bottom:20px;">
         <div class="stat-card">
           <div class="stat-label">Total Revenue (All Time)</div>
-          <div class="stat-value gold">$0</div>
-          <div class="stat-change neutral">Awaiting Stripe</div>
+          <div class="stat-value gold" id="totalRevenue">$0</div>
+          <div class="stat-change neutral">All successful payments</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">MRR</div>
-          <div class="stat-value gold">$0</div>
+          <div class="stat-value gold" id="mrrRevenue">$0</div>
           <div class="stat-change neutral">Monthly Recurring</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">ARR (Projected)</div>
-          <div class="stat-value gold">$0</div>
+          <div class="stat-value gold" id="arrRevenue">$0</div>
           <div class="stat-change neutral">Annual Run Rate</div>
         </div>
       </div>
@@ -784,7 +816,7 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
                 <th>Invoice</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="paymentTableBody">
               <tr>
                 <td colspan="6">
                   <div class="empty-state">
@@ -994,6 +1026,15 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
 </main>
 
 <script>
+// ══ CONFIG ══
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:3001'
+  : 'https://empire-homepath-api.onrender.com';
+const ADMIN_KEY = 'ehpadmin2026secret';
+let allSubscribers = [];
+let months = ['Jan','Feb','Mar','Apr','May','Jun'];
+let revenues = [0,0,0,0,0,0];
+
 // ══ NAVIGATION ══
 function showSection(id, btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1011,9 +1052,31 @@ function setDate(){
 }
 setDate();
 
+function money(n){
+  return '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+function formatDate(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function statusBadge(status){
+  const s = (status || '').toLowerCase();
+  if(s === 'active') return '<span class="badge badge-active">Active</span>';
+  if(s === 'cancelled' || s === 'canceled') return '<span class="badge badge-cancelled">Cancelled</span>';
+  if(s === 'past due') return '<span class="badge badge-pastdue">Past Due</span>';
+  return `<span class="badge">${status || '—'}</span>`;
+}
+function setLoading(on){
+  document.getElementById('adminLoading').classList.toggle('show', !!on);
+}
+function setError(msg){
+  const el = document.getElementById('adminError');
+  if(!msg){ el.classList.remove('show'); el.textContent=''; return; }
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
 // ══ CHART ══
-const months=['Jan','Feb','Mar','Apr','May','Jun'];
-const revenues=[0,0,0,0,0,0]; // Will be populated from Stripe
 function buildChart(){
   const wrap=document.getElementById('revenueChart');
   const max=Math.max(...revenues,1);
@@ -1025,6 +1088,131 @@ function buildChart(){
     </div>`).join('');
 }
 buildChart();
+
+function renderSubscribers(list){
+  const body = document.getElementById('subTableBody');
+  document.getElementById('subCount').textContent = `${list.length} subscriber${list.length === 1 ? '' : 's'}`;
+  if(!list.length){
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">🔌</div><div class="empty-state-text">No subscribers yet.</div></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = list.map(s => `
+    <tr data-plan="${s.plan || ''}" data-status="${s.status || ''}" data-search="${(s.name + ' ' + s.email).toLowerCase()}">
+      <td>
+        <div style="font-weight:600;color:var(--white);">${s.name || '—'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${s.email || '—'}</div>
+      </td>
+      <td>${s.plan || '—'}</td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${formatDate(s.created)}</td>
+      <td>${formatDate(s.lastPayment)}</td>
+      <td><a class="btn-edit" href="https://dashboard.stripe.com/subscriptions/${s.id}" target="_blank">View</a></td>
+    </tr>`).join('');
+}
+
+function renderPayments(payments){
+  const body = document.getElementById('paymentTableBody');
+  if(!payments || !payments.length){
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">💳</div><div class="empty-state-text">No payments yet.</div></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = payments.map(p => `
+    <tr>
+      <td>${formatDate(p.date)}</td>
+      <td>${p.email || '—'}</td>
+      <td>—</td>
+      <td style="color:var(--gold);font-weight:600;">${money(p.amount)}</td>
+      <td>${statusBadge(p.status === 'Paid' ? 'Active' : p.status)}</td>
+      <td>${p.invoice ? `<a class="btn-edit" href="${p.invoice}" target="_blank">Receipt</a>` : '—'}</td>
+    </tr>`).join('');
+}
+
+function renderActivity(payments, subscribers){
+  const list = document.getElementById('activityList');
+  const events = [];
+  (payments || []).slice(0,5).forEach(p => {
+    events.push({
+      icon: 'payment',
+      text: `<strong>Payment received</strong> — ${p.email || 'Customer'} · ${money(p.amount)}`,
+      time: formatDate(p.date),
+    });
+  });
+  (subscribers || []).filter(s => s.status === 'Active').slice(0,5).forEach(s => {
+    events.push({
+      icon: 'signup',
+      text: `<strong>New subscriber</strong> — ${s.name || s.email} · ${s.plan}`,
+      time: formatDate(s.created),
+    });
+  });
+  if(!events.length){
+    list.innerHTML = `<div class="activity-item"><div class="activity-icon signup">✓</div><div class="activity-content"><div class="activity-text"><strong>No recent activity</strong></div><div class="activity-time">Activity will appear as Stripe events come in</div></div></div>`;
+    return;
+  }
+  list.innerHTML = events.slice(0,8).map(e => `
+    <div class="activity-item">
+      <div class="activity-icon ${e.icon}">${e.icon === 'payment' ? '$' : '✓'}</div>
+      <div class="activity-content">
+        <div class="activity-text">${e.text}</div>
+        <div class="activity-time">${e.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function applyStats(data){
+  document.getElementById('totalSubs').textContent = data.totalSubscribers || 0;
+  document.getElementById('mrr').textContent = money(data.mrr);
+  document.getElementById('newSubs').textContent = data.newThisMonth || 0;
+  document.getElementById('cancelled').textContent = data.cancelledThisMonth || 0;
+  document.getElementById('totalSubsNote').textContent = 'Active + trialing';
+  document.getElementById('mrrNote').textContent = 'From active subscriptions';
+  document.getElementById('newSubsNote').textContent = 'Created this month';
+  document.getElementById('cancelledNote').textContent = 'Cancelled this month';
+  if(data.cancelledThisMonth > 0) document.getElementById('cancelled').classList.add('red');
+
+  document.getElementById('totalRevenue').textContent = money(data.totalRevenue);
+  document.getElementById('mrrRevenue').textContent = money(data.mrr);
+  document.getElementById('arrRevenue').textContent = money(data.arr);
+
+  const monthly = data.monthlyRevenue || [];
+  months = monthly.map(m => m.month);
+  revenues = monthly.map(m => m.revenue || 0);
+  buildChart();
+
+  const counts = data.planCounts || {};
+  const ind = counts.Individual || 0;
+  const pro = counts.Professional || 0;
+  const ent = counts.Enterprise || 0;
+  const totalPlans = Math.max(ind + pro + ent, 1);
+  document.getElementById('indCount').textContent = ind;
+  document.getElementById('proCount').textContent = pro;
+  document.getElementById('entCount').textContent = ent;
+  document.getElementById('indBar').style.width = `${(ind / totalPlans) * 100}%`;
+  document.getElementById('proBar').style.width = `${(pro / totalPlans) * 100}%`;
+  document.getElementById('entBar').style.width = `${(ent / totalPlans) * 100}%`;
+
+  allSubscribers = data.subscribers || [];
+  renderSubscribers(allSubscribers);
+  renderPayments(data.payments || []);
+  renderActivity(data.payments || [], allSubscribers);
+}
+
+async function loadStripeStats(){
+  setError('');
+  setLoading(true);
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'x-admin-key': ADMIN_KEY },
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(data.error || data.details || `Request failed (${res.status})`);
+    applyStats(data);
+  } catch (err) {
+    console.error(err);
+    setError(`Could not load Stripe data: ${err.message}`);
+  } finally {
+    setLoading(false);
+  }
+}
 
 // ══ PROGRAMS ══
 const samplePrograms=[
@@ -1064,16 +1252,30 @@ function addProgram(){
 }
 
 // ══ FILTER TABLE ══
-function filterTable(val){}
-function filterByPlan(val){}
-function filterByStatus(val){}
+function currentFilteredSubs(){
+  const q = (document.querySelector('.search-input')?.value || '').toLowerCase().trim();
+  const plan = document.querySelectorAll('.filter-select')[0]?.value || '';
+  const status = document.querySelectorAll('.filter-select')[1]?.value || '';
+  return allSubscribers.filter(s => {
+    const hay = `${s.name || ''} ${s.email || ''}`.toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(plan && s.plan !== plan) return false;
+    if(status && s.status !== status) return false;
+    return true;
+  });
+}
+function filterTable(){ renderSubscribers(currentFilteredSubs()); }
+function filterByPlan(){ renderSubscribers(currentFilteredSubs()); }
+function filterByStatus(){ renderSubscribers(currentFilteredSubs()); }
 
 // ══ REFRESH ══
 function refreshData(){
   const btn=document.querySelector('.btn-refresh');
   btn.textContent='↻ Refreshing…';
-  setTimeout(()=>btn.textContent='↻ Refresh',1500);
+  loadStripeStats().finally(()=>{ btn.textContent='↻ Refresh'; });
 }
+
+loadStripeStats();
 </script>
 </body>
 </html>
