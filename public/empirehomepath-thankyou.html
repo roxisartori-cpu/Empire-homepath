@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome to Empire HomePath — You're In</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0A1628;--ink-deep:#060E1C;--ink-mid:#102038;--ink-lift:#16284A;
+  --gold:#C9A84C;--gold-warm:#DDB85C;--gold-dim:rgba(201,168,76,0.12);
+  --white:#FFFFFF;--body:rgba(255,255,255,0.65);--muted:rgba(255,255,255,0.35);
+  --border:rgba(201,168,76,0.16);--border-mid:rgba(201,168,76,0.28);
+  --success:#4ADE80;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--ink);
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ══ NAV ══ */
+nav{
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 64px;
+  background:rgba(6,14,28,0.97);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  text-decoration:none;
+  font-size:20px;font-weight:700;
+  color:var(--white);
+}
+.nav-logo span{color:var(--gold);}
+
+/* ══ HERO ══ */
+.hero{
+  flex:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:80px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 80% 80%,rgba(22,40,74,0.8) 0%,transparent 55%);
+  pointer-events:none;
+}
+
+/* Key icon animation */
+.key-icon{
+  width:88px;height:88px;
+  border-radius:50%;
+  background:var(--gold-dim);
+  border:2px solid var(--border-mid);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 32px;
+  position:relative;z-index:1;
+  animation:popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.check-path{
+  stroke-dasharray:60;
+  stroke-dashoffset:60;
+  animation:drawCheck 0.7s ease 0.5s forwards;
+}
+@keyframes drawCheck{
+  to{stroke-dashoffset:0;}
+}
+@keyframes popIn{
+  from{transform:scale(0);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+.key-icon::after{
+  content:'';
+  position:absolute;inset:-8px;
+  border-radius:50%;
+  border:1px solid rgba(201,168,76,0.2);
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1;}
+  50%{transform:scale(1.1);opacity:0.4;}
+}
+
+.eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);opacity:0.8;
+  margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.2s both;
+}
+.eyebrow::before,.eyebrow::after{
+  content:'';display:block;
+  width:32px;height:1px;
+  background:var(--gold);opacity:0.5;
+}
+
+.hero-title{
+  font-size:clamp(36px,5vw,64px);
+  font-weight:800;letter-spacing:-0.02em;
+  line-height:1.05;
+  margin-bottom:16px;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.3s both;
+}
+.hero-title span{color:var(--gold);}
+
+.hero-sub{
+  font-size:17px;font-weight:400;
+  color:var(--body);line-height:1.75;
+  max-width:540px;
+  margin:0 auto 48px;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.4s both;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ══ NEXT STEPS CARDS ══ */
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  max-width:860px;
+  margin:0 auto 48px;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.5s both;
+}
+.step-card{
+  background:var(--ink-mid);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:24px 22px;
+  text-align:left;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.step-card:hover{border-color:var(--border-mid);transform:translateY(-3px);}
+.step-num{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.1em;
+  color:var(--gold);opacity:0.7;
+  margin-bottom:10px;
+}
+.step-title{
+  font-size:15px;font-weight:700;
+  color:var(--white);margin-bottom:8px;
+}
+.step-body{
+  font-size:13px;font-weight:400;
+  color:var(--body);line-height:1.65;
+}
+
+/* ══ CTA BUTTONS ══ */
+.cta-group{
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;flex-wrap:wrap;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.6s both;
+  margin-bottom:64px;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 40px;
+  background:var(--gold);color:var(--ink-deep);
+  font-size:13px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  border-radius:5px;text-decoration:none;
+  transition:all 0.25s;
+  box-shadow:0 4px 28px rgba(201,168,76,0.25);
+}
+.btn-primary:hover{background:var(--gold-warm);transform:translateY(-2px);}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 36px;
+  border:1px solid var(--border-mid);
+  color:var(--body);
+  font-size:13px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  border-radius:5px;text-decoration:none;
+  transition:all 0.2s;
+}
+.btn-secondary:hover{border-color:var(--gold);color:var(--white);}
+
+/* ══ CONFIRMATION BOX ══ */
+.confirm-box{
+  background:var(--ink-mid);
+  border:1px solid var(--border-mid);
+  border-radius:8px;
+  padding:20px 28px;
+  max-width:480px;
+  margin:0 auto 48px;
+  display:flex;align-items:center;gap:16px;
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.45s both;
+}
+.confirm-icon{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(74,222,128,0.12);
+  border:1px solid rgba(74,222,128,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  color:var(--success);
+  font-weight:700;
+}
+.confirm-text{text-align:left;}
+.confirm-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px;}
+.confirm-sub{font-size:12px;font-weight:400;color:var(--muted);line-height:1.5;}
+
+/* ══ CLOSING LINE ══ */
+.closing{
+  position:relative;z-index:1;
+  animation:fadeUp 0.5s ease 0.7s both;
+  padding:32px 40px;
+  border-top:1px solid var(--border);
+  text-align:center;
+  background:var(--ink-deep);
+}
+.closing-text{
+  font-size:14px;font-weight:400;
+  color:var(--body);line-height:1.7;
+  max-width:520px;margin:0 auto 8px;
+}
+.closing-slogan{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);opacity:0.8;
+}
+
+/* ══ FOOTER ══ */
+footer{
+  background:var(--ink-deep);
+  border-top:1px solid var(--border);
+  padding:24px 64px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-logo{font-size:16px;font-weight:700;color:var(--white);text-decoration:none;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:24px;list-style:none;}
+.footer-links a{font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.18);width:100%;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:768px){
+  nav{padding:0 24px;}
+  .hero{padding:60px 24px;}
+  .steps-grid{grid-template-columns:1fr;}
+  .cta-group{flex-direction:column;align-items:stretch;}
+  .btn-primary,.btn-secondary{text-align:center;justify-content:center;}
+  footer{padding:24px;}
+  .footer-links{flex-wrap:wrap;gap:16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://empirehomepath.com" class="nav-logo">Empire<span>Home</span>Path</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+
+  <div class="key-icon">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" stroke="rgba(201,168,76,0.25)" stroke-width="1.5"/>
+      <path class="check-path" d="M10 22 L18 31 L34 13" stroke="#C9A84C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Subscription Confirmed</div>
+
+  <h1 class="hero-title">
+    You're In.<br/>
+    <span>Let's Start Closing.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Welcome to Empire HomePath. You now have full access to verified homebuyer assistance program data across all 62 New York counties — updated continuously, available instantly.
+  </p>
+
+  <!-- Confirmation box -->
+  <div class="confirm-box">
+    <div class="confirm-icon">✓</div>
+    <div class="confirm-text">
+      <div class="confirm-title">Payment confirmed — your account is active</div>
+      <div class="confirm-sub">A receipt has been sent to your email. You can manage your subscription anytime through your account portal.</div>
+    </div>
+  </div>
+
+  <!-- Next Steps -->
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">Step 01</div>
+      <div class="step-title">Sign In to Your Account</div>
+      <div class="step-body">Access your account portal to manage your subscription, update billing, or change your plan at any time.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 02</div>
+      <div class="step-title">Run Your First Search</div>
+      <div class="step-body">Select a county, enter your buyer's income and purchase price, and see every matching program in seconds.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 03</div>
+      <div class="step-title">Generate a Client Report</div>
+      <div class="step-body">One click produces a professional PDF summary you can share directly with your buyer before the call ends.</div>
+    </div>
+  </div>
+
+  <!-- CTA Buttons -->
+  <div class="cta-group">
+    <a href="https://accounts.empirehomepath.com/sign-in" class="btn-primary">
+      Sign In to Your Account →
+    </a>
+    <a href="https://empirehomepath.com/search" class="btn-secondary">
+      Run Your First Search
+    </a>
+  </div>
+
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <p class="closing-text">
+    Questions about your subscription? Email us at <a href="mailto:empirehomepath@gmail.com" style="color:var(--gold);text-decoration:none;font-weight:600;">empirehomepath@gmail.com</a> — we respond same business day. Thank you for trusting Empire HomePath to power your practice.
+  </p>
+  <div class="closing-slogan">Stop Searching. Start Closing.</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="https://empirehomepath.com" class="footer-logo">Empire<span>Home</span>Path</a>
+  <ul class="footer-links">
+    <li><a href="https://empirehomepath.com/privacy">Privacy Policy</a></li>
+    <li><a href="https://empirehomepath.com/terms">Terms of Service</a></li>
+    <li><a href="mailto:empirehomepath@gmail.com">Contact</a></li>
+  </ul>
+  <div class="footer-copy">2026 Empire HomePath LLC · All rights reserved · empirehomepath.com</div>
+</footer>
+
+</body>
+</html>

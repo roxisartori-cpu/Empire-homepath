@@ -7,6 +7,7 @@
     { "source": "/privacy", "destination": "/empirehomepath-privacy.html" },
     { "source": "/terms", "destination": "/empirehomepath-terms.html" },
     { "source": "/disclaimer", "destination": "/empirehomepath-disclaimer.html" },
-    { "source": "/admin", "destination": "/empirehomepath-admin.html" }
+    { "source": "/admin", "destination": "/empirehomepath-admin.html" },
+    { "source": "/thankyou", "destination": "/empirehomepath-thankyou.html" }
   ]
 }
