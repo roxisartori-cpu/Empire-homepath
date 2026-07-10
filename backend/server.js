@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Stripe from 'stripe';
 import { authenticateToken } from './middleware.js';
+import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) =
 });
 
 app.use(express.json());
+app.use(adminRoutes);
 
 const PORT = 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'empire-homepath-pro-secret-key-2026';
