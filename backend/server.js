@@ -534,7 +534,7 @@ app.post('/api/user/settings', authenticateToken, async (req, res) => {
 // --- Subscription Endpoints ---
 
 app.post('/api/create-checkout-session', authenticateToken, async (req, res) => {
-  const { priceId } = req.body; // Price IDs for Standard ($150) or White Label ($375)
+  const { priceId } = req.body; // Price IDs for Individual ($150) or Professional ($375)
   
   try {
     const users = await runDb('SELECT email, stripe_customer_id FROM users WHERE id = ?', [req.user.id]);
@@ -574,7 +574,7 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: 'https://empirehomepath.com/thankyou',
       cancel_url: `${req.headers.origin}/pricing`,
     });
 

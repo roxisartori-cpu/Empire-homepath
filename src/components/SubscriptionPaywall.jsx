@@ -51,10 +51,10 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
       )}
 
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Standard Tier */}
+        {/* Individual Tier */}
         <div className="bg-white p-8 rounded-3xl shadow-xl border border-warm-100 flex flex-col">
           <div className="mb-8">
-            <h3 className="text-2xl font-bold text-brand-800 mb-2">Standard Tier</h3>
+            <h3 className="text-2xl font-bold text-brand-800 mb-2">Individual Tier</h3>
             <div className="flex items-baseline gap-1 mb-4">
               <span className="text-4xl font-black text-warm-900">$150</span>
               <span className="text-warm-500">/mo</span>
@@ -69,7 +69,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
             </ul>
           </div>
           <button
-            onClick={() => handleSubscribe('price_standard_placeholder')}
+            onClick={() => handleSubscribe('price_1TpszdCjCXhGzH7HxZDe5vKw')}
             disabled={loading}
             className="mt-auto w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
           >
@@ -77,18 +77,18 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
           </button>
         </div>
 
-        {/* White Label Tier */}
+        {/* Professional Tier */}
         <div className="bg-brand-50 p-8 rounded-3xl shadow-xl border-2 border-brand-200 flex flex-col relative overflow-hidden">
           <div className="absolute top-0 right-0 bg-brand-500 text-white px-6 py-1 rounded-bl-2xl text-xs font-bold uppercase tracking-wider">
             Most Popular
           </div>
           <div className="mb-8">
-            <h3 className="text-2xl font-bold text-brand-800 mb-2">White Label Tier</h3>
+            <h3 className="text-2xl font-bold text-brand-800 mb-2">Professional Tier</h3>
             <div className="flex items-baseline gap-1 mb-4">
               <span className="text-4xl font-black text-warm-900">$375</span>
               <span className="text-warm-500">/mo</span>
             </div>
-            <p className="text-brand-600 font-semibold mb-6 italic text-sm">Everything in Standard plus:</p>
+            <p className="text-brand-600 font-semibold mb-6 italic text-sm">Everything in Individual plus:</p>
             <ul className="space-y-4">
               {['Custom logo & colors', 'Lead generation widgets', 'Branded client portals', 'Priority support'].map((feat) => (
                 <li key={feat} className="flex items-center gap-2 text-warm-700">
@@ -98,7 +98,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
             </ul>
           </div>
           <button
-            onClick={() => handleSubscribe('price_whitelabel_placeholder')}
+            onClick={() => handleSubscribe('price_PROFESSIONAL_ID_HERE')}
             disabled={loading}
             className="mt-auto w-full bg-brand-800 hover:bg-brand-900 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
           >
