@@ -52,17 +52,22 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
         </div>
       )}
 
-      <div className="plan-grid">
+      <div className="plan-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         {/* Individual Tier */}
         <div className="plan-card">
-          <div className="plan-tier">Individual Tier</div>
+          <div className="plan-tier">Individual</div>
           <div className="plan-price-row">
             <span className="plan-price">$150</span>
             <span className="plan-period">/mo</span>
           </div>
-          <p className="plan-trial">7-day free trial included</p>
           <ul className="plan-feats">
-            {['62-county matching engine', 'Unlimited searches', 'Client PDF reports', 'Real-time program updates'].map((feat) => (
+            {[
+              'Full 62-county program access',
+              'Unlimited program searches',
+              'Client-ready PDF reports (download/print)',
+              'Email support',
+              'Up-to-date — static information updated upon each search',
+            ].map((feat) => (
               <li key={feat}><span className="ck">✓</span> {feat}</li>
             ))}
           </ul>
@@ -72,32 +77,64 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
             className="btn-gold-outline"
             style={{ width: '100%' }}
           >
-            Start 7-Day Free Trial
+            Get Sta
           </button>
         </div>
 
         {/* Professional Tier */}
         <div className="plan-card is-featured">
           <div className="plan-badge">Most Popular</div>
-          <div className="plan-tier">Professional Tier</div>
+          <div className="plan-tier">Professional</div>
           <div className="plan-price-row">
             <span className="plan-price">$375</span>
             <span className="plan-period">/mo</span>
           </div>
-          <p className="plan-trial">Everything in Individual plus:</p>
           <ul className="plan-feats">
-            {['Custom logo & colors', 'Lead generation widgets', 'Branded client portals', 'Priority support'].map((feat) => (
+            {[
+              'Up to 4 personal accounts',
+              'Full 62-county program access',
+              'Unlimited program searches',
+              'Client-ready PDF reports (download/print)',
+              'Email support',
+              'Up-to-date — static information updated upon each search',
+            ].map((feat) => (
               <li key={feat}><span className="ck">✓</span> {feat}</li>
             ))}
           </ul>
           <button
-            onClick={() => handleSubscribe('price_PROFESSIONAL_ID_HERE')}
+            onClick={() => handleSubscribe('price_1Tpt0zCjCXhGzH7Hjk2He2LB')}
             disabled={loading}
-            className="btn-gold"
+         lassName="btn-gold"
             style={{ width: '100%' }}
           >
             Go Professional
           </button>
+        </div>
+
+        {/* Custom / Enterprise Tier */}
+        <div className="plan-card">
+          <div className="plan-tier">Custom</div>
+          <div className="plan-price-row">
+            <span className="plan-price" style={{ fontSize: '28px' }}>Contact Us</span>
+          </div>
+          <ul className="plan-feats">
+            {[
+              'Platform under your brand',
+              'Multi-user team access',
+              'API data integration',
+              'Dedicated account manager',
+              'Custom onboarding',
+            ].map((feat) => (
+              <li key={feat}><span className="ck">✓</span> {feat}</li>
+            ))}
+          </ul>
+          <button
+            onClick={() => { window.location.href = 'mailto:empirehomepath@gmail.com'; }}
+            className="btn-gold-outline"
+            style={{ width: '100%' }}
+          >
+            Contact Us
+        </button>
         </div>
       </div>
 
