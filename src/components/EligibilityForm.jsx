@@ -3,85 +3,87 @@ import { NY_COUNTIES } from '../counties';
 
 const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearching }) => {
   return (
-    <section id="form" className="px-4 pb-12 -mt-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-md p-6 md:p-8 animate-slide-up">
-          <h2 className="text-xl font-semibold text-brand-800 mb-2">Tell us about you</h2>
-          <p className="text-sm text-warm-400 mb-6">We'll match you with programs you may qualify for.</p>
+    <section id="form" style={{ padding: '0 20px 48px' }}>
+      <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+        <div className="card-dark card-dark-pad">
+          <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--white)', marginBottom: '4px' }}>Tell us about you</h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '28px' }}>We'll match you with programs you may qualify for.</p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* County */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="county" className="block text-sm font-medium text-warm-600 mb-1.5">County you're looking in</label>
-                <select 
-                  id="county" 
-                  name="county"
-                  value={formData.county}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 bg-white focus:ring-2 focus:ring-brand-400 focus:border-brand-400 text-warm-800 appearance-none" 
-                  required
-                >
-                  <option value="">Select a county...</option>
-                  {NY_COUNTIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
+            <div className="form-row">
+              <div className="field-group">
+                <label htmlFor="county" className="field-label">County you're looking in</label>
+                <div className="select-wrap">
+                  <select
+                    id="county"
+                    name="county"
+                    value={formData.county}
+                    onChange={handleInputChange}
+                    className="field-select"
+                    required
+                  >
+                    <option value="">Select a county...</option>
+                    {NY_COUNTIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
               </div>
-              <div>
-                <label htmlFor="city" className="block text-sm font-medium text-warm-600 mb-1.5">City / Town (optional)</label>
-                <input 
-                  type="text" 
-                  id="city" 
+              <div className="field-group">
+                <label htmlFor="city" className="field-label">City / Town (optional)</label>
+                <input
+                  type="text"
+                  id="city"
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  placeholder="e.g. Buffalo, Albany" 
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 bg-white focus:ring-2 focus:ring-brand-400 focus:border-brand-400 text-warm-800"
+                  placeholder="e.g. Buffalo, Albany"
+                  className="field-input"
                 />
               </div>
             </div>
 
             {/* Household income */}
-            <div>
-              <label htmlFor="income" className="block text-sm font-medium text-warm-600 mb-1.5">Your household income</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-400 font-medium">$</span>
-                <input 
-                  type="number" 
-                  id="income" 
+            <div className="field-group">
+              <label htmlFor="income" className="field-label">Your household income</label>
+              <div className="field-prefix-wrap">
+                <span className="field-prefix">$</span>
+                <input
+                  type="number"
+                  id="income"
                   name="income"
                   value={formData.income}
                   onChange={handleInputChange}
-                  placeholder="Your household income before taxes" 
-                  className="w-full pl-8 pr-4 py-3 rounded-xl border border-warm-200 bg-white focus:ring-2 focus:ring-brand-400 focus:border-brand-400 text-warm-800"
+                  placeholder="Your household income before taxes"
+                  className="field-input"
                 />
               </div>
-              <p className="flex items-center gap-1 mt-1.5 text-xs text-warm-400">
-                <span className="cursor-help" title="Include all earners in your household before taxes">💡</span>
+              <p className="field-hint">
+                <span title="Include all earners in your household before taxes">💡</span>
                 Include all earners in your household before taxes
               </p>
             </div>
 
             {/* Purchase price */}
-            <div>
-              <label htmlFor="purchasePrice" className="block text-sm font-medium text-warm-600 mb-1.5">Price of the home you're looking at</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-400 font-medium">$</span>
-                <input 
-                  type="number" 
-                  id="purchasePrice" 
+            <div className="field-group">
+              <label htmlFor="purchasePrice" className="field-label">Price of the home you're looking at</label>
+              <div className="field-prefix-wrap">
+                <span className="field-prefix">$</span>
+                <input
+                  type="number"
+                  id="purchasePrice"
                   name="purchasePrice"
                   value={formData.purchasePrice}
                   onChange={handleInputChange}
-                  placeholder="Approximate price" 
-                  className="w-full pl-8 pr-4 py-3 rounded-xl border border-warm-200 bg-white focus:ring-2 focus:ring-brand-400 focus:border-brand-400 text-warm-800"
+                  placeholder="Approximate price"
+                  className="field-input"
                 />
               </div>
             </div>
 
             {/* Property type */}
-            <div>
-              <label className="block text-sm font-medium text-warm-600 mb-2">Type of home</label>
-              <div className="flex flex-wrap gap-2">
+            <div className="field-group">
+              <label className="field-label">Type of home</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {[
                   { label: '🏠 Single-family home', value: 'Single Family' },
                   { label: '🏢 Condo / Co-op', value: 'Condo/Co-op' },
@@ -92,11 +94,7 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
                     key={type.value}
                     type="button"
                     onClick={() => handleInputChange({ target: { name: 'propertyType', value: type.value } })}
-                    className={`px-4 py-2 rounded-lg border transition-all text-sm ${
-                      formData.propertyType === type.value
-                        ? 'bg-brand-100 border-brand-500 text-brand-800 font-medium'
-                        : 'border-warm-200 hover:border-brand-400 text-warm-600'
-                    }`}
+                    className={`pill-toggle ${formData.propertyType === type.value ? 'is-active' : ''}`}
                   >
                     {type.label}
                   </button>
@@ -105,9 +103,9 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
             </div>
 
             {/* First-time buyer */}
-            <div>
-              <label className="block text-sm font-medium text-warm-600 mb-2">Is this your first time buying a home?</label>
-              <div className="flex gap-2">
+            <div className="field-group">
+              <label className="field-label">Is this your first time buying a home?</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 {[
                   { label: 'Yes', value: true },
                   { label: 'No', value: false }
@@ -116,11 +114,7 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
                     key={opt.label}
                     type="button"
                     onClick={() => handleInputChange({ target: { name: 'isFirstTimeBuyer', value: opt.value } })}
-                    className={`px-5 py-2.5 rounded-lg border transition-all text-sm ${
-                      formData.isFirstTimeBuyer === opt.value
-                        ? 'bg-brand-100 border-brand-500 text-brand-800 font-medium'
-                        : 'border-warm-200 hover:border-brand-400 text-warm-600'
-                    }`}
+                    className={`pill-toggle ${formData.isFirstTimeBuyer === opt.value ? 'is-active' : ''}`}
                   >
                     {opt.label}
                   </button>
@@ -129,9 +123,9 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
             </div>
 
             {/* Veteran status */}
-            <div>
-              <label className="block text-sm font-medium text-warm-600 mb-2">Have you served in the military?</label>
-              <div className="flex gap-2">
+            <div className="field-group">
+              <label className="field-label">Have you served in the military?</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 {[
                   { label: 'Yes', value: true },
                   { label: 'No', value: false }
@@ -140,11 +134,7 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
                     key={opt.label}
                     type="button"
                     onClick={() => handleInputChange({ target: { name: 'isVeteran', value: opt.value } })}
-                    className={`px-5 py-2.5 rounded-lg border transition-all text-sm ${
-                      formData.isVeteran === opt.value
-                        ? 'bg-brand-100 border-brand-500 text-brand-800 font-medium'
-                        : 'border-warm-200 hover:border-brand-400 text-warm-600'
-                    }`}
+                    className={`pill-toggle ${formData.isVeteran === opt.value ? 'is-active' : ''}`}
                   >
                     {opt.label}
                   </button>
@@ -153,67 +143,62 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
             </div>
 
             {/* Additional Interests */}
-            <div className="pt-2">
-              <label className="block text-sm font-medium text-warm-600 mb-3">Optional: Are you interested in any of these?</label>
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative">
-                    <input 
-                      type="checkbox" 
-                      name="isInterestedInRenovation"
-                      checked={formData.isInterestedInRenovation}
-                      onChange={handleInputChange}
-                      className="sr-only"
-                    />
-                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInRenovation ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
-                      {formData.isInterestedInRenovation && <span className="text-white text-xs">✓</span>}
-                    </div>
+            <div className="field-group" style={{ paddingTop: '4px' }}>
+              <label className="field-label" style={{ marginBottom: '6px' }}>Optional: Are you interested in any of these?</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <label className="check-row">
+                  <input
+                    type="checkbox"
+                    name="isInterestedInRenovation"
+                    checked={formData.isInterestedInRenovation}
+                    onChange={handleInputChange}
+                    style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+                  />
+                  <div className={`check-box ${formData.isInterestedInRenovation ? 'is-checked' : ''}`}>
+                    {formData.isInterestedInRenovation && '✓'}
                   </div>
-                  <span className="text-sm text-warm-700">Fixing up a home that needs repairs (Renovation)</span>
+                  <span className="check-label">Fixing up a home that needs repairs (Renovation)</span>
                 </label>
 
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative">
-                    <input 
-                      type="checkbox" 
-                      name="isInterestedInEnergy"
-                      checked={formData.isInterestedInEnergy}
-                      onChange={handleInputChange}
-                      className="sr-only"
-                    />
-                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInEnergy ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
-                      {formData.isInterestedInEnergy && <span className="text-white text-xs">✓</span>}
-                    </div>
+                <label className="check-row">
+                  <input
+                    type="checkbox"
+                    name="isInterestedInEnergy"
+                    checked={formData.isInterestedInEnergy}
+                    onChange={handleInputChange}
+                    style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+                  />
+                  <div className={`check-box ${formData.isInterestedInEnergy ? 'is-checked' : ''}`}>
+                    {formData.isInterestedInEnergy && '✓'}
                   </div>
-                  <span className="text-sm text-warm-700">Energy-saving upgrades (Solar, Insulation, etc.)</span>
+                  <span className="check-label">Energy-saving upgrades (Solar, Insulation, etc.)</span>
                 </label>
 
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative">
-                    <input 
-                      type="checkbox" 
-                      name="isInterestedInAccessibility"
-                      checked={formData.isInterestedInAccessibility}
-                      onChange={handleInputChange}
-                      className="sr-only"
-                    />
-                    <div className={`w-6 h-6 rounded border-2 transition-all flex items-center justify-center ${formData.isInterestedInAccessibility ? 'bg-brand-500 border-brand-500' : 'border-warm-200 group-hover:border-brand-400'}`}>
-                      {formData.isInterestedInAccessibility && <span className="text-white text-xs">✓</span>}
-                    </div>
+                <label className="check-row">
+                  <input
+                    type="checkbox"
+                    name="isInterestedInAccessibility"
+                    checked={formData.isInterestedInAccessibility}
+                    onChange={handleInputChange}
+                    style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+                  />
+                  <div className={`check-box ${formData.isInterestedInAccessibility ? 'is-checked' : ''}`}>
+                    {formData.isInterestedInAccessibility && '✓'}
                   </div>
-                  <span className="text-sm text-warm-700">Modifications for disabilities (Accessibility)</span>
+                  <span className="check-label">Modifications for disabilities (Accessibility)</span>
                 </label>
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSearching}
-              className={`w-full md:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-md hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 ${isSearching ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className="btn-gold"
+              style={{ width: '100%' }}
             >
               {isSearching ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div style={{ width: '18px', height: '18px', border: '2px solid rgba(10,22,40,0.3)', borderTopColor: 'var(--ink-deep)', borderRadius: '50%', animation: 'app-spin 0.8s linear infinite' }}></div>
                   Searching...
                 </>
               ) : (

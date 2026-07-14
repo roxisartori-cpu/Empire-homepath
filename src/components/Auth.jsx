@@ -16,7 +16,7 @@ const Auth = ({ onAuthSuccess }) => {
     const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
     try {
-      console.log('Fetching:', `${endpoint}`); const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -34,58 +34,57 @@ const Auth = ({ onAuthSuccess }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 bg-white rounded-2xl shadow-xl border border-warm-100">
-      <h2 className="text-3xl font-bold text-brand-800 mb-6 text-center">
-        {isLogin ? 'Welcome Back' : 'Create Account'}
-      </h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        {error && (
-          <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg">
-            {error}
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <div className="auth-eyebrow">Empire HomePath Pro</div>
+        <h2 className="auth-title">
+          {isLogin ? <>Welcome <span>Back</span></> : <>Create <span>Account</span></>}
+        </h2>
+        <p className="auth-sub">
+          {isLogin
+            ? 'Sign in to access verified homebuyer program data across all 62 NY counties.'
+            : 'Start matching clients to programs in seconds.'}
+        </p>
+
+        <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {error && <div className="auth-error">{error}</div>}
+
+          <div className="field-group">
+            <label htmlFor="email" className="field-label">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="field-input"
+              placeholder="pro@example.com"
+              required
+            />
           </div>
-        )}
-        
-        <div>
-          <label className="block text-sm font-medium text-warm-600 mb-1">Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:ring-2 focus:ring-brand-400 focus:border-brand-400 outline-none"
-            placeholder="pro@example.com"
-            required
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-warm-600 mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:ring-2 focus:ring-brand-400 focus:border-brand-400 outline-none"
-            placeholder="••••••••"
-            required
-          />
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
-        >
-          {loading ? 'Processing...' : (isLogin ? 'Login' : 'Sign Up')}
-        </button>
-      </form>
+          <div className="field-group">
+            <label htmlFor="password" className="field-label">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="field-input"
+              placeholder="••••••••"
+              required
+            />
+          </div>
 
-      <div className="mt-6 text-center">
-        <button
-          onClick={() => setIsLogin(!isLogin)}
-          className="text-brand-600 hover:text-brand-700 font-medium text-sm"
-        >
-          {isLogin ? "Don't have an account? Sign up" : "Already have an account? Login"}
-        </button>
+          <button type="submit" disabled={loading} className="btn-gold" style={{ width: '100%', marginTop: '4px' }}>
+            {loading ? 'Processing...' : (isLogin ? 'Login' : 'Sign Up')}
+          </button>
+        </form>
+
+        <div className="auth-switch">
+          <button onClick={() => setIsLogin(!isLogin)}>
+            {isLogin ? "Don't have an account? Sign up" : "Already have an account? Login"}
+          </button>
+        </div>
       </div>
     </div>
   );

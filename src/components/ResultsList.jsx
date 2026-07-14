@@ -1,17 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, ChevronRight, Star, RefreshCw, CheckCircle, AlertCircle, Building2, FileText } from 'lucide-react';
+import { ExternalLink, RefreshCw, CheckCircle, AlertCircle, Building2, FileText } from 'lucide-react';
 
 const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyLive, onLenderClick, isAdminView = false, formData = {}, user = null }) => {
   const navigate = useNavigate();
 
   if (programs.length === 0) {
     return (
-      <section id="results" className="px-4 pb-16">
-        <div className="max-w-4xl mx-auto text-center py-12 bg-white rounded-2xl border border-warm-200">
-          <div className="text-4xl mb-4">🔍</div>
-          <h2 className="text-2xl font-semibold text-brand-800 mb-2">No perfect matches found</h2>
-          <p className="text-warm-600">Try adjusting your info. Some programs have very specific requirements.</p>
+      <section id="results" style={{ padding: '0 20px 64px' }}>
+        <div style={{ maxWidth: '840px', margin: '0 auto' }}>
+          <div className="no-results">
+            <div style={{ fontSize: '36px', marginBottom: '14px' }}>🔍</div>
+            <h2>No perfect matches found</h2>
+            <p>Try adjusting your info. Some programs have very specific requirements.</p>
+          </div>
         </div>
       </section>
     );
@@ -28,195 +30,147 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
       url: p.official_url
     }));
 
-    navigate('/report', { 
-      state: { 
-        results: formattedResults, 
-        formData, 
-        user 
-      } 
+    navigate('/report', {
+      state: {
+        results: formattedResults,
+        formData,
+        user
+      }
     });
   };
 
-  const badgeColors = {
-    'Strong': 'bg-leaf-100 text-leaf-600',
-    'Good': 'bg-brand-100 text-brand-600',
-    'Maybe': 'bg-warm-100 text-warm-400'
+  const badgeClass = {
+    'Strong': 'strong',
+    'Good': 'good',
+    'Maybe': 'maybe'
   };
 
   return (
-    <section id="results" className="px-4 pb-16">
-      <div className="max-w-4xl mx-auto animate-fade-in">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+    <section id="results" style={{ padding: '0 20px 64px' }}>
+      <div style={{ maxWidth: '840px', margin: '0 auto' }}>
+        <div className="results-header">
           <div>
-            <h2 className="text-2xl font-semibold text-brand-800">We found programs that match your info</h2>
-            <span className="text-sm text-warm-400">Showing {programs.length} programs</span>
+            <h2 className="results-title">We found programs that match your info</h2>
+            <span className="results-count">Showing {programs.length} programs</span>
           </div>
-          <button 
-            onClick={handlePrintClick}
-            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all active:scale-95"
-          >
-            <FileText size={16} /> Generate PDF Report
+          <button onClick={handlePrintClick} className="btn-gold-outline" style={{ padding: '10px 20px', fontSize: '12px' }}>
+            <FileText size={15} /> Generate PDF Report
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {programs.map((program, idx) => {
             const programId = program.program_id || program.id || `prog-${idx}`;
             return (
-            <div 
-              key={idx} 
-              className="bg-white rounded-2xl border border-warm-200 p-6 hover:shadow-md transition-shadow animate-slide-up"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="text-3xl p-3 bg-brand-50 rounded-xl">
-                  {program.program_name.includes('Dream') ? '🏡' : 
-                   program.program_name.includes('Down Payment') ? '💵' :
-                   program.program_name.includes('Remodel') ? '🔨' :
-                   program.program_name.includes('Grant') ? '🏠' : '🏘️'}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`${badgeColors[program.matchStrength]} text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1`}>
-                      <Star size={12} fill="currentColor" /> {program.matchStrength} Match
-                    </span>
-                    <span className="bg-warm-100 text-warm-600 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
-                      {program.category || 'Program'}
-                    </span>
+              <div key={idx} className="prog-card">
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', marginBottom: '14px' }}>
+                  <div className="prog-icon">
+                    {program.program_name.includes('Dream') ? '🏡' :
+                     program.program_name.includes('Down Payment') ? '💵' :
+                     program.program_name.includes('Remodel') ? '🔨' :
+                     program.program_name.includes('Grant') ? '🏠' : '🏘️'}
                   </div>
-                  <h3 className="text-lg font-semibold text-brand-800">{program.program_name}</h3>
-                </div>
-              </div>
-
-              <p className="text-warm-600 text-sm leading-relaxed mb-6">{program.description}</p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div>
-                  <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Yearly income limit</p>
-                  <p className="text-sm font-medium text-warm-800">
-                    {verificationStates[programId]?.resultData?.verified_income_limit ? (
-                      <span className="text-leaf-600 font-bold">
-                        ${verificationStates[programId].resultData.verified_income_limit.toLocaleString()}*
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                      <span className={`match-badge ${badgeClass[program.matchStrength]}`}>
+                        ★ {program.matchStrength} Match
                       </span>
-                    ) : (
-                      typeof program.income_limits === 'string' ? program.income_limits : 'Varies by county'
-                    )}
-                  </p>
+                      <span className="category-pill">{program.category || 'Program'}</span>
+                    </div>
+                    <h3 className="prog-name">{program.program_name}</h3>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Home price limit</p>
-                  <p className="text-sm font-medium text-warm-800">
-                    {verificationStates[programId]?.resultData?.verified_price_cap ? (
-                      <span className="text-leaf-600 font-bold">
-                        ${verificationStates[programId].resultData.verified_price_cap.toLocaleString()}*
-                      </span>
-                    ) : (
-                      typeof program.purchase_price_limits === 'string' ? program.purchase_price_limits : 'Varies by county'
-                    )}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Counties served</p>
-                  <p className="text-sm font-medium text-warm-800">{program.counties_served}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-warm-400 uppercase tracking-wider mb-0.5">Home type</p>
-                  <p className="text-sm font-medium text-warm-800">{program.property_type_eligibility}</p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-4 pt-4 border-t border-warm-100">
-                <div className="flex-1 flex flex-wrap items-center gap-4">
-                  <a 
-                    href={program.official_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-brand-500 hover:text-brand-600 font-medium text-sm flex items-center gap-1 transition"
-                  >
-                    Official Website <ExternalLink size={14} />
-                  </a>
+                <p className="prog-desc" style={{ marginBottom: '20px' }}>{program.description}</p>
 
-                  {/* Live Verify Button / Status */}
-                  <div className="flex items-center">
-                    {verificationStates[programId] ? (
-                      <div className="flex items-center gap-3">
-                        {verificationStates[programId].status === 'pending' ? (
-                          <span className="inline-flex items-center gap-2 text-brand-600 text-sm font-medium animate-pulse">
-                            <RefreshCw size={14} className="animate-spin" /> Verifying...
-                          </span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: '16px', marginBottom: '20px' }}>
+                  <div>
+                    <p className="prog-stat-label">Yearly income limit</p>
+                    <p className={`prog-stat-value ${verificationStates[programId]?.resultData?.verified_income_limit ? 'green' : ''}`}>
+                      {verificationStates[programId]?.resultData?.verified_income_limit ? (
+                        <>${verificationStates[programId].resultData.verified_income_limit.toLocaleString()}*</>
+                      ) : (
+                        typeof program.income_limits === 'string' ? program.income_limits : 'Varies by county'
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="prog-stat-label">Home price limit</p>
+                    <p className={`prog-stat-value ${verificationStates[programId]?.resultData?.verified_price_cap ? 'green' : ''}`}>
+                      {verificationStates[programId]?.resultData?.verified_price_cap ? (
+                        <>${verificationStates[programId].resultData.verified_price_cap.toLocaleString()}*</>
+                      ) : (
+                        typeof program.purchase_price_limits === 'string' ? program.purchase_price_limits : 'Varies by county'
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="prog-stat-label">Counties served</p>
+                    <p className="prog-stat-value">{program.counties_served}</p>
+                  </div>
+                  <div>
+                    <p className="prog-stat-label">Home type</p>
+                    <p className="prog-stat-value">{program.property_type_eligibility}</p>
+                  </div>
+                </div>
+
+                <div className="prog-footer" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+                    <a href={program.official_url} target="_blank" rel="noopener noreferrer" className="prog-link">
+                      Official Website <ExternalLink size={13} />
+                    </a>
+
+                    <div>
+                      {verificationStates[programId] ? (
+                        verificationStates[programId].status === 'pending' ? (
+                          <span className="verify-pending"><RefreshCw size={13} className="animate-spin" /> Verifying...</span>
                         ) : verificationStates[programId].status === 'verified' ? (
-                          <div className="flex flex-col">
-                            <span className="inline-flex items-center gap-1.5 text-leaf-600 text-sm font-bold bg-leaf-50 px-2 py-0.5 rounded-md">
-                              <CheckCircle size={14} /> Live Verified
-                            </span>
-                            <span className="text-[10px] text-warm-400 mt-0.5">
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span className="verify-verified"><CheckCircle size={13} /> Live Verified</span>
+                            <span style={{ fontSize: '10px', color: 'var(--muted)' }}>
                               Checked {verificationStates[programId].resultData?.timestamp || 'Just now'}
                             </span>
                             {verificationStates[programId].resultData?.source_url && (
-                              <a 
-                                href={verificationStates[programId].resultData.source_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[10px] text-brand-400 underline hover:text-brand-500"
-                              >
+                              <a href={verificationStates[programId].resultData.source_url} target="_blank" rel="noopener noreferrer" className="verify-source">
                                 View Source
                               </a>
                             )}
                           </div>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 text-amber-600 text-sm font-medium bg-amber-50 px-2 py-0.5 rounded-md">
-                            <AlertCircle size={14} /> Not Eligible (Live)
-                          </span>
-                        )}
-                      </div>
-                    ) : (
-                      <button 
-                        onClick={() => onVerifyLive(programId)}
-                        className="inline-flex items-center gap-2 text-warm-500 hover:text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-transparent hover:border-brand-200"
-                      >
-                        <RefreshCw size={14} /> Verify Live Now
-                      </button>
-                    )}
+                          <span className="verify-notlive"><AlertCircle size={13} /> Not Eligible (Live)</span>
+                        )
+                      ) : (
+                        <button onClick={() => onVerifyLive(programId)} className="verify-btn">
+                          <RefreshCw size={13} /> Verify Live Now
+                        </button>
+                      )}
+                    </div>
+
+                    <button onClick={() => onLenderClick(program.program_name)} className="btn-specialist">
+                      <Building2 size={13} /> Talk to a Specialist
+                    </button>
                   </div>
 
-                  {/* Lender CTA */}
-                  <button 
-                    onClick={() => onLenderClick(program.program_name)}
-                    className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700 font-semibold text-sm transition px-2 py-1 rounded-md hover:bg-brand-50"
-                  >
-                    <Building2 size={14} /> Talk to a Specialist
-                  </button>
+                  <a href={program.official_url} target="_blank" rel="noopener noreferrer" className="btn-apply">
+                    Apply for This
+                  </a>
                 </div>
-
-                <a 
-                  href={program.official_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-leaf-500 hover:bg-leaf-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
-                >
-                  Apply for This
-                </a>
               </div>
-            </div>
-          );
+            );
           })}
         </div>
 
         {/* Action buttons */}
         {!isAdminView && (
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
-              onClick={handlePrintClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all active:scale-95"
-            >
-              <FileText size={20} /> Generate PDF Report
-            </button>
-            <button 
-              onClick={onSaveClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white border-2 border-brand-200 hover:border-brand-400 text-brand-800 px-8 py-4 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all"
-            >
-              💾 Save My Results
-            </button>
+          <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '14px', width: '100%' }}>
+              <button onClick={handlePrintClick} className="btn-gold" style={{ flex: '1 1 220px' }}>
+                <FileText size={18} /> Generate PDF Report
+              </button>
+              <button onClick={onSaveClick} className="btn-gold-outline" style={{ flex: '1 1 220px' }}>
+                💾 Save My Results
+              </button>
+            </div>
           </div>
         )}
       </div>

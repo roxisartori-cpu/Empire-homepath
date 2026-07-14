@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Menu, X, LogOut, User, Palette, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, User, Palette, LayoutDashboard } from 'lucide-react';
 
 const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -7,101 +7,85 @@ const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const isSubscribed = user?.role === 'admin' || user?.subscription_status === 'active';
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-brand-200 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
-        <button onClick={() => onViewChange('app')} className="flex items-center gap-2 text-xl font-bold text-brand-800">
-          <span className="text-2xl">🏡</span>
-          Empire HomePath Pro
-        </button>
-        
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {isSubscribed && (
-            <button 
-              onClick={() => onViewChange(currentView === 'dashboard' ? 'app' : 'dashboard')}
-              className={`text-sm font-bold transition flex items-center gap-2 px-4 py-2 rounded-lg border ${
-                currentView === 'dashboard' ? 'bg-brand-600 text-white border-brand-600' : 'text-brand-600 bg-brand-50 border-brand-100 hover:bg-brand-100'
-              }`}
-            >
-              <LayoutDashboard size={16} /> {currentView === 'dashboard' ? '🚀 Go to Search' : 'Dashboard'}
-            </button>
-          )}
-          {user?.role === 'admin' && (
-            <button 
-              onClick={() => onViewChange(currentView === 'admin' ? 'app' : 'admin')}
-              className="text-brand-600 hover:text-brand-700 font-bold text-sm transition px-4 py-2 bg-brand-50 rounded-lg border border-brand-100"
-            >
-              {currentView === 'admin' ? '🚀 Go to App' : '🛠 Admin Panel'}
-            </button>
-          )}
-          {user?.plan === 'white-label' && (
-            <button 
-              onClick={() => onViewChange(currentView === 'branding' ? 'app' : 'branding')}
-              className="text-amber-600 hover:text-amber-700 font-bold text-sm transition px-4 py-2 bg-amber-50 rounded-lg border border-amber-100 flex items-center gap-2"
-            >
-              <Palette size={16} /> Branding
-            </button>
-          )}
-          <a href="#glossary" className="text-warm-600 hover:text-brand-500 font-medium text-sm transition">📖 Glossary</a>
-          <a href="#checklist" className="text-warm-600 hover:text-brand-500 font-medium text-sm transition">📋 Checklist</a>
-          
-          {user && (
-            <div className="flex items-center gap-4 pl-6 border-l border-warm-200">
-              <div className="flex flex-col text-right">
-                <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">{user.plan} Tier</span>
-                <span className="text-sm text-warm-500 truncate max-w-[150px]">{user.email}</span>
-              </div>
-              <button 
-                onClick={onLogout}
-                className="p-2.5 text-warm-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                title="Logout"
-              >
-                <LogOut size={20} />
-              </button>
-            </div>
-          )}
-        </div>
+    <nav className="app-nav">
+      <button onClick={() => onViewChange('app')} className="app-nav-logo">
+        Empire <span>HomePath</span> Pro
+      </button>
 
-        {/* Mobile hamburger */}
-        <button 
-          className="md:hidden p-2 text-warm-600 hover:text-brand-500" 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+      {/* Desktop nav */}
+      <div className="app-nav-links">
+        {isSubscribed && (
+          <button
+            onClick={() => onViewChange(currentView === 'dashboard' ? 'app' : 'dashboard')}
+            className={`app-nav-btn ${currentView === 'dashboard' ? 'is-active' : ''}`}
+          >
+            <LayoutDashboard size={14} /> {currentView === 'dashboard' ? 'Go to Search' : 'Dashboard'}
+          </button>
+        )}
+        {user?.role === 'admin' && (
+          <button
+            onClick={() => onViewChange(currentView === 'admin' ? 'app' : 'admin')}
+            className={`app-nav-btn ${currentView === 'admin' ? 'is-active' : ''}`}
+          >
+            {currentView === 'admin' ? 'Go to App' : 'Admin Panel'}
+          </button>
+        )}
+        {user?.plan === 'white-label' && (
+          <button
+            onClick={() => onViewChange(currentView === 'branding' ? 'app' : 'branding')}
+            className={`app-nav-btn ${currentView === 'branding' ? 'is-active' : ''}`}
+          >
+            <Palette size={14} /> Branding
+          </button>
+        )}
+        <a href="#glossary" className="app-nav-link">Glossary</a>
+        <a href="#checklist" className="app-nav-link">Checklist</a>
+
+        {user && (
+          <div className="app-nav-user">
+            <div>
+              <span className="app-nav-user-tier">{user.plan} Tier</span>
+              <span className="app-nav-user-email">{user.email}</span>
+            </div>
+            <button onClick={onLogout} className="app-nav-logout" title="Logout">
+              <LogOut size={18} />
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Mobile hamburger */}
+      <button className="app-nav-burger" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
+        {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+      </button>
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-b border-warm-200 px-4 py-6 space-y-4 shadow-xl animate-fade-in">
+        <div className="app-mobile-menu" style={{ position: 'absolute', top: '64px', left: 0, right: 0 }}>
           {isSubscribed && (
-            <button 
+            <button
               onClick={() => { onViewChange('dashboard'); setIsMenuOpen(false); }}
-              className="block w-full text-left text-lg text-brand-700 hover:text-brand-800 font-bold flex items-center gap-2"
+              className="app-mobile-link"
             >
-              <LayoutDashboard size={20} /> Professional Dashboard
+              <LayoutDashboard size={18} /> Professional Dashboard
             </button>
           )}
-          <a href="#glossary" className="block text-lg text-warm-700 hover:text-brand-600 font-semibold" onClick={() => setIsMenuOpen(false)}>📖 Glossary</a>
-          <a href="#checklist" className="block text-lg text-warm-700 hover:text-brand-600 font-semibold" onClick={() => setIsMenuOpen(false)}>📋 Checklist</a>
-          
+          <a href="#glossary" className="app-mobile-link" onClick={() => setIsMenuOpen(false)}>Glossary</a>
+          <a href="#checklist" className="app-mobile-link" onClick={() => setIsMenuOpen(false)}>Checklist</a>
+
           {user && (
-            <div className="pt-4 mt-4 border-t border-warm-100 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-brand-600">
-                  <User size={24} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '16px', marginTop: '4px', borderTop: '1px solid var(--border)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'var(--gold-dim)', border: '1px solid var(--border-mid)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--gold)' }}>
+                  <User size={20} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-brand-800">{user.email}</p>
-                  <p className="text-xs text-warm-500 uppercase font-bold tracking-widest">{user.plan} Tier</p>
+                  <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--white)' }}>{user.email}</p>
+                  <p style={{ fontFamily: "'DM Mono',monospace", fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{user.plan} Tier</p>
                 </div>
               </div>
-              <button 
-                onClick={onLogout}
-                className="flex items-center gap-2 text-red-500 font-bold px-4 py-2 bg-red-50 rounded-xl"
-              >
-                <LogOut size={18} /> Exit
+              <button onClick={onLogout} className="btn-ghost-dark" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <LogOut size={16} /> Exit
               </button>
             </div>
           )}

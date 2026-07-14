@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import './styles/app.css';
 import NavBar from './components/NavBar';
 import Hero from './components/Hero';
 import EligibilityForm from './components/EligibilityForm';
@@ -216,7 +217,7 @@ function App() {
   if (loading && !isStaticRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
-        <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+        <div className="spinner-gold"></div>
       </div>
     );
   }
@@ -253,7 +254,7 @@ function App() {
           <Route path="/report" element={<PdfReport />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/app" element={
-            <div className="min-h-screen bg-warm-50 text-warm-800">
+            <div className="app-shell">
               {(!token || !user) ? (
                 <Auth onAuthSuccess={handleAuthSuccess} />
               ) : (
@@ -284,8 +285,8 @@ function App() {
                       {isSearching && (
                         <div className="max-w-4xl mx-auto px-4 py-12">
                           <div className="flex flex-col items-center justify-center space-y-4">
-                            <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-                            <p className="text-warm-600 font-medium animate-pulse">Finding your programs...</p>
+                            <div className="spinner-gold"></div>
+                            <p style={{ color: 'var(--body-c)', fontWeight: 500 }} className="animate-pulse">Finding your programs...</p>
                           </div>
                         </div>
                       )}
