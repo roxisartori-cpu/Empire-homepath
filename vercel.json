@@ -1,7 +1,7 @@
 {
-  "outputDirectory": "public",
   "rewrites": [
-    { "source": "/", "destination": "/empirehomepath-v8.html" },
+    { "source": "/app", "destination": "/index.html" },
+    { "source": "/app/(.*)", "destination": "/index.html" },
     { "source": "/demo", "destination": "/empirehomepath-demo.html" },
     { "source": "/search", "destination": "/empirehomepath-search.html" },
     { "source": "/privacy", "destination": "/empirehomepath-privacy.html" },
@@ -9,7 +9,8 @@
     { "source": "/disclaimer", "destination": "/empirehomepath-disclaimer.html" },
     { "source": "/admin", "destination": "/empirehomepath-admin.html" },
     { "source": "/thankyou", "destination": "/empirehomepath-thankyou.html" },
-    { "source": "/app", "destination": "/index.html" },
-    { "source": "/app/(.*)", "destination": "/index.html" }
-  ]
+    { "source": "/", "destination": "/empirehomepath-v8.html" }
+  ],
+  "buildCommand": "npm run build && cp -r dist/* public/",
+  "outputDirectory": "public"
 }
