@@ -16,17 +16,159 @@ const client = createClient({
 const app = express();
 app.use(cors());
 
-// Stripe webhook needs raw body
-app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  // Webhook handling will go here
-  res.send();
-});
-
-app.use(express.json());
-
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'empire-homepath-pro-secret-key-2026';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+
+async function runDb(query, params = []) {
+  try {
+    const result = await client.execute({ sql: query, args: params });
+    return result.rows;
+  } catch (err) {
+    console.error('DB Error:', err.message);
+    throw err;
+  }
+}
+
+function planFromPriceId(priceId) {
+  if (priceId && priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) return 'professional';
+  if (priceId && priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID) return 'individual';
+  return 'individual';
+}
+
+async function findUserByEmail(email) {
+  if (!email) return null;
+  const rows = await runDb('SELECT * FROM users WHERE LOWER(email) = LOWER(?)', [email]);
+  return rows[0] || null;
+}
+
+async function findUserByStripeCustomerId(customerId) {
+  if (!customerId) return null;
+  const rows = await runDb('SELECT * FROM users WHERE stripe_customer_id = ?', [customerId]);
+  return rows[0] || null;
+}
+
+// Stripe webhook — must use raw body before express.json()
+app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const signature = req.headers['stripe-signature'];
+
+  if (!webhookSecret || webhookSecret.includes('your_stripe_webhook')) {
+    console.error('STRIPE_WEBHOOK_SECRET is not configured');
+    return res.status(500).json({ error: 'Webhook secret not configured' });
+  }
+  if (!signature) {
+    return res.status(400).json({ error: 'Missing stripe-signature header' });
+  }
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret);
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object;
+        const email =
+          session.customer_details?.email ||
+          session.customer_email ||
+          null;
+        const customerId =
+          typeof session.customer === 'string' ? session.customer : session.customer?.id || null;
+
+        let priceId = null;
+        try {
+          const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 10 });
+          priceId = lineItems.data[0]?.price?.id || null;
+        } catch (lineErr) {
+          console.error('Failed to list checkout line items:', lineErr.message);
+        }
+
+        const plan = planFromPriceId(priceId);
+        const user = (await findUserByEmail(email)) || (await findUserByStripeCustomerId(customerId));
+
+        if (!user) {
+          console.warn(`checkout.session.completed: no user for email=${email} customer=${customerId}`);
+          break;
+        }
+
+        await runDb(
+          'UPDATE users SET subscription_status = ?, plan = ?, stripe_customer_id = COALESCE(NULLIF(stripe_customer_id, \'\'), ?) WHERE id = ?',
+          ['active', plan, customerId || '', user.id],
+        );
+        console.log(`Activated subscription for ${user.email} (plan=${plan})`);
+        break;
+      }
+
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object;
+        const customerId =
+          typeof subscription.customer === 'string'
+            ? subscription.customer
+            : subscription.customer?.id || null;
+
+        let user = await findUserByStripeCustomerId(customerId);
+        if (!user && customerId) {
+          try {
+            const customer = await stripe.customers.retrieve(customerId);
+            if (!customer.deleted) user = await findUserByEmail(customer.email);
+          } catch (custErr) {
+            console.error('Failed to retrieve customer for cancelled subscription:', custErr.message);
+          }
+        }
+
+        if (!user) {
+          console.warn(`customer.subscription.deleted: no user for customer=${customerId}`);
+          break;
+        }
+
+        await runDb('UPDATE users SET subscription_status = ? WHERE id = ?', ['cancelled', user.id]);
+        console.log(`Cancelled subscription for ${user.email}`);
+        break;
+      }
+
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object;
+        const customerId =
+          typeof invoice.customer === 'string' ? invoice.customer : invoice.customer?.id || null;
+        const email = invoice.customer_email || null;
+
+        let user = (await findUserByStripeCustomerId(customerId)) || (await findUserByEmail(email));
+        if (!user && customerId) {
+          try {
+            const customer = await stripe.customers.retrieve(customerId);
+            if (!customer.deleted) user = await findUserByEmail(customer.email);
+          } catch (custErr) {
+            console.error('Failed to retrieve customer for failed invoice:', custErr.message);
+          }
+        }
+
+        if (!user) {
+          console.warn(`invoice.payment_failed: no user for email=${email} customer=${customerId}`);
+          break;
+        }
+
+        await runDb('UPDATE users SET subscription_status = ? WHERE id = ?', ['past_due', user.id]);
+        console.log(`Marked past_due for ${user.email}`);
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    res.json({ received: true });
+  } catch (err) {
+    console.error('Webhook handler error:', err);
+    res.status(500).json({ error: 'Webhook handler failed', details: err.message });
+  }
+});
+
+app.use(express.json());
 
 async function listAllStripe(listFn, params = {}) {
   const items = [];
@@ -220,16 +362,6 @@ app.get('/api/admin/stats', async (req, res) => {
   }
 });
 
-async function runDb(query, params = []) {
-  try {
-    const result = await client.execute({ sql: query, args: params });
-    return result.rows;
-  } catch (err) {
-    console.error('DB Error:', err.message);
-    throw err;
-  }
-}
-
 // --- Auth Endpoints ---
 
 app.post('/api/register', async (req, res) => {
@@ -414,9 +546,6 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      subscription_data: {
-        trial_period_days: 7,
-      },
       success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/pricing`,
     });
@@ -435,7 +564,7 @@ app.post('/api/verify', authenticateToken, async (req, res) => {
     const users = await runDb('SELECT subscription_status, plan, role FROM users WHERE id = ?', [req.user.id]);
     const user = users[0];
     
-    const isSubscribed = user?.subscription_status === 'active' || user?.subscription_status === 'trialing';
+    const isSubscribed = user?.subscription_status === 'active';
     const isAdmin = user?.role === 'admin';
 
     if (!isSubscribed && !isAdmin) {

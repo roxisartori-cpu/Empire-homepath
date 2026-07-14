@@ -4,7 +4,7 @@ import { Home, Menu, X, LogOut, User, Palette, LayoutDashboard } from 'lucide-re
 const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const isSubscribed = user?.role === 'admin' || user?.subscription_status === 'active' || (user?.subscription_status === 'trialing' && (!user.trial_end || new Date(user.trial_end) > new Date()));
+  const isSubscribed = user?.role === 'admin' || user?.subscription_status === 'active';
 
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-brand-200 shadow-sm">

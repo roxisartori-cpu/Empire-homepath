@@ -223,12 +223,7 @@ function App() {
 
   const isSubscribed = useMemo(() => {
     if (user?.role === 'admin') return true;
-    if (user?.subscription_status === 'active') return true;
-    if (user?.subscription_status === 'trialing') {
-      if (!user.trial_end) return true;
-      return new Date(user.trial_end) > new Date();
-    }
-    return false;
+    return user?.subscription_status === 'active';
   }, [user]);
 
   return (
