@@ -214,6 +214,11 @@ function App() {
     }, 800);
   };
 
+  const isSubscribed = useMemo(() => {
+    if (user?.role === 'admin') return true;
+    return user?.subscription_status === 'active';
+  }, [user]);
+
   if (loading && !isStaticRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
@@ -222,10 +227,6 @@ function App() {
     );
   }
 
-  const isSubscribed = useMemo(() => {
-    if (user?.role === 'admin') return true;
-    return user?.subscription_status === 'active';
-  }, [user]);
 
   return (
     <div className="min-h-screen bg-[#0A1628] font-sans">
