@@ -104,7 +104,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
           <button
             onClick={() => handleSubscribe('price_1Tpt0zCjCXhGzH7Hjk2He2LB')}
             disabled={loading}
-         CclassName="btn-gold"
+         className="btn-gold"
             style={{ width: '100%' }}
           >
             Go Professional
