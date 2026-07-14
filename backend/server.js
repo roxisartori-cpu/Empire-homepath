@@ -50,11 +50,16 @@ async function findUserByStripeCustomerId(customerId) {
 
 // Stripe webhook — must use raw body before express.json()
 app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret =
+    process.env.NODE_ENV === 'test'
+      ? process.env.STRIPE_TEST_WEBHOOK_SECRET
+      : process.env.STRIPE_WEBHOOK_SECRET;
   const signature = req.headers['stripe-signature'];
 
   if (!webhookSecret || webhookSecret.includes('your_stripe_webhook')) {
-    console.error('STRIPE_WEBHOOK_SECRET is not configured');
+    const secretName =
+      process.env.NODE_ENV === 'test' ? 'STRIPE_TEST_WEBHOOK_SECRET' : 'STRIPE_WEBHOOK_SECRET';
+    console.error(`${secretName} is not configured`);
     return res.status(500).json({ error: 'Webhook secret not configured' });
   }
   if (!signature) {
@@ -80,16 +85,39 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
         const customerId =
           typeof session.customer === 'string' ? session.customer : session.customer?.id || null;
 
+        console.log('[webhook] checkout.session.completed received', {
+          sessionId: session.id,
+          emailFromStripe: email,
+          customerId,
+          customerDetailsEmail: session.customer_details?.email || null,
+          customerEmail: session.customer_email || null,
+          paymentStatus: session.payment_status,
+          mode: session.mode,
+        });
+
         let priceId = null;
         try {
           const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 10 });
           priceId = lineItems.data[0]?.price?.id || null;
+          console.log('[webhook] line items priceId:', priceId);
         } catch (lineErr) {
           console.error('Failed to list checkout line items:', lineErr.message);
         }
 
         const plan = planFromPriceId(priceId);
-        const user = (await findUserByEmail(email)) || (await findUserByStripeCustomerId(customerId));
+        const userByEmail = await findUserByEmail(email);
+        const userByCustomerId = userByEmail ? null : await findUserByStripeCustomerId(customerId);
+        const user = userByEmail || userByCustomerId;
+
+        console.log('[webhook] user lookup result', {
+          emailFromStripe: email,
+          foundByEmail: !!userByEmail,
+          foundByCustomerId: !!userByCustomerId,
+          matchedUserEmail: user?.email || null,
+          matchedUserId: user?.id || null,
+          currentStatus: user?.subscription_status || null,
+          planToSet: plan,
+        });
 
         if (!user) {
           console.warn(`checkout.session.completed: no user for email=${email} customer=${customerId}`);
