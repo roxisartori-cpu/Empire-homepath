@@ -18,7 +18,31 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'empire-homepath-pro-secret-key-2026';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+
+// --- Stripe mode switch ---
+// Set STRIPE_MODE to "test" or "live" on Render. This picks which secret key
+// gets used, so the test and live keys can both live in the environment at
+// the same time without ever overwriting each other.
+const STRIPE_MODE = (process.env.STRIPE_MODE || 'test').toLowerCase();
+
+const stripeSecretKey =
+  STRIPE_MODE === 'live'
+    ? process.env.STRIPE_SECRET_KEY_LIVE
+    : process.env.STRIPE_SECRET_KEY_TEST;
+
+if (!stripeSecretKey) {
+  console.error(
+    `CRITICAL: STRIPE_MODE is set to "${STRIPE_MODE}" but the matching key ` +
+    `(STRIPE_SECRET_KEY_${STRIPE_MODE.toUpperCase()}) is not set in the environment.`
+  );
+}
+
+const stripe = new Stripe(stripeSecretKey || 'sk_test_placeholder');
+
+console.log(
+  `[Stripe] Running in ${STRIPE_MODE.toUpperCase()} mode. ` +
+  `Key in use starts with: ${(stripeSecretKey || 'MISSING').slice(0, 12)}...`
+);
 
 async function runDb(query, params = []) {
   try {
@@ -255,12 +279,12 @@ app.get('/api/admin/stats', async (req, res) => {
 
   try {
     if (
-      !process.env.STRIPE_SECRET_KEY ||
-      process.env.STRIPE_SECRET_KEY.includes('placeholder') ||
-      process.env.STRIPE_SECRET_KEY.includes('your_stripe')
+      !stripeSecretKey ||
+      stripeSecretKey.includes('placeholder') ||
+      stripeSecretKey.includes('your_stripe')
     ) {
       return res.status(503).json({
-        error: 'Stripe is not configured. Set STRIPE_SECRET_KEY on the backend.',
+        error: `Stripe is not configured for ${STRIPE_MODE.toUpperCase()} mode. Set STRIPE_SECRET_KEY_${STRIPE_MODE.toUpperCase()} on the backend.`,
       });
     }
 

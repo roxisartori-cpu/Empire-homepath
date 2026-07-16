@@ -1,0 +1,15 @@
+---
+description: Keep Empire-homepath project rooted on Desktop; never relocate it
+alwaysApply: true
+---
+
+# Workspace location (do not move)
+
+Canonical project path:
+
+`/Users/roxannesartori/Desktop/Empire-homepath`
+
+- Never move, rename, copy, or relocate this folder.
+- Never switch the agent workspace to `/Users/roxannesartori/Empire-homepath` (home) or any other copy unless the user explicitly asks and confirms.
+- If the user pastes a different path, ask before calling `move_agent_to_root`.
+- Prefer editing files in place under Desktop. Do not suggest relocating the repo.
