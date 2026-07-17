@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, Phone, Mail, Building2, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import { X, Send, Building2, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
 const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
   const [submitted, setSubmitted] = useState(false);
@@ -50,77 +50,61 @@ const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-900/40 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-scale-up">
-        <div className="relative">
-          <button 
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backgroundColor: 'rgba(6,14,28,0.75)' }}>
+      <div style={{ background: 'var(--ink-mid)', border: '1px solid var(--border-mid)', borderRadius: '20px', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '100%', maxWidth: '640px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative' }}>
+          <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-warm-400 hover:text-warm-600 hover:bg-warm-100 rounded-full transition-colors z-10"
+            style={{ position: 'absolute', top: '16px', right: '16px', padding: '8px', color: 'var(--muted)', background: 'none', border: 'none', borderRadius: '999px', cursor: 'pointer', zIndex: 10 }}
           >
             <X size={20} />
           </button>
 
-          <div className="grid grid-cols-1 md:grid-cols-5">
-            {/* Left side - Info */}
-            <div className="md:col-span-2 bg-brand-50 p-8 flex flex-col justify-between">
+          <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '2fr 3fr' }}>
+            <div style={{ background: 'var(--ink-lift)', padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: window.innerWidth < 768 ? 'none' : '1px solid var(--border)' }}>
               <div>
-                <div className="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
-                  <Building2 className="text-brand-500" size={24} />
+                <div style={{ width: '48px', height: '48px', background: 'var(--gold-dim)', border: '1px solid var(--border-mid)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                  <Building2 style={{ color: 'var(--gold)' }} size={22} />
                 </div>
-                <h2 className="text-2xl font-bold text-brand-900 mb-2 leading-tight">
+                <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--white)', marginBottom: '8px', lineHeight: 1.2 }}>
                   Expert Guidance
                 </h2>
-                <p className="text-warm-600 text-sm mb-6 leading-relaxed">
-                  Connect with a specialist who understands <span className="font-semibold text-brand-700">{programName}</span> and other New York assistance programs.
+                <p style={{ color: 'var(--body-c)', fontSize: '13px', marginBottom: '24px', lineHeight: 1.7 }}>
+                  Connect with a specialist who understands <span style={{ fontWeight: 700, color: 'var(--gold)' }}>{programName}</span> and other New York assistance programs.
                 </p>
 
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 p-1 bg-leaf-100 rounded-full text-leaf-600">
-                      <CheckCircle2 size={12} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {['Free consultation', 'Lender matched to your area', 'No impact on credit score'].map((item) => (
+                    <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                      <div style={{ marginTop: '2px', color: 'var(--success)', flexShrink: 0 }}>
+                        <CheckCircle2 size={14} />
+                      </div>
+                      <p style={{ fontSize: '13px', color: 'var(--body-c)', fontWeight: 500 }}>{item}</p>
                     </div>
-                    <p className="text-xs text-warm-700 font-medium">Free consultation</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 p-1 bg-leaf-100 rounded-full text-leaf-600">
-                      <CheckCircle2 size={12} />
-                    </div>
-                    <p className="text-xs text-warm-700 font-medium">Lender matched to your area</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 p-1 bg-leaf-100 rounded-full text-leaf-600">
-                      <CheckCircle2 size={12} />
-                    </div>
-                    <p className="text-xs text-warm-700 font-medium">No impact on credit score</p>
-                  </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-brand-100">
-                <p className="text-[10px] text-warm-400 uppercase tracking-widest font-bold mb-3">Partner Lenders</p>
-                <div className="flex flex-wrap gap-3">
-                  <div className="px-3 py-1 bg-white rounded-lg border border-brand-100 text-[10px] font-semibold text-brand-600 shadow-sm">
-                    Empire HomePath Partners
-                  </div>
-                </div>
+              <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
+                <p className="field-label" style={{ marginBottom: '10px' }}>Partner Lenders</p>
+                <span className="category-pill">Empire HomePath Partners</span>
               </div>
             </div>
 
-            {/* Right side - Form */}
-            <div className="md:col-span-3 p-8">
+            <div style={{ padding: '32px' }}>
               {!submitted ? (
                 <>
-                  <h3 className="text-xl font-bold text-brand-800 mb-6">Inquire about this program</h3>
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--white)', marginBottom: '20px' }}>Inquire about this program</h3>
+                  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                     {error && (
-                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
+                      <div className="auth-error" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <AlertCircle size={16} />
                         {error}
                       </div>
                     )}
-                    
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-warm-500 uppercase tracking-wider ml-1">Full Name</label>
+
+                    <div className="field-group">
+                      <label className="field-label">Full Name</label>
                       <input
                         required
                         type="text"
@@ -128,13 +112,13 @@ const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Jane Doe"
-                        className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all bg-warm-50/30"
+                        className="field-input"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-warm-500 uppercase tracking-wider ml-1">Email</label>
+                    <div className="form-row">
+                      <div className="field-group">
+                        <label className="field-label">Email Address</label>
                         <input
                           required
                           type="email"
@@ -142,11 +126,11 @@ const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="jane@example.com"
-                          className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all bg-warm-50/30"
+                          className="field-input"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-warm-500 uppercase tracking-wider ml-1">Phone</label>
+                      <div className="field-group">
+                        <label className="field-label">Phone Number</label>
                         <input
                           required
                           type="tel"
@@ -154,27 +138,29 @@ const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="(555) 000-0000"
-                          className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all bg-warm-50/30"
+                          className="field-input"
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-warm-500 uppercase tracking-wider ml-1">Any specific questions?</label>
+                    <div className="field-group">
+                      <label className="field-label">Any specific questions?</label>
                       <textarea
                         rows="3"
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder="I'm curious about the income limits..."
-                        className="w-full px-4 py-3 rounded-xl border border-warm-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all bg-warm-50/30 resize-none"
+                        className="field-input"
+                        style={{ resize: 'none' }}
                       ></textarea>
                     </div>
 
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-brand-300 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/20 active:scale-[0.98] mt-2"
+                      className="btn-gold"
+                      style={{ width: '100%', marginTop: '4px' }}
                     >
                       {loading ? (
                         <Loader2 className="animate-spin" size={18} />
@@ -183,23 +169,23 @@ const LenderModal = ({ isOpen, onClose, programName, apiUrl }) => {
                       )}
                       {loading ? 'Submitting...' : 'Connect Me with a Specialist'}
                     </button>
-                    <p className="text-[10px] text-center text-warm-400 px-4">
+                    <p style={{ fontSize: '11px', textAlign: 'center', color: 'var(--muted)', padding: '0 16px' }}>
                       By clicking, you agree to be contacted by an Empire HomePath partner specialist. We never sell your data to third parties.
                     </p>
                   </form>
                 </>
               ) : (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
-                  <div className="w-20 h-20 bg-leaf-100 rounded-full flex items-center justify-center text-leaf-600 mb-2 animate-bounce-slow">
-                    <CheckCircle2 size={40} />
+                <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '16px', padding: '48px 0' }}>
+                  <div style={{ width: '72px', height: '72px', background: 'rgba(74,222,128,0.12)', borderRadius: '999px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--success)' }}>
+                    <CheckCircle2 size={36} />
                   </div>
-                  <h3 className="text-2xl font-bold text-brand-900">Request Sent!</h3>
-                  <p className="text-warm-600 leading-relaxed max-w-xs mx-auto">
-                    A specialist who knows the <span className="font-semibold text-brand-700">{programName}</span> has been notified and will reach out to you within 24 hours.
+                  <h3 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--white)' }}>Request Sent!</h3>
+                  <p style={{ color: 'var(--body-c)', lineHeight: 1.7, maxWidth: '280px' }}>
+                    A specialist who knows the <span style={{ fontWeight: 700, color: 'var(--gold)' }}>{programName}</span> has been notified and will reach out to you within 24 hours.
                   </p>
-                  <button 
+                  <button
                     onClick={onClose}
-                    className="text-brand-600 font-bold hover:underline pt-4"
+                    style={{ color: 'var(--gold)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', paddingTop: '12px', fontFamily: "'Inter',sans-serif" }}
                   >
                     Back to results
                   </button>
