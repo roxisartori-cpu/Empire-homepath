@@ -22,7 +22,7 @@
     },
     "counties_served": "All 62 counties in New York State",
     "property_type_eligibility": "Move-in ready single-family homes, condos, co-ops, and 2-4 unit properties.",
-    "official_url": "https://hcr.ny.gov/achieving-dream",
+    "official_url": "https://hcr.ny.gov/achieving-dream-program",
     "data_year": 2026
   },
   {
@@ -34,7 +34,7 @@
     "purchase_price_limits": "Same as the SONYMA mortgage program being used.",
     "counties_served": "All 62 counties in New York State",
     "property_type_eligibility": "Move-in ready properties eligible for SONYMA financing.",
-    "official_url": "https://hcr.ny.gov/sonyma-down-payment-assistance-loan-dpal",
+    "official_url": "https://hcr.ny.gov/down-payment-assistant-loan-dpal",
     "program_type": "Down Payment Assistance",
     "data_year": 2026
   },
@@ -71,7 +71,7 @@
       }
     },
     "purchase_price_limits": "Varies based on specific grant funding cycles; generally follows HUD or SONYMA guidelines.",
-    "counties_served": "Westchester, Dutchess, Long Island (Nassau/Suffolk), and Hudson Valley counties.",
+    "counties_served": "Westchester, Nassau, Suffolk, and Dutchess counties",
     "property_type_eligibility": "Single-family homes, townhouses, and condos.",
     "official_url": "https://www.communityhousing.org/homeownership/",
     "data_year": 2026
@@ -85,7 +85,7 @@
     "purchase_price_limits": "Aligned with Ulster County typical home prices and grant requirements.",
     "counties_served": "Ulster County (primarily), with some programs extending to Sullivan and Orange counties.",
     "property_type_eligibility": "Move-in ready single-family homes.",
-    "official_url": "https://rupco.org/",
+    "official_url": "https://rupco.org/first-time-home-buyers/",
     "data_year": 2026
   },
   {
@@ -97,7 +97,7 @@
     "purchase_price_limits": "Must meet HUD's FHA mortgage limits for Erie County.",
     "counties_served": "Erie (City of Buffalo only)",
     "property_type_eligibility": "Single-family homes within city limits.",
-    "official_url": "https://www.buffalony.gov/648/Home-Ownership-Assistance",
+    "official_url": "https://www.buffalourbanrenewal.com/housing/",
     "data_year": 2026
   },
   {
@@ -109,7 +109,7 @@
     "purchase_price_limits": "Subject to HUD's HOME Program price limits.",
     "counties_served": "Monroe (City of Rochester only)",
     "property_type_eligibility": "Single-family homes, townhouses, and condos in the city.",
-    "official_url": "https://www.cityofrochester.gov/homebuyerassistance/",
+    "official_url": "https://www.cityofrochester.gov/departments/neighborhood-and-business-development/home-purchase-assistance-program",
     "data_year": 2026
   },
   {
@@ -121,7 +121,7 @@
     "purchase_price_limits": "Must not exceed HUD 203(b) mortgage limits for Albany County.",
     "counties_served": "Albany (City of Albany only)",
     "property_type_eligibility": "Single-family residential properties.",
-    "official_url": "https://www.albanyny.gov/housing",
+    "official_url": "https://www.albanyny.gov/748/Home-Improvement-Programs",
     "data_year": 2026
   },
   {
@@ -132,7 +132,7 @@
     "data_year": 2026,
     "income_limits": "Follows standard SONYMA Low Interest Rate limits. Note: Military pay for active duty service members serving in a combat zone may be excluded.",
     "purchase_price_limits": "Follows standard SONYMA purchase price limits.",
-    "official_url": "https://hcr.ny.gov/homes-veterans",
+    "official_url": "https://hcr.ny.gov/homes-veterans-program",
     "counties_served": "All 62 counties in New York State",
     "category": "State",
     "property_type_eligibility": "See program guidelines."
@@ -150,7 +150,7 @@
       "3_persons": 63000,
       "4_persons": 75000
     },
-    "official_url": "https://www.nyserda.ny.gov/All-Programs/EmPower-New-York-Next-Generation",
+    "official_url": "https://www.nyserda.ny.gov/All-Programs/EmPower-New-York-Program",
     "counties_served": "All 62 counties in New York State",
     "category": "State",
     "purchase_price_limits": "Varies by county and property type.",
@@ -215,7 +215,7 @@
     "description": "Provides loans to very-low-income homeowners to repair, improve or modernize their homes or grants to elderly very-low-income homeowners to remove health and safety hazards.",
     "data_year": 2026,
     "income_limits": "Household income must be below 50% of the Area Median Income (Very Low).",
-    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-repair-loans-grants/ny",
+    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-repair-loans-grants-18",
     "counties_served": "Eligible rural areas in New York State",
     "category": "Federal",
     "purchase_price_limits": "Varies by county and property type.",

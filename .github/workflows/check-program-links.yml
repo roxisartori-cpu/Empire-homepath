@@ -1,0 +1,35 @@
+name: Monthly Program Link Check
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'
+  workflow_dispatch: {}
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run the program link checker
+        id: check
+        run: node scripts/check-program-links.js
+
+      - name: Create a GitHub issue if a link is confirmed broken
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Monthly link check found a broken program URL (${new Date().toISOString().slice(0,10)})`,
+              body: 'The monthly automated check found at least one program with a confirmed-dead link (not just a bot-protection 403 — an actual 404 or connection failure). Check the "Actions" tab on GitHub, open this workflow run, and look at the log for the exact program name and URL.\n\nThis needs a human to find the correct current link and update `src/data/programs.json`.',
+              labels: ['broken-link', 'needs-review'],
+            });
