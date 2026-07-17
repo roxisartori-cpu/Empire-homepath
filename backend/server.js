@@ -424,7 +424,8 @@ app.get('/api/admin/stats', async (req, res) => {
 // --- Auth Endpoints ---
 
 app.post('/api/register', async (req, res) => {
-  const { email, password } = req.body;
+  const email = (req.body.email || '').trim();
+  const password = (req.body.password || '').trim();
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
   try {
@@ -469,7 +470,8 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
+  const email = (req.body.email || '').trim();
+  const password = (req.body.password || '').trim();
   console.log('Login attempt for:', email);
   console.log('Password length:', password ? password.length : 0);
   try {

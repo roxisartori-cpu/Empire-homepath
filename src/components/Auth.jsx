@@ -9,6 +9,7 @@ const Auth = ({ onAuthSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // prevent duplicate/overlapping submissions
     setError('');
     setLoading(true);
 
@@ -19,7 +20,7 @@ const Auth = ({ onAuthSuccess }) => {
       const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
       });
 
       const data = await res.json();
@@ -82,7 +83,7 @@ const Auth = ({ onAuthSuccess }) => {
 
         <div className="auth-switch">
           <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? "Don't have an account? Sign up" : "Already have an account? Login"}
+            {isLogin ? "Don't have an account? Sign up" : "Already  Login"}
           </button>
         </div>
       </div>
