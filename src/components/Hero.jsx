@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <section style={{ padding: '64px 16px 56px', textAlign: 'center' }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <div className="auth-eyebrow" style={{ justifyContent: 'center' }}>
+        <div style={{ fontSize: 'clamp(38px,6vw,56px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '20px', color: 'var(--white)' }}>
           Empire <span style={{ color: 'var(--gold)' }}>HomePath</span>
         </div>
         <h1 style={{ fontSize: 'clamp(28px,4vw,40px)', fontWeight: 800, color: 'var(--white)', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: '16px' }}>
