@@ -304,7 +304,7 @@ app.get('/api/admin/stats', async (req, res) => {
         stripe.subscriptions.list({
           ...params,
           status: 'all',
-          expand: ['data.customer', 'data.items.data.price.product'],
+          expand: ['data.customer', 'data.items.data.price'],
         }),
       ),
       listAllStripe((params) => stripe.charges.list({ ...params })),
