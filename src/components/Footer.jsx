@@ -1,21 +1,19 @@
 import React from 'react';
-import { Home } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-warm-800 text-warm-400 py-12 px-4 mt-12 text-center text-sm">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-center gap-2 mb-6 text-white font-bold text-lg">
-          <span className="text-2xl">🏡</span>
-          <span>Empire HomePath</span>
+    <footer style={{ background: 'var(--ink-deep)', borderTop: '1px solid var(--border)', padding: '48px 16px', marginTop: '48px', textAlign: 'center', fontSize: '13px', color: 'var(--muted)' }}>
+      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '20px', color: 'var(--white)', fontWeight: 700, fontSize: '17px' }}>
+          Empire <span style={{ color: 'var(--gold)' }}>HomePath</span>
         </div>
-        <p className="mb-4 max-w-md mx-auto leading-relaxed">
+        <p style={{ marginBottom: '12px', maxWidth: '440px', margin: '0 auto 12px', neHeight: 1.7, color: 'var(--body-c)' }}>
           Supporting New Yorkers on their journey to homeownership with clarity, care, and jargon-free guidance.
         </p>
-        <p className="mb-8">
+        <p style={{ marginBottom: '28px', color: 'var(--muted)' }}>
           Not affiliated with NY State government. Always verify with official program administrators.
         </p>
-        <div className="pt-8 border-t border-warm-600/30 text-xs">
+        <div style={{ paddingTop: '24px', borderTop: '1px solid var(--border)', fontSize: '11px', color: 'var(--muted)' }}>
           &copy; {new Date().getFullYear()} Empire HomePath. All rights reserved.
         </div>
       </div>

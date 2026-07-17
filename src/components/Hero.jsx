@@ -2,23 +2,24 @@ import React from 'react';
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-b from-brand-50 to-white pt-16 pb-20 md:pt-24 md:pb-28 px-4">
-      <div className="max-w-4xl mx-auto text-center animate-fade-in">
-        <div className="text-5xl md:text-6xl mb-6 text-center">🏡</div>
-        <h1 className="text-3xl md:text-4xl font-bold text-brand-800 leading-tight mb-4 text-center">
-          Find help buying your<br className="hidden sm:block" /> first home in New York with <strong>Empire HomePath</strong>
-        </h1>
-        <p className="text-base md:text-lg text-warm-600 max-w-prose mx-auto leading-relaxed mb-8 text-center">
-          Answer a few quick questions to find programs that match your situation.
-          <span className="hidden sm:inline"><br /></span>No jargon, no fine print. Just clear steps to help you get started.
-        </p>
-        <div className="flex justify-center">
-          <a href="#form" className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-md hover:shadow-lg transition-all active:scale-95">
-            Start Your Search
-            <span>→</span>
-          </a>
+    <section style={{ padding: '64px 16px 56px', textAlign: 'center' }}>
+      <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+        <div className="auth-eyebrow" style={{ justifyContent: 'center' }}>
+          Empire <span style={{ color: 'var(--gold)' }}>HomePath</span>
         </div>
-        <p className="mt-6 text-sm text-warm-400 text-center">✨ Trusted by homebuyers across all 62 NY counties</p>
+        <h1 style={{ fontSize: 'clamp(28px,4vw,40px)', fontWeight: 800, color: 'var(--white)', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: '16px' }}>
+          Find help buying your first home in New York
+        </h1>
+        <p style={{ fontSize: '16px', color: 'var(--body-c)', maxWidth: '560px', margin: '0 auto 32px', lineHeight: 1.7 }}>
+          Answer a few quick questions to find programs that match your situation.
+          No jargon, no fine print. Just clear steps to help you get started.
+        </p>
+        <a href="#form" className="btn-gold" style={{ display: 'inline-flex' }}>
+          Start Your Search <span>→</span>
+        </a>
+        <p style={{ marginTop: '24px', fontSize: '13px', color: 'var(--muted)' }}>
+          Trusted by homebuyers across all 62 NY counties
+        </p>
       </div>
     </section>
   );
