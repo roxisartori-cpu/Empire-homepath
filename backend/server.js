@@ -55,8 +55,15 @@ async function runDb(query, params = []) {
 }
 
 function planFromPriceId(priceId) {
-  if (priceId && priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) return 'professional';
-  if (priceId && priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID) return 'individual';
+  if (!priceId) return 'individual';
+  if (
+    priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID_LIVE ||
+    priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID_TEST
+  ) return 'professional';
+  if (
+    priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID_LIVE ||
+    priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID_TEST
+  ) return 'individual';
   return 'individual';
 }
 
@@ -75,14 +82,14 @@ async function findUserByStripeCustomerId(customerId) {
 // Stripe webhook — must use raw body before express.json()
 app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const webhookSecret =
-    process.env.NODE_ENV === 'test'
+    STRIPE_MODE === 'test'
       ? process.env.STRIPE_TEST_WEBHOOK_SECRET
       : process.env.STRIPE_WEBHOOK_SECRET;
   const signature = req.headers['stripe-signature'];
 
   if (!webhookSecret || webhookSecret.includes('your_stripe_webhook')) {
     const secretName =
-      process.env.NODE_ENV === 'test' ? 'STRIPE_TEST_WEBHOOK_SECRET' : 'STRIPE_WEBHOOK_SECRET';
+      STRIPE_MODE === 'test' ? 'STRIPE_TEST_WEBHOOK_SECRET' : 'STRIPE_WEBHOOK_SECRET';
     console.error(`${secretName} is not configured`);
     return res.status(500).json({ error: 'Webhook secret not configured' });
   }
@@ -558,8 +565,27 @@ app.post('/api/user/settings', authenticateToken, async (req, res) => {
 // --- Subscription Endpoints ---
 
 app.post('/api/create-checkout-session', authenticateToken, async (req, res) => {
-  const { priceId } = req.body; // Price IDs for Individual ($150) or Professional ($375)
-  
+  const { plan } = req.body; // 'individual' or 'professional'
+
+  const priceIdsByMode = {
+    test: {
+      individual: process.env.STRIPE_INDIVIDUAL_PRICE_ID_TEST,
+      professional: process.env.STRIPE_PROFESSIONAL_PRICE_ID_TEST,
+    },
+    live: {
+      individual: process.env.STRIPE_INDIVIDUAL_PRICE_ID_LIVE,
+      professional: process.env.STRIPE_PROFESSIONAL_PRICE_ID_LIVE,
+    },
+  };
+
+  const priceId = priceIdsByMode[STRIPE_MODE]?.[plan];
+
+  if (!priceId) {
+    return res.status(400).json({
+      error: `No price ID configured for plan "${plan}" in ${STRIPE_MODE.toUpperCase()} mode. Check STRIPE_${(plan || '').toUpperCase()}_PRICE_ID_${STRIPE_MODE.toUpperCase()} on the backend.`,
+    });
+  }
+
   try {
     const users = await runDb('SELECT email, stripe_customer_id FROM users WHERE id = ?', [req.user.id]);
     if (users.length === 0) return res.status(404).json({ error: 'User not found' });

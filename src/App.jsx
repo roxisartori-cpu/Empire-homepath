@@ -263,7 +263,7 @@ function App() {
                   <NavBar user={user} onLogout={handleLogout} onViewChange={setCurrentView} currentView={currentView} />
                   
                   {!isSubscribed ? (
-                    <SubscriptionPaywall user={user} />
+                    <SubscriptionPaywall user={user} preselectedPlan={new URLSearchParams(location.search).get('plan')} />
                   ) : currentView === 'admin' && user?.role === 'admin' ? (
                     <AdminDashboard />
                   ) : currentView === 'branding' && user?.plan === 'white-label' ? (

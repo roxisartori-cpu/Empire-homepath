@@ -1,10 +1,46 @@
 import React, { useState } from 'react';
 
-const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
-  const [loading, setLoading] = useState(false);
+const PLAN_DETAILS = {
+  individual: {
+    tier: 'Individual',
+    price: '$150',
+    feats: [
+      'Full 62-county program access',
+      'Unlimited program searches',
+      'Client-ready PDF reports (download/print)',
+      'Email support',
+      'Up-to-date — static information updated upon each search',
+    ],
+    buttonLabel: 'Get Started',
+    buttonClass: 'btn-gold-outline',
+  },
+  professional: {
+    tier: 'Professional',
+    price: '$375',
+    feats: [
+      'Up to 4 personal accounts',
+      'Full 62-county program access',
+      'Unlimited program searches',
+      'Client-ready PDF reports (download/print)',
+      'Email support',
+      'Up-to-date — static information updated upon each search',
+    ],
+    buttonLabel: 'Go Professional',
+    buttonClass: 'btn-gold',
+  },
+};
+
+const SubscriptionPaywall = ({ user, onSubscribeSuccess, preselectedPlan }) => {
+  const [loading, setLoading] = tate(false);
   const [error, setError] = useState('');
 
-  const handleSubscribe = async (priceId) => {
+  const validPreselected = preselectedPlan === 'individual' || preselectedPlan === 'professional'
+    ? preselectedPlan
+    : null;
+
+  const [showAllPlans, setShowAllPlans] = useState(!validPreselected);
+
+  const handleSubscribe = async (plan) => {
     setLoading(true);
     setError('');
     const API_BASE_URL = import.meta.env.VITE_API_URL || '';
@@ -17,7 +53,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ plan }),
       });
 
       const data = await res.json();
@@ -32,6 +68,60 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
       setLoading(false);
     }
   };
+
+  if (validPreselected && !showAllPlans) {
+    const plan = PLAN_DETAILS[validPreselected];
+    return (
+      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '64px 24px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div className="auth-eyebrow" style={{ justifyContent: 'center' }}>Confirm Your Plan</div>
+          <h2 style={{ fontSize: 'clamp(24px,3vw,32px)', fontWeight: 800, color: 'var(--white)', letterSpacing: '-0.02em' }}>
+            You're subscribing to <span style={{ color: 'var(--gold)' }}>{plan.tier}</span>
+          </h2>
+        </div>
+
+        {error && (
+          <div className="auth-error" style={{ textAlign: 'center', marginBottom: '24px' }}>
+            {error}
+          </div>
+        )}
+
+        <div className={`plan-card ${validPreselected === 'professional' ? 'is-featured' : ''}`}>
+          <div className="plan-tier">{plan.tier}</div>
+          <div className="plan-price-row">
+            <span className="plan-price">{plan.price}</span>
+            <span className="plan-period">/mo</span>
+          </div>
+          <ul className="plan-feats">
+            {plan.feats.map((feat) => (
+              <li key={feat}><span className="ck">✓</span> {feat}</li>
+            ))}
+          </ul>
+          <button
+            onClick={() => handleSubscribe(validPreselected)}
+            disabled={loading}
+            className={plan.buttonClass}
+            style={{ width: '100%' }}
+          >
+            {loading ? 'Redirecting to secure checkout...' : plan.buttonLabel}
+          </button>
+        </div>
+
+        <p style={{ marginTop: '24px', textAlign: 'center' }}>
+          <button
+            onClick={() => setShowAllPlans(true)}
+            style={{ color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline', fontFamily: "'Inter',sans-serif" }}
+          >
+            Not the right plan? See all options
+          </button>
+        </p>
+
+        <p style={{ marginTop: '16px', textAlign: 'center', color: 'var(--muted)', fontSize: '13px' }}>
+          Secure billing with Stripe. Cancel anytime in your dashboard.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: '960px', margin: '0 auto', padding: '64px 24px' }}>
@@ -53,7 +143,6 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
       )}
 
       <div className="plan-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-        {/* Individual Tier */}
         <div className="plan-card">
           <div className="plan-tier">Individual</div>
           <div className="plan-price-row">
@@ -61,18 +150,12 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
             <span className="plan-period">/mo</span>
           </div>
           <ul className="plan-feats">
-            {[
-              'Full 62-county program access',
-              'Unlimited program searches',
-              'Client-ready PDF reports (download/print)',
-              'Email support',
-              'Up-to-date — static information updated upon each search',
-            ].map((feat) => (
+            {PLAN_DETAILS.individual.feats.map((feat) => (
               <li key={feat}><span className="ck">✓</span> {feat}</li>
             ))}
           </ul>
           <button
-            onClick={() => handleSubscribe('price_1TpszdCjCXhGzH7HxZDe5vKw')}
+            onClick={() => handleSubscribe('individual')}
             disabled={loading}
             className="btn-gold-outline"
             style={{ width: '100%' }}
@@ -81,37 +164,28 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
           </button>
         </div>
 
-        {/* Professional Tier */}
         <div className="plan-card is-featured">
-          <div className="plan-badge">Most Popular</div>
+          <div className="plan-badge">Most Popur</div>
           <div className="plan-tier">Professional</div>
           <div className="plan-price-row">
             <span className="plan-price">$375</span>
             <span className="plan-period">/mo</span>
           </div>
           <ul className="plan-feats">
-            {[
-              'Up to 4 personal accounts',
-              'Full 62-county program access',
-              'Unlimited program searches',
-              'Client-ready PDF reports (download/print)',
-              'Email support',
-              'Up-to-date — static information updated upon each search',
-            ].map((feat) => (
+            {PLAN_DETAILS.professional.feats.map((feat) => (
               <li key={feat}><span className="ck">✓</span> {feat}</li>
             ))}
           </ul>
           <button
-            onClick={() => handleSubscribe('price_1Tpt0zCjCXhGzH7Hjk2He2LB')}
+            onClick={() => handleSubscribe('professional')}
             disabled={loading}
-         className="btn-gold"
+            className="btn-gold"
             style={{ width: '100%' }}
           >
             Go Professional
           </button>
         </div>
 
-        {/* Custom / Enterprise Tier */}
         <div className="plan-card">
           <div className="plan-tier">Custom</div>
           <div className="plan-price-row">
@@ -120,7 +194,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
           <ul className="plan-feats">
             {[
               'Platform under your brand',
-              'Multi-user team access',
+            'Multi-user team access',
               'API data integration',
               'Dedicated account manager',
               'Custom onboarding',
@@ -134,7 +208,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess }) => {
             style={{ width: '100%' }}
           >
             Contact Us
-        </button>
+          </button>
         </div>
       </div>
 
