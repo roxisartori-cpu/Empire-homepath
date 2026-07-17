@@ -31,7 +31,7 @@ const PLAN_DETAILS = {
 };
 
 const SubscriptionPaywall = ({ user, onSubscribeSuccess, preselectedPlan }) => {
-  const [loading, setLoading] = tate(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const validPreselected = preselectedPlan === 'individual' || preselectedPlan === 'professional'
