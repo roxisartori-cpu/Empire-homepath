@@ -200,7 +200,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess, preselectedPlan }) => {
               'Multi-user team access.',
               'Unlimited Full platform access.',
             ].map((feat) => (
-              <li key={feat}><span className="ck">✓</span> {fe/li>
+              <li key={feat}><span className="ck">✓</span> {feat}</li>
             ))}
           </ul>
           <button
