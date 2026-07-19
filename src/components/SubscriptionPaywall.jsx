@@ -193,13 +193,14 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess, preselectedPlan }) => {
           </div>
           <ul className="plan-feats">
             {[
-              'Platform under your brand',
-            'Multi-user team access',
+              'All 62 NY Counties, State, Government and Municipal program access.',
               'API data integration',
-              'Dedicated account manager',
-              'Custom onboarding',
+              'Client Ready PDF reports Download/Print',
+              'Your Company or Organization branding on search results.',
+              'Multi-user team access.',
+              'Unlimited Full platform access.',
             ].map((feat) => (
-              <li key={feat}><span className="ck">✓</span> {feat}</li>
+              <li key={feat}><span className="ck">✓</span> {fe/li>
             ))}
           </ul>
           <button
