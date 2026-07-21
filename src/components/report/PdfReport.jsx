@@ -70,7 +70,7 @@ const PdfReport = () => {
           style={{ borderBottom: `3px solid ${branding?.primaryColor || '#2563eb'}` }}
         >
           <div className="flex items-center gap-4">
-            {branding?.logoUrl ? (
+            {branding?.logo ? (
               <img src={branding.logoUrl} alt="Company Logo" className="w-14 h-14 object-contain rounded-xl" />
             ) : (
               <div className="w-14 h-14 bg-brand-100 rounded-xl flex items-center justify-center">

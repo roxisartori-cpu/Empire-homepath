@@ -5,7 +5,7 @@ const PLAN_DETAILS = {
     tier: 'Individual',
     price: '$150',
     feats: [
-      'Full 62-county program access',
+      'Full access to all 62 NY counties — state, government, and municipal programs.',
       'Unlimited program searches',
       'Client-ready PDF reports (download/print)',
       'Email support',
@@ -19,7 +19,7 @@ const PLAN_DETAILS = {
     price: '$375',
     feats: [
       'Up to 4 personal accounts',
-      'Full 62-county program access',
+      'Full access to all 62 NY counties — state, government, and municipal programs.',
       'Unlimited program searches',
       'Client-ready PDF reports (download/print)',
       'Email support',
@@ -193,7 +193,7 @@ const SubscriptionPaywall = ({ user, onSubscribeSuccess, preselectedPlan }) => {
           </div>
           <ul className="plan-feats">
             {[
-              'All 62 NY Counties, State, Government and Municipal program access.',
+              'Full access to all 62 NY counties — state, government, and municipal programs.',
               'API data integration',
               'Client Ready PDF reports Download/Print',
               'Your Company or Organization branding on search results.',
