@@ -71,7 +71,7 @@ const PdfReport = () => {
         >
           <div className="flex items-center gap-4">
             {branding?.logo ? (
-              <img src={branding.logoUrl} alt="Company Logo" className="w-14 h-14 object-contain rounded-xl" />
+              <img src={branding.logo} alt="Company Logo" className="w-14 h-14 object-contain rounded-xl" />
             ) : (
               <div className="w-14 h-14 bg-brand-100 rounded-xl flex items-center justify-center">
                 <span className="text-2xl">🏡</span>
