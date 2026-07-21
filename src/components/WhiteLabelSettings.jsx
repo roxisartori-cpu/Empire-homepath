@@ -197,7 +197,7 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
                       <p style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a' }}>{prog.name}</p>
                       <p style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>{prog.tag}</p>
                     </div>
-                    <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '999px', backgroundColor: settings.secondaryColor + '20', color:ngs.secondaryColor, border: `1px solid ${settings.secondaryColor}` }}>Open</span>
+                    <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '999px', backgroundColor: settings.secondaryColor + '20', color: settings.secondaryColor, border: `1px solid ${settings.secondaryColor}` }}>Open</span>
                   </div>
                 ))}
               </div>
