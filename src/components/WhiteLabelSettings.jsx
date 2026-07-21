@@ -131,7 +131,7 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
               placeholder="https://example.com/logo.png"
               className="field-input"
             />
-            <p className="field-hint">Paste a direct link to your logo image (PNG or JPG works best)</p>
+            <p className="field-hint">Must be a direct link ending in .png or .jpg — not a website homepage</p>
           </div>
 
           <div className="field-group">
@@ -157,46 +157,52 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h3 style={{ fontFamily: "'DM Mono',monospace", fontSize: '11px', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', opacity: 0.85, paddingLeft: '4px' }}>Live Preview</h3>
+          <h3 style={{ fontFamily: "'DM Mono',monospace", fontSize: '11px', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', opacity: 0.85, paddingLeft: '4px' }}>Live Preview — how your clients will see it</h3>
           <div style={{ background: 'var(--white)', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,0.3)' }}>
             <div style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: settings.primaryColor }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 {settings.logo ? (
-                  <img src={settings.logo} alt="Logo" style={{ height: '32px', objectFit: 'contain' }} />
-                ) : (
-                  <div style={{ width: '32px', height: '32px', background: 'rgba(255,255,255,0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '10px' }}>LOGO</div>
-                )}
+                  <img
+                    src={settings.logo}
+                    alt="Logo"
+                    style={{ height: '32px', width: '32px', objectFit: 'contain', borderRadius: '6px', background: '#fff' }}
+                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                  />
+                ) : null}
+                <div style={{ width: '32px', height: '32px', background: 'rgba(255,255,255,0.25)', borderRadius: '8px', display: settings.logo ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '10px' }}>LOGO</div>
                 <span style={{ color: '#fff', fontWeight: 700 }}>{settings.companyName || 'Your Company'}</span>
               </div>
               <div style={{ width: '24px', height: '24px', borderRadius: '999px', background: 'rgba(255,255,255,0.2)' }}></div>
             </div>
 
             <div style={{ padding: '24px', background: '#f8f8f8' }}>
-              <div style={{ height: '16px', width: '33%', background: '#e5e5e5', borderRadius: '4px', marginBottom: '24px' }}></div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                {[0, 1].map((i) => (
-                  <div key={i} style={{ height: '80px', background: '#fff', borderRadius: '12px', border: '1px solid #eee', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div style={{ height: '12px', width: '50%', background: '#eee', borderRadius: '4px' }}></div>
-                    <div style={{ height: '20px', width: '75%', background: '#e5e5e5', borderRadius: '4px' }}></div>
-                  </div>
-                ))}
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>Orange County · 3 Programs Found</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #eee', padding: '14px' }}>
+                  <p style={{ fontSize: '11px', color: '#999', fontWeight: 600, marginBottom: '4px' }}>DPA LOAN</p>
+                  <p style={{ fontSize: '15px', fontWeight: 700, color: '#1a1a1a' }}>$10,000</p>
+                </div>
+                <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #eee', padding: '14px' }}>
+                  <p style={{ fontSize: '11px', color: '#999', fontWeight: 600, marginBottom: '4px' }}>FORGIVABLE GRANT</p>
+                  <p style={{ fontSize: '15px', fontWeight: 700, color: '#1a1a1a' }}>$15,000</p>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {[0, 1].map((i) => (
-                  <div key={i} style={{ background: '#fff', padding: '16px', borderRadius: '12px', border: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eee' }}></div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <div style={{ height: '12px', width: '128px', background: '#e5e5e5', borderRadius: '4px' }}></div>
-                        <div style={{ height: '8px', width: '96px', background: '#eee', borderRadius: '4px' }}></div>
-                      </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { name: 'County Down Payment Assistance', tag: 'Forgivable · ≤ 120% AMI' },
+                  { name: 'HOME Investment Grant Program', tag: 'Non-Repayable · ≤ 80% AMI' },
+                ].map((prog) => (
+                  <div key={prog.name} style={{ background: '#fff', padding: '14px 16px', borderRadius: '12px', border: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <p style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a' }}>{prog.name}</p>
+                      <p style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>{prog.tag}</p>
                     </div>
-                    <div style={{ width: '64px', height: '24px', borderRadius: '999px', backgroundColor: settings.secondaryColor + '20', border: `1px solid ${settings.secondaryColor}` }}></div>
+                    <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '999px', backgroundColor: settings.secondaryColor + '20', color:ngs.secondaryColor, border: `1px solid ${settings.secondaryColor}` }}>Open</span>
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: '32px', paddingTop: '16px', borderTop: '1px solid #eee', textAlign: 'center' }}>
+              <div style={{ marginTop: '28px', paddingTop: '16px', borderTop: '1px solid #eee', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', fontWeight: 700, color: settings.primaryColor }}>{settings.companyName || 'Your Company'}</p>
                 <p style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>{settings.contactInfo || 'Contact details appear here'}</p>
               </div>
