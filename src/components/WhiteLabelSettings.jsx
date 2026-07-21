@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Palette, Upload, Globe, Save, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Palette, Upload, Globe, Save, CheckCircle, FileText, X } from 'lucide-react';
 
 const WhiteLabelSettings = ({ user, onUpdateUser }) => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [settings, setSettings] = useState({
     logo: '',
     primaryColor: '#C9A84C',
@@ -24,6 +27,71 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
       }
     }
   }, [user]);
+
+  const handleLogoFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please choose an image file (PNG, JPG, or SVG).');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Please choose an image smaller than 2MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setSettings((prev) => ({ ...prev, logo: event.target.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveLogo = () => {
+    setSettings((prev) => ({ ...prev, logo: '' }));
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDownloadSample = () => {
+    const sampleFormData = {
+      county: 'Orange',
+      income: 85000,
+      householdSize: 3,
+      purchasePrice: 300000,
+      propertyType: 'Single Family',
+      isFirstTimeBuyer: true,
+    };
+
+    const sampleResults = [
+      {
+        id: 'sample-1',
+        name: 'County Down Payment Assistance',
+        description: 'A forgivable loan providing up to $10,000 toward down payment and closing costs for eligible first-time homebuyers.',
+        matchScore: 'Strong',
+        incomeLimit: '\u2264 120% AMI',
+        priceLimit: '$350,000',
+        url: 'https://hcr.ny.gov',
+      },
+      {
+        id: 'sample-2',
+        name: 'HOME Investment Grant Program',
+        description: 'A non-repayable grant funded through federal HOME Investment Partnerships, providing up to $15,000 for down payment and closing costs.',
+        matchScore: 'Good',
+        incomeLimit: '\u2264 80% AMI',
+        priceLimit: '$325,000',
+        url: 'https://hud.gov/homebuying',
+      },
+    ];
+
+    navigate('/report', {
+      state: {
+        results: sampleResults,
+        formData: sampleFormData,
+        user: { ...user, plan: 'white-label', white_label_settings: settings },
+      },
+    });
+  };
 
   const handleSave = async () => {
     setLoading(true);
@@ -122,16 +190,38 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
 
           <div className="field-group">
             <label className="field-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Upload size={13} /> Logo URL
+              <Upload size={13} /> Company Logo
             </label>
+            {settings.logo ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', border: '1px solid var(--border-mid)', borderRadius: '10px', background: 'var(--ink-lift)' }}>
+                <img src={settings.logo} alt="Logo preview" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '6px', background: '#fff' }} />
+                <span style={{ fontSize: '12px', color: 'var(--body-c)', flex: 1 }}>Logo uploaded</span>
+                <button
+                  type="button"
+                  onClick={handleRemoveLogo}
+                  style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', padding: '4px' }}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="field-input"
+                style={{ cursor: 'pointer', textAlign: 'left', color: 'var(--muted)' }}
+              >
+                Click to upload your logo (PNG, JPG, or SVG)
+              </button>
+            )}
             <input
-              type="text"
-              value={settings.logo}
-              onChange={(e) => setSettings({...settings, logo: e.target.value})}
-              placeholder="https://example.com/logo.png"
-              className="field-input"
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleLogoFileChange}
+              style={{ display: 'none' }}
             />
-            <p className="field-hint">Must be a direct link ending in .png or .jpg — not a website homepage</p>
+            <p className="field-hint">Max 2MB. Square logos with a transparent background work best.</p>
           </div>
 
           <div className="field-group">
@@ -154,6 +244,17 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
           >
             {saved ? <><CheckCircle size={18} /> Settings Saved!</> : <><Save size={18} /> Save Branding</>}
           </button>
+
+          <button
+            onClick={handleDownloadSample}
+            className="btn-gold-outline"
+            style={{ width: '100%' }}
+          >
+            <FileText size={18} /> Download Sample Branded PDF
+          </button>
+          <p className="field-hint" style={{ textAlign: 'center', marginTop: '-8px' }}>
+            Opens a real sample report with your current settings — use your browser's Print dialog to save it as a PDF.
+          </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
