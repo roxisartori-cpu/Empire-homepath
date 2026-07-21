@@ -64,7 +64,10 @@ function planFromPriceId(priceId) {
     priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID_LIVE ||
     priceId === process.env.STRIPE_INDIVIDUAL_PRICE_ID_TEST
   ) return 'individual';
-  return 'individual';
+  // Any other price ID means it's a custom, one-off price you created
+  // specifically for a negotiated Enterprise/Custom deal — so treat it
+  // as white-label automatically, with no manual admin step needed.
+  return 'white-label';
 }
 
 async function findUserByEmail(email) {
