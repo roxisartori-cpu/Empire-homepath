@@ -20,6 +20,8 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
   }
 
   const handlePrintClick = () => {
+    const clientName = window.prompt("Client's name (optional — leave blank to skip):", '');
+
     const formattedResults = programs.map(p => ({
       id: p.program_id || p.id,
       name: p.program_name,
@@ -27,13 +29,15 @@ const ResultsList = ({ programs, onSaveClick, verificationStates = {}, onVerifyL
       matchScore: p.matchStrength,
       incomeLimit: typeof p.income_limits === 'string' ? p.income_limits : 'Varies',
       priceLimit: typeof p.purchase_price_limits === 'string' ? p.purchase_price_limits : 'Varies',
+      category: p.category || null,
+      dataYear: p.data_year || null,
       url: p.official_url
     }));
 
     navigate('/report', {
       state: {
         results: formattedResults,
-        formData,
+        formData: { ...formData, clientName: clientName?.trim() || null },
         user
       }
     });

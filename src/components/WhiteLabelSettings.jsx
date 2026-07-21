@@ -36,8 +36,8 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
       alert('Please choose an image file (PNG, JPG, or SVG).');
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      alert('Please choose an image smaller than 2MB.');
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Please choose an image smaller than 5MB.');
       return;
     }
 
@@ -61,6 +61,7 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
       purchasePrice: 300000,
       propertyType: 'Single Family',
       isFirstTimeBuyer: true,
+      clientName: 'Jane Doe',
     };
 
     const sampleResults = [
@@ -71,6 +72,8 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
         matchScore: 'Strong',
         incomeLimit: '\u2264 120% AMI',
         priceLimit: '$350,000',
+        category: 'Down Payment Assistance',
+        dataYear: new Date().getFullYear(),
         url: 'https://hcr.ny.gov',
       },
       {
@@ -80,6 +83,8 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
         matchScore: 'Good',
         incomeLimit: '\u2264 80% AMI',
         priceLimit: '$325,000',
+        category: 'Municipal',
+        dataYear: new Date().getFullYear(),
         url: 'https://hud.gov/homebuying',
       },
     ];
@@ -221,7 +226,7 @@ const WhiteLabelSettings = ({ user, onUpdateUser }) => {
               onChange={handleLogoFileChange}
               style={{ display: 'none' }}
             />
-            <p className="field-hint">Max 2MB. Square logos with a transparent background work best.</p>
+            <p className="field-hint">Max 5MB. Square logos with a transparent background work best.</p>
           </div>
 
           <div className="field-group">

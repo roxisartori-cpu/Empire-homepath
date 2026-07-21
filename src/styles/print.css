@@ -22,7 +22,19 @@
     text-decoration: underline !important;
   }
 
+  .report-section {
+    break-inside: avoid;
+  }
+
+  .report-page-break {
+    break-before: page;
+  }
+
+  .report-program-card {
+    break-inside: avoid;
+  }
+
   @page {
-    margin: 1cm;
+    margin: 1.5cm;
   }
 }

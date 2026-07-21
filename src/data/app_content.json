@@ -76,6 +76,18 @@
     {
       "term": "Closing Costs",
       "definition": "One-time fees paid at the very end of the home buying process. These include things like lawyer fees, taxes, and title insurance, usually totaling 2% to 5% of the home's price."
+    },
+    {
+      "term": "AMI (Area Median Income)",
+      "definition": "The midpoint household income for a specific county, published annually by HUD. Most assistance programs set eligibility as a percentage of AMI (for example, \u2264 80% AMI) rather than a flat dollar amount, since it adjusts for local cost of living."
+    },
+    {
+      "term": "Forgivable Loan",
+      "definition": "Down payment help structured as a loan that is fully forgiven if you stay in the home for a set number of years (often 5-10). If you sell or refinance too early, you may have to repay some or all of it."
+    },
+    {
+      "term": "Down Payment Assistance (DPA)",
+      "definition": "Any grant, loan, or matched-savings program that helps cover the upfront cash needed to buy a home, separate from your actual mortgage. Some DPA is a true gift; other DPA must eventually be repaid."
     }
   ]
 }
