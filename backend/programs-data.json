@@ -246,5 +246,17 @@
     "category": "Municipal / Federal",
     "purchase_price_limits": "Varies by county and property type.",
     "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "homehq-closing-cost",
+    "category": "Municipal",
+    "program_name": "Home HeadQuarters Closing Cost Assistance",
+    "description": "Nonprofit-administered loans up to $5,000 to help first-time homebuyers cover closing costs, at a simple interest rate of 3-6% depending on income, payable over 5 years.",
+    "income_limits": "No hard cap; buyers below 80% of HUD area median income qualify for the lower 3% interest rate.",
+    "purchase_price_limits": "Not specified; standard first mortgage qualification applies.",
+    "counties_served": "All of New York State except New York City",
+    "property_type_eligibility": "Owner-occupied primary residence; first-time homebuyers only.",
+    "official_url": "https://www.homehq.org/homebuyer-lending",
+    "data_year": 2026
   }
 ]

@@ -21,7 +21,16 @@ export const matchPrograms = (programs, userData) => {
     const desc = (program.description || "").toLowerCase();
 
     // 1. County & City Filter
-    if (program.counties_served && program.counties_served !== "All 62 counties in New York State") {
+    if (name.includes("home headquarters")) {
+      // Statewide except NYC's 5 boroughs. Handled as its own unconditional
+      // check (rather than inside the servedStr substring logic below)
+      // because "New York" the county collides with "New York State" and
+      // "New York City" as substrings of the description text, which would
+      // otherwise falsely mark this as already matching for that county.
+      const userCounty = (county || "").toLowerCase();
+      const nycCounties = ["bronx", "kings", "new york", "queens", "richmond"];
+      if (nycCounties.includes(userCounty)) score -= 100;
+    } else if (program.counties_served && program.counties_served !== "All 62 counties in New York State") {
       const servedStr = program.counties_served.toLowerCase();
       const userCounty = (county || "").toLowerCase();
       const userCity = (city || "").toLowerCase();
