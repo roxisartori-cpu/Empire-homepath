@@ -317,6 +317,41 @@ function monthlyAmountCents(sub) {
 }
 
 // Admin Stripe stats — mounted directly on the main server so Render always picks it up
+app.get('/api/admin/panel-users', async (req, res) => {
+  if (req.headers['x-admin-key'] !== process.env.ADMIN_SECRET_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    const users = await runDb('SELECT id, email, plan, subscription_status, trial_end, created_at, role, seat_limit, team_owner_id FROM users');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users', details: err.message });
+  }
+});
+
+app.post('/api/admin/panel-update-user', async (req, res) => {
+  if (req.headers['x-admin-key'] !== process.env.ADMIN_SECRET_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  const { userId, plan, subscription_status, seat_limit } = req.body;
+
+  try {
+    let updates = [];
+    let params = [];
+    if (plan) { updates.push('plan = ?'); params.push(plan); }
+    if (subscription_status) { updates.push('subscription_status = ?'); params.push(subscription_status); }
+    if (seat_limit !== undefined) { updates.push('seat_limit = ?'); params.push(seat_limit === '' || seat_limit === null ? null : Number(seat_limit)); }
+
+    if (updates.length === 0) return res.status(400).json({ error: 'No updates provided' });
+
+    params.push(userId);
+    await runDb(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user', details: err.message });
+  }
+});
+
 app.get('/api/admin/stats', async (req, res) => {
   if (req.headers['x-admin-key'] !== process.env.ADMIN_SECRET_KEY) {
     return res.status(401).json({ error: 'Unauthorized' });

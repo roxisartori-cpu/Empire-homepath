@@ -560,6 +560,10 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       All Subscribers
     </button>
+    <button class="nav-item" onclick="showSection('accounts',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12" stroke="currentColor" stroke-width="1.5"/></svg>
+      Accounts
+    </button>
     <button class="nav-item" onclick="showSection('revenue',this)">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1 13L5 8l3 3 3-5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Revenue & Billing
@@ -771,6 +775,43 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
                   <div class="empty-state">
                     <div class="empty-state-icon">🔌</div>
                     <div class="empty-state-text">No subscribers yet — or Stripe not connected.<br/>Subscribers will appear here automatically once payments come in.</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ACCOUNTS (Plan & Seat Management) ══ -->
+    <div class="section" id="section-accounts">
+      <div class="section-header">
+        <div class="section-title">Accounts — Plan &amp; Seat Management</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;">MAKE CHANGES DIRECTLY HERE</div>
+      </div>
+      <div class="card">
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Search by email…" oninput="filterAccounts(this.value)"/>
+          <div class="table-count" id="accountCount">0 accounts</div>
+        </div>
+        <div class="card-body">
+          <table class="data-table" id="accountTable">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Plan</th>
+                <th>Seats</th>
+                <th>Status</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody id="accountTableBody">
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state">
+                    <div class="empty-state-icon">👤</div>
+                    <div class="empty-state-text">Loading accounts…</div>
                   </div>
                 </td>
               </tr>
@@ -1063,7 +1104,7 @@ function statusBadge(status){
   const s = (status || '').toLowerCase();
   if(s === 'active' || s === 'paid') return '<span class="badge badge-active">Active</span>';
   if(s === 'cancelled' || s === 'canceled') return '<span class="badge badge-cancelled">Cancelled</span>';
-  if(s === 'past due') return '<span class="badge badge-pastdue">Past Due</span>';
+  if(s === 'past due' || s === 'past_due') return '<span class="badge badge-pastdue">Past Due</span>';
   return `<span class="badge">${status || '—'}</span>`;
 }
 function setLoading(on){
@@ -1275,7 +1316,77 @@ function refreshData(){
   loadStripeStats().finally(()=>{ btn.textContent='↻ Refresh'; });
 }
 
+// ══ ACCOUNTS (Plan & Seat Management) ══
+let allAccounts = [];
+
+async function loadAccounts(){
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/panel-users`, {
+      headers: { 'x-admin-key': ADMIN_KEY }
+    });
+    if (!res.ok) throw new Error('Failed to load accounts');
+    allAccounts = await res.json();
+    renderAccounts(allAccounts);
+  } catch (err) {
+    docntById('accountTableBody').innerHTML =
+      `<tr><td colspan="5"><div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Could not load accounts: ${err.message}</div></div></td></tr>`;
+  }
+}
+
+function renderAccounts(list){
+  const body = document.getElementById('accountTableBody');
+  document.getElementById('accountCount').textContent = `${list.length} account${list.length === 1 ? '' : 's'}`;
+  if(!list.length){
+    body.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-state-icon">👤</div><div class="empty-state-text">No accounts yet.</div></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = list.map(u => `
+    <tr>
+      <td>
+        <div style="font-weight:600;color:var(--white);">${u.email}</div>
+        ${u.team_owner_id ? '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Team member</div>' : ''}
+      </td>
+      <td>
+        <select class="filter-select" style="min-width:140px;" onchange="updateAccount('${u.id}', {plan: this.value})">
+          <option value="free" ${u.plan==='free'||!u.plan?'selected':''}>Free</option>
+          <option value="individual" ${u.plan==='individual'?'selected':''}>Individual</option>
+          <option value="professional" ${u.plan==='professional'?'selected':''}>Professional</option>
+          <option value="white-label" ${u.plan==='white-label'?'selected':''}>Custom / White-Label</option>
+        </select>
+      </td>
+      <td>
+        ${(u.plan==='professional'||u.plan==='white-label') ? `
+          <input type="number" min="1" value="${u.seat_limit ?? ''}" placeholder="Unlimited"
+            style="width:80px;background:var(--ink-lift);border:1px solid var(--border-mid);border-radius:8px;padding:6px 8px;color:var(--white);font-size:13px;"
+            onblur="updateAccount('${u.id}', {seat_limit: this.value === '' ? null : Number(this.value)})"/>
+        ` : '<span style="color:var(--muted);">—</span>'}
+      </td>
+      <td>${statusBadge(u.subscription_status)}</td>
+      <td>${formatDate(u.created_at)}</td>
+    </tr>`).join('');
+}
+
+async function updateAccount(userId, updates){
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/panel-update-user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
+      body: JSON.stringify({ userId, ...updates })
+    });
+    if (!res.ok) throw new Error('Update failed');
+    await loadAccounts();
+  } catch (err) {
+    alert(`Could not save change: ${err.message}`);
+  }
+}
+
+function filterAccounts(query){
+  const q = (query || '').toLowerCase().trim();
+  renderAccounts(allAccounts.filter(u => u.email.toLowerCase().includes(q)));
+}
+
 loadStripeStats();
+loadAccounts();
 </script>
 </body>
 </html>
