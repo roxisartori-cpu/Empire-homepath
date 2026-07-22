@@ -70,6 +70,40 @@ function planFromPriceId(priceId) {
   return 'white-label';
 }
 
+// Resolves the plan/subscription_status/branding that should actually govern
+// this user's access. If they're an invited teammate (team_owner_id set),
+// their access always comes from whoever owns the subscription — never
+// their own row. This is the single source of truth for "is this account
+// allowed in" across the whole app, so an owner cancelling or lapsing
+// automatically and immediately cuts off every teammate too.
+async function getEffectiveAccess(userRow) {
+  if (!userRow.team_owner_id) {
+    return {
+      plan: userRow.plan,
+      subscription_status: userRow.subscription_status,
+      white_label_settings: userRow.white_label_settings,
+      is_team_member: false,
+    };
+  }
+
+  const ownerRows = await runDb(
+    'SELECT plan, subscription_status, white_label_settings FROM users WHERE id = ?',
+    [userRow.team_owner_id]
+  );
+
+  if (ownerRows.length === 0) {
+    return { plan: 'free', subscription_status: null, white_label_settings: null, is_team_member: true };
+  }
+
+  const owner = ownerRows[0];
+  return {
+    plan: owner.plan,
+    subscription_status: owner.subscription_status,
+    white_label_settings: owner.white_label_settings,
+    is_team_member: true,
+  };
+}
+
 async function findUserByEmail(email) {
   if (!email) return null;
   const rows = await runDb('SELECT * FROM users WHERE LOWER(email) = LOWER(?)', [email]);
@@ -158,8 +192,9 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
           break;
         }
 
+        const seatLimitUpdate = plan === 'professional' ? ', seat_limit = 4' : '';
         await runDb(
-          'UPDATE users SET subscription_status = ?, plan = ?, stripe_customer_id = COALESCE(NULLIF(stripe_customer_id, \'\'), ?) WHERE id = ?',
+          `UPDATE users SET subscription_status = ?, plan = ?, stripe_customer_id = COALESCE(NULLIF(stripe_customer_id, ''), ?)${seatLimitUpdate} WHERE id = ?`,
           ['active', plan, customerId || '', user.id],
         );
         console.log(`Activated subscription for ${user.email} (plan=${plan})`);
@@ -507,9 +542,11 @@ app.post('/api/login', async (req, res) => {
 
 app.get('/api/me', authenticateToken, async (req, res) => {
   try {
-    const users = await runDb('SELECT id, email, plan, subscription_status, white_label_settings, role FROM users WHERE id = ?', [req.user.id]);
+    const users = await runDb('SELECT id, email, plan, subscription_status, white_label_settings, role, team_owner_id, seat_limit FROM users WHERE id = ?', [req.user.id]);
     if (users.length === 0) return res.status(404).json({ error: 'User not found' });
-    res.json(users[0]);
+    const userRow = users[0];
+    const access = await getEffectiveAccess(userRow);
+    res.json({ ...userRow, ...access });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user', details: err.message });
   }
@@ -520,7 +557,7 @@ app.get('/api/me', authenticateToken, async (req, res) => {
 app.get('/api/admin/users', authenticateToken, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
   try {
-    const users = await runDb('SELECT id, email, plan, subscription_status, trial_end, created_at, role FROM users');
+    const users = await runDb('SELECT id, email, plan, subscription_status, trial_end, created_at, role, seat_limit, team_owner_id FROM users');
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users', details: err.message });
@@ -529,7 +566,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
 
 app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
-  const { userId, plan, subscription_status, trial_end, role, white_label_settings } = req.body;
+  const { userId, plan, subscription_status, trial_end, role, white_label_settings, seat_limit } = req.body;
   
   try {
     let updates = [];
@@ -539,6 +576,7 @@ app.post('/api/admin/update-user', authenticateToken, async (req, res) => {
     if (trial_end) { updates.push('trial_end = ?'); params.push(trial_end); }
     if (role) { updates.push('role = ?'); params.push(role); }
     if (white_label_settings) { updates.push('white_label_settings = ?'); params.push(JSON.stringify(white_label_settings)); }
+    if (seat_limit !== undefined) { updates.push('seat_limit = ?'); params.push(seat_limit === '' || seat_limit === null ? null : Number(seat_limit)); }
 
     if (updates.length === 0) return res.status(400).json({ error: 'No updates provided' });
 
@@ -644,10 +682,11 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
 app.post('/api/verify', authenticateToken, async (req, res) => {
   // Check subscription before allowing verification
   try {
-    const users = await runDb('SELECT subscription_status, plan, role FROM users WHERE id = ?', [req.user.id]);
+    const users = await runDb('SELECT subscription_status, plan, role, team_owner_id, white_label_settings FROM users WHERE id = ?', [req.user.id]);
     const user = users[0];
-    
-    const isSubscribed = user?.subscription_status === 'active';
+
+    const access = user ? await getEffectiveAccess(user) : null;
+    const isSubscribed = access?.subscription_status === 'active';
     const isAdmin = user?.role === 'admin';
 
     if (!isSubscribed && !isAdmin) {

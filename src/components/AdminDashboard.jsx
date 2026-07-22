@@ -178,6 +178,7 @@ const AdminDashboard = () => {
               <tr className="bg-warm-50 text-warm-600 text-xs uppercase tracking-widest">
                 <th className="px-6 py-4 font-black">Professional</th>
                 <th className="px-6 py-4 font-black">Plan Tier</th>
+                <th className="px-6 py-4 font-black">Seats</th>
                 <th className="px-6 py-4 font-black">Status</th>
                 <th className="px-6 py-4 font-black">Trial End</th>
                 <th className="px-6 py-4 font-black">Actions</th>
@@ -200,6 +201,27 @@ const AdminDashboard = () => {
                       <option value="standard">Standard</option>
                       <option value="white-label">White Label</option>
                     </select>
+                  </td>
+                  <td className="px-6 py-4">
+                    {(user.plan === 'professional' || user.plan === 'white-label') ? (
+                      <input
+                        key={`${user.id}-${user.seat_limit}`}
+                        type="number"
+                        min="1"
+                        defaultValue={user.seat_limit ?? ''}
+                        placeholder="Unlimited"
+                        disabled={updating === user.id}
+                        onBlur={(e) => {
+                          const val = e.target.value === '' ? null : Number(e.target.value);
+                          if (val !== user.seat_limit) {
+                            handleUpdateUser(user.id, { seat_limit: val });
+                          }
+                        }}
+                        className="w-20 bg-warm-50 border border-warm-200 rounded-lg px-2 py-1 text-sm font-bold text-brand-700 focus:ring-2 focus:ring-brand-400 outline-none"
+                      />
+                    ) : (
+                      <span className="text-warm-300 text-sm">—</span>
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex">
