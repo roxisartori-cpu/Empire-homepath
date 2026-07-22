@@ -564,6 +564,10 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12" stroke="currentColor" stroke-width="1.5"/></svg>
       Accounts
     </button>
+    <button class="nav-item" onclick="showSection('search',this)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Search
+    </button>
     <button class="nav-item" onclick="showSection('revenue',this)">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1 13L5 8l3 3 3-5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Revenue & Billing
@@ -818,6 +822,55 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- ══ SEARCH (Full Eligibility Search Tool) ══ -->
+    <div class="section" id="section-search">
+      <div class="section-header">
+        <div class="section-title">Program Search</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;">SAME ENGINE AS THE LIVE APP</div>
+      </div>
+      <div class="card" style="padding:24px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:20px;">
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">County</label>
+            <select id="searchCounty" class="filter-select" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">City / Town (optional)</label>
+            <input id="searchCity" type="text" class="search-input" style="width:100%;" placeholder="e.g. Warwick"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">Household Income</label>
+            <input id="searchIncome" type="number" class="search-input" style="width:100%;" placeholder="85000"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">Household Size</label>
+            <input id="searchHouseholdSize" type="number" class="search-input" style="width:100%;" placeholder="3" value="2"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">Purchase Price</label>
+            <input id="searchPurchasePrice" type="number" class="search-input" style="width:100%;" placeholder="300000"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">Property Type</label>
+            <select id="searchPropertyType" class="filter-select" style="width:100%;">
+              <option value="Single Family">Single Family</option>
+              <option value="2-4 Unit">2-4 Unit</option>
+              <option value="Condo">Condo</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:20px;font-size:13px;color:var(--body);">
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="searchFirstTime" checked/> First-Time Buyer</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="searchVeteran"/> Veteran</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="searchRenovation"/> Interested in Renovation</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="searchEnergy"/> Interested in Energy Efficiency</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="searchAccessibility"/> Interested in Accessibility</label>
+        </div>
+        <button class="btn-refresh" onclick="runAdminSearch()">🔍 Find Matching Programs</button>
+        <div id="searchResults" style="margin-top:24px;"></div>
       </div>
     </div>
 
@@ -1383,6 +1436,77 @@ async function updateAccount(userId, updates){
 function filterAccounts(query){
   const q = (query || '').toLowerCase().trim();
   renderAccounts(allAccounts.filter(u => u.email.toLowerCase().includes(q)));
+}
+
+// ══ SEARCH (Full Eligibility Search) ══
+const NY_COUNTIES = [
+  "Albany", "Allegany", "Bronx", "Broome", "Cattaraugus", "Cayuga", "Chautauqua", "Chemung", "Chenango", "Clinton",
+  "Columbia", "Cortland", "Delaware", "Dutchess", "Erie", "Essex", "Franklin", "Fulton", "Genesee", "Greene",
+  "Hamilton", "Herkimer", "Jefferson", "Kings", "Lewis", "Livingston", "Madison", "Monroe", "Montgomery", "Nassau",
+  "New York", "Niagara", "Oneida", "Onondaga", "Ontario", "Orange", "Orleans", "Oswego", "Otsego", "Putnam",
+  "Queens", "Rensselaer", "Richmond", "Rockland", "St. Lawrence", "Saratoga", "Schenectady", "Schoharie", "Schuyler", "Seneca",
+  "Steuben", "Suffolk", "Sullivan", "Tioga", "Tompkins", "Ulster", "Warren", "Washington", "Wayne", "Westchester",
+  "Wyoming", "Yates"
+];
+
+function populateSearchCounties(){
+  const sel = document.getElementById('searchCounty');
+  sel.innerHTML = NY_COUNTIES.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+populateSearchCounties();
+
+async function runAdminSearch(){
+  const resultsDiv = document.getElementById('searchResults');
+  resultsDiv.innerHTML = `<div class="empty-state"><div class="empty-state-text">Searching…</div></div>`;
+
+  const payload = {
+    county: document.getElementById('searchCounty').value,
+    city: document.getElementById('searchCity').value,
+    income: Number(document.getElementById('searchIncome').value) || 0,
+    householdSize: Number(document.getElementById('searchHouseholdSize').value) || 1,
+    purchasePrice: Number(document.getElementById('searchPurchasePrice').value) || 0,
+    propertyType: document.getElementById('searchPropertyType').value,
+    isFirstTimeBuyer: document.getElementById('searchFirstTime').checked,
+    isVeteran: document.getElementById('searchVeteran').checked,
+    isInterestedInRenovation: document.getElementById('searchRenovation').checked,
+    isInterestedInEnergy: document.getElementById('searchEnergy').checked,
+    isInterestedInAccessibility: document.getElementById('searchAccessibility').checked,
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/panel-search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Search failed');
+    const data = await res.json();
+    renderSearchResults(data.results || []);
+  } catch (err) {
+    resultsDiv.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">${err.message}</div></div>`;
+  }
+}
+
+function renderSearchResults(results){
+  const resultsDiv = document.getElementById('searchResults');
+  if (!results.length){
+    resultsDiv.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No matching programs found for these parameters.</div></div>`;
+    return;
+  }
+  resultsDiv.innerHTML = `<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">${results.length} matching program${results.length===1?'':'s'} found</div>` +
+    results.map(p => `
+      <div style="background:var(--ink-lift);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px;">
+          <div style="font-weight:700;color:var(--white);">${p.program_name}</div>
+          <span class="badge ${p.matchStrength==='Strong'?'badge-active':'badge-pastdue'}">${p.matchStrength} Match</span>
+        </div>
+        <div style="font-size:13px;color:var(--body);margin-bottom:8px;">${p.description || ''}</div>
+        <div style="display:flex;gap:16px;font-size:11px;color:var(--muted);flex-wrap:wrap;">
+          <span>Category: <strong style="color:var(--body);">${p.category || '—'}</strong></span>
+          <span>Counties: <strong style="color:var(--body);">${p.counties_served || '—'}</strong></span>
+          ${p.official_url ? `<a href="${p.official_url}" target="_blank" style="color:var(--gold);">View Official Page →</a>` : ''}
+        </div>
+      </div>`).join('');
 }
 
 loadStripeStats();

@@ -1,0 +1,250 @@
+[
+  {
+    "id": "sonyma-atd",
+    "category": "State",
+    "program_name": "SONYMA Achieving the Dream",
+    "description": "A low-interest mortgage program specifically designed for lower-income first-time homebuyers to make homeownership more affordable.",
+    "income_limits": {
+      "Westchester": {
+        "1-2_persons": 130000,
+        "3+_persons": 150000
+      },
+      "Dutchess": {
+        "1-2_persons": 98000,
+        "3+_persons": 112000
+      },
+      "Note": "Limits vary by county and family size. These are estimates based on 2024 data."
+    },
+    "purchase_price_limits": {
+      "Westchester": 800000,
+      "Dutchess": 500000,
+      "Note": "Limits vary by county and property type (1-unit vs 2-unit)."
+    },
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Move-in ready single-family homes, condos, co-ops, and 2-4 unit properties.",
+    "official_url": "https://hcr.ny.gov/achieving-dream-program",
+    "data_year": 2026
+  },
+  {
+    "id": "sonyma-dpal",
+    "category": "Down Payment Assistance",
+    "program_name": "SONYMA Down Payment Assistance Loan (DPAL)",
+    "description": "A second mortgage that can be used in conjunction with any SONYMA mortgage program to help with down payment and closing costs. It has no interest and no monthly payments, and is forgiven after 10 years.",
+    "income_limits": "Follows the income limits of the SONYMA mortgage program it is paired with.",
+    "purchase_price_limits": "Same as the SONYMA mortgage program being used.",
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Move-in ready properties eligible for SONYMA financing.",
+    "official_url": "https://hcr.ny.gov/down-payment-assistant-loan-dpal",
+    "program_type": "Down Payment Assistance",
+    "data_year": 2026
+  },
+  {
+    "id": "sonyma-remodel",
+    "category": "Renovation",
+    "program_name": "SONYMA RemodelNY",
+    "description": "Provides mortgage financing to purchase and renovate a one-family home or to refinance and renovate a one-family home. This program allows homebuyers to combine the purchase price and renovation costs into a single fixed-rate mortgage.",
+    "income_limits": "Follows standard SONYMA Low Interest Rate or Achieving the Dream limits depending on the borrower's eligibility.",
+    "purchase_price_limits": "Follows standard SONYMA purchase price limits.",
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Fixer-upper properties that need repair to meet standard living conditions.",
+    "official_url": "https://hcr.ny.gov/remodelny",
+    "program_type": "Renovation",
+    "data_year": 2026
+  },
+  {
+    "id": "chi-grant",
+    "category": "Regional",
+    "program_name": "Community Housing Innovations (CHI) Grant",
+    "description": "Provides grants to help with your down payment and fees for getting your keys to help bridge the affordability gap.",
+    "income_limits": {
+      "Westchester (80% AMI)": {
+        "1_person": 95200,
+        "2_persons": 108800,
+        "3_persons": 122400,
+        "4_persons": 136000
+      },
+      "Dutchess (80% AMI)": {
+        "1_person": 68900,
+        "2_persons": 78750,
+        "3_persons": 88600,
+        "4_persons": 98400
+      }
+    },
+    "purchase_price_limits": "Varies based on specific grant funding cycles; generally follows HUD or SONYMA guidelines.",
+    "counties_served": "Westchester, Nassau, Suffolk, and Dutchess counties",
+    "property_type_eligibility": "Single-family homes, townhouses, and condos.",
+    "official_url": "https://www.communityhousing.org/homeownership/",
+    "data_year": 2026
+  },
+  {
+    "id": "rupco-assistance",
+    "category": "Regional",
+    "program_name": "RUPCO First-Time Homebuyer Assistance",
+    "description": "Offers financial help and counseling for first-time homebuyers, specifically focusing on residents in Ulster County.",
+    "income_limits": "Generally 80% of your area's typical income (AMI) for Ulster County family sizes.",
+    "purchase_price_limits": "Aligned with Ulster County typical home prices and grant requirements.",
+    "counties_served": "Ulster County (primarily), with some programs extending to Sullivan and Orange counties.",
+    "property_type_eligibility": "Move-in ready single-family homes.",
+    "official_url": "https://rupco.org/first-time-home-buyers/",
+    "data_year": 2026
+  },
+  {
+    "id": "buffalo-dpa",
+    "category": "Municipal",
+    "program_name": "City of Buffalo Down Payment Assistance",
+    "description": "Provides zero-interest, forgivable loans to eligible first-time homebuyers for down payment and closing costs for homes within Buffalo city limits.",
+    "income_limits": "Varies by family size; generally 80% AMI for Erie County.",
+    "purchase_price_limits": "Must meet HUD's FHA mortgage limits for Erie County.",
+    "counties_served": "Erie (City of Buffalo only)",
+    "property_type_eligibility": "Single-family homes within city limits.",
+    "official_url": "https://www.buffalourbanrenewal.com/housing/",
+    "data_year": 2026
+  },
+  {
+    "id": "rochester-hba",
+    "category": "Municipal",
+    "program_name": "City of Rochester Homebuyer Assistance Program",
+    "description": "Provides grants to low-and-moderate income first-time homebuyers to assist with down payment and closing costs for properties in Rochester.",
+    "income_limits": "Up to 80% AMI for Monroe County.",
+    "purchase_price_limits": "Subject to HUD's HOME Program price limits.",
+    "counties_served": "Monroe (City of Rochester only)",
+    "property_type_eligibility": "Single-family homes, townhouses, and condos in the city.",
+    "official_url": "https://www.cityofrochester.gov/departments/neighborhood-and-business-development/home-purchase-assistance-program",
+    "data_year": 2026
+  },
+  {
+    "id": "albany-dpa",
+    "category": "Municipal",
+    "program_name": "City of Albany Down Payment Assistance",
+    "description": "Assistance for first-time homebuyers purchasing a home in the City of Albany. The program provides a grant to help with down payment and fees for getting your keys.",
+    "income_limits": "Based on 80% of Area Median Income for the Albany-Schenectady-Troy MSA.",
+    "purchase_price_limits": "Must not exceed HUD 203(b) mortgage limits for Albany County.",
+    "counties_served": "Albany (City of Albany only)",
+    "property_type_eligibility": "Single-family residential properties.",
+    "official_url": "https://www.albanyny.gov/748/Home-Improvement-Programs",
+    "data_year": 2026
+  },
+  {
+    "id": "sonyma-veterans",
+    "program_name": "SONYMA Homes for Veterans",
+    "program_type": "Veterans",
+    "description": "Offers fixed-rate mortgages with interest rates 0.375% lower than the standard SONYMA interest rates and no points or origination fees. Available to military veterans, active duty service members, and their spouses.",
+    "data_year": 2026,
+    "income_limits": "Follows standard SONYMA Low Interest Rate limits. Note: Military pay for active duty service members serving in a combat zone may be excluded.",
+    "purchase_price_limits": "Follows standard SONYMA purchase price limits.",
+    "official_url": "https://hcr.ny.gov/homes-veterans-program",
+    "counties_served": "All 62 counties in New York State",
+    "category": "State",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "nyserda-empower",
+    "program_name": "EmPower+ (NYSERDA)",
+    "program_type": "Energy Efficiency",
+    "description": "Provides no-cost energy efficiency improvements to low- and moderate-income households. Improvements may include insulation, air sealing, energy-efficient lighting, and health and safety measures.",
+    "data_year": 2026,
+    "income_limits": {
+      "Basis": "60% of State Median Income (SMI) for low-income; up to 80% AMI for moderate-income.",
+      "1_person": 39500,
+      "2_persons": 51000,
+      "3_persons": 63000,
+      "4_persons": 75000
+    },
+    "official_url": "https://www.nyserda.ny.gov/All-Programs/EmPower-New-York-Program",
+    "counties_served": "All 62 counties in New York State",
+    "category": "State",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "nyshcr-access-home",
+    "program_name": "Access to Home (NYSHCR)",
+    "program_type": "Accessibility",
+    "description": "Provides financial assistance to make residential units accessible for low- and moderate-income persons with disabilities. Grants are used for modifications such as ramps, lifts, and bathroom adaptations.",
+    "data_year": 2026,
+    "income_limits": "Up to 80% of Area Median Income (AMI).",
+    "official_url": "https://hcr.ny.gov/access-home",
+    "counties_served": "All 62 counties in New York State (via local nonprofit administrators)",
+    "category": "State",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "fha-203k",
+    "program_name": "FHA 203(k) Rehabilitation Mortgage",
+    "program_type": "Renovation",
+    "description": "HUD's primary program for the rehabilitation and repair of single-family properties. Allows homebuyers to finance both the purchase and the repair of a home with a single mortgage loan.",
+    "data_year": 2026,
+    "income_limits": "No income limits. Eligibility is based on standard FHA credit and debt-to-income requirements.",
+    "purchase_price_limits": "Limited by FHA county loan limits (varies by county, approx. $498,000 to $1,150,000 in NY).",
+    "official_url": "https://www.hud.gov/program_offices/housing/sfh/203k",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Federal",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "fannie-mae-resources",
+    "program_name": "Fannie Mae Homeownership & Rental Resources",
+    "program_type": "Resources & Education",
+    "description": "Comprehensive consumer portal providing resources, educational tools, and assistance options for homebuyers, homeowners, and renters. Covers mortgage products, foreclosure prevention, and rental assistance.",
+    "data_year": 2026,
+    "income_limits": "Varies by specific assistance program; general resources have no income limits.",
+    "official_url": "https://yourhome.fanniemae.com",
+    "counties_served": "All 62 counties in New York State",
+    "category": "Federal",
+    "purchase_price_limits": "Varies by specific product.",
+    "property_type_eligibility": "Includes single-family homes, condos, co-ops, and rental properties."
+  },
+  {
+    "id": "usda-502-direct",
+    "program_name": "USDA Section 502 Direct Home Loan",
+    "program_type": "Rural",
+    "description": "Provides payment assistance to low- and very-low-income applicants in eligible rural areas. The assistance reduces the mortgage payment to an effective interest rate as low as 1%.",
+    "data_year": 2026,
+    "income_limits": "Varies by county; typically 50% AMI (Very Low) to 80% AMI (Low).",
+    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-direct-home-loans/ny",
+    "counties_served": "Eligible rural areas in New York State (all counties except highly urbanized areas of NYC, Buffalo, etc.)",
+    "category": "Federal",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "usda-504-repair",
+    "program_name": "USDA Section 504 Home Repair Program",
+    "program_type": "Renovation",
+    "description": "Provides loans to very-low-income homeowners to repair, improve or modernize their homes or grants to elderly very-low-income homeowners to remove health and safety hazards.",
+    "data_year": 2026,
+    "income_limits": "Household income must be below 50% of the Area Median Income (Very Low).",
+    "official_url": "https://www.rd.usda.gov/programs-services/single-family-housing-programs/single-family-housing-repair-loans-grants-18",
+    "counties_served": "Eligible rural areas in New York State",
+    "category": "Federal",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "sonyma-nrp",
+    "program_name": "SONYMA Neighborhood Revitalization Program",
+    "program_type": "Special Occupation / Renovation",
+    "description": "Offers incentives for homebuyers purchasing homes in designated communities, including up to $20,000 for renovations. Provides lower interest rates and down payment assistance. This program is particularly beneficial for 'Next Step' borrowers and those in special occupations such as teachers, police officers, firefighters, and EMS personnel.",
+    "data_year": 2026,
+    "income_limits": "Follows standard SONYMA limits (Low Interest Rate or ATD).",
+    "official_url": "https://hcr.ny.gov/neighborhood-revitalization-program",
+    "counties_served": "Designated communities in Albany, Clinton, Dutchess, Erie, Monroe, Montgomery, Nassau, Niagara, Oneida, Onondaga, Orange, Rensselaer, Schenectady, Suffolk, and Westchester.",
+    "category": "State",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  },
+  {
+    "id": "nys-home-cdbg",
+    "program_name": "Local HOME/CDBG Down Payment Assistance",
+    "program_type": "Municipal / Federal",
+    "description": "Federally funded programs (HOME Investment Partnerships and Community Development Block Grants) administered by local counties and municipalities. Typically provides $5,000 to $20,000 in deferred-payment loans for down payment and closing costs.",
+    "data_year": 2026,
+    "income_limits": "Usually capped at 80% of Area Median Income (AMI).",
+    "official_url": "Contact local county housing office (e.g., Erie County, Monroe County, Westchester County).",
+    "counties_served": "Many counties and larger 'Entitlement' cities across New York State.",
+    "category": "Municipal / Federal",
+    "purchase_price_limits": "Varies by county and property type.",
+    "property_type_eligibility": "See program guidelines."
+  }
+]

@@ -30,7 +30,7 @@ export const matchPrograms = (programs, userData) => {
       if (!servedStr.includes(userCounty)) {
         // Special case for CHI and RUPCO
         if (name.includes("community housing innovations") || name.includes("chi grant")) {
-           const chiCounties = ["westchester", "dutchess", "nassau", "suffolk", "orange", "putnam", "rockland", "sullivan", "ulster"];
+           const chiCounties = ["westchester", "dutchess", "nassau", "suffolk"];
            if (!chiCounties.includes(userCounty)) score -= 100;
         } else if (name.includes("rupco")) {
            const rupcoCounties = ["ulster", "sullivan", "orange"];

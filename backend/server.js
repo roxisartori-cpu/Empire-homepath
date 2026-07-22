@@ -7,6 +7,13 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Stripe from 'stripe';
 import { authenticateToken } from './middleware.js';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { matchPrograms } from './matching.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const programsData = JSON.parse(readFileSync(path.join(__dirname, 'programs-data.json'), 'utf-8'));
 
 const client = createClient({
   url: process.env.TURSO_URL || process.env.TEAM_DB_URL || 'libsql://agent-team-5cbc01a6-cto.aws-us-west-2.turso.io',
@@ -317,6 +324,18 @@ function monthlyAmountCents(sub) {
 }
 
 // Admin Stripe stats — mounted directly on the main server so Render always picks it up
+app.post('/api/admin/panel-search', (req, res) => {
+  if (req.headers['x-admin-key'] !== process.env.ADMIN_SECRET_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    const results = matchPrograms(programsData, req.body);
+    res.json({ results });
+  } catch (err) {
+    res.status(500).json({ error: 'Search failed', details: err.message });
+  }
+});
+
 app.get('/api/admin/panel-users', async (req, res) => {
   if (req.headers['x-admin-key'] !== process.env.ADMIN_SECRET_KEY) {
     return res.status(401).json({ error: 'Unauthorized' });
