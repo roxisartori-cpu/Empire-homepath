@@ -1381,7 +1381,7 @@ async function loadAccounts(){
     allAccounts = await res.json();
     renderAccounts(allAccounts);
   } catch (err) {
-    docntById('accountTableBody').innerHTML =
+    document.getElementById('accountTableBody').innerHTML =
       `<tr><td colspan="5"><div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Could not load accounts: ${err.message}</div></div></td></tr>`;
   }
 }
