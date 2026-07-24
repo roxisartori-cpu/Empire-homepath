@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/app", "destination": "/index.html" },
     { "source": "/app/(.*)", "destination": "/index.html" },
+    { "source": "/accept-invite", "destination": "/index.html" },
     { "source": "/demo", "destination": "/empirehomepath-demo.html" },
     { "source": "/search", "destination": "/empirehomepath-search.html" },
     { "source": "/privacy", "destination": "/empirehomepath-privacy.html" },
