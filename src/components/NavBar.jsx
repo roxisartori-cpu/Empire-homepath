@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, LogOut, User, Palette, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, User, Palette, LayoutDashboard, Users } from 'lucide-react';
 
 const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,6 +36,14 @@ const NavBar = ({ user, onLogout, onViewChange, currentView }) => {
             className={`app-nav-btn ${currentView === 'branding' ? 'is-active' : ''}`}
           >
             <Palette size={14} /> Branding
+          </button>
+        )}
+        {(user?.plan === 'professional' || user?.plan === 'white-label') && !user?.team_owner_id && (
+          <button
+            onClick={() => onViewChange(currentView === 'team' ? 'app' : 'team')}
+            className={`app-nav-btn ${currentView === 'team' ? 'is-active' : ''}`}
+          >
+            <Users size={14} /> Team
           </button>
         )}
         <a href="#glossary" className="app-nav-link">Glossary</a>

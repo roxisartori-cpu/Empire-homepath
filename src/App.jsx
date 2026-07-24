@@ -16,6 +16,8 @@ import AdminDashboard from './components/AdminDashboard';
 import WhiteLabelSettings from './components/WhiteLabelSettings';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PdfReport from './components/report/PdfReport';
+import TeamManagement from './components/TeamManagement';
+import AcceptInvite from './pages/AcceptInvite';
 import WidgetEmbed from './pages/WidgetEmbed';
 import { STATIC_ROUTE_PATHS } from './pages/StaticPagesLayout';
 import HomePage from './pages/static/HomePage';
@@ -267,6 +269,7 @@ function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/report" element={<PdfReport />} />
+          <Route path="/accept-invite" element={<AcceptInvite onAuthSuccess={handleAuthSuccess} />} />
           <Route path="/widget/embed" element={<WidgetEmbed />} />
           <Route path="/app" element={
             <div className="app-shell">
@@ -282,6 +285,8 @@ function App() {
                     <AdminDashboard />
                   ) : currentView === 'branding' && user?.plan === 'white-label' ? (
                     <WhiteLabelSettings user={user} onUpdateUser={setUser} />
+                  ) : currentView === 'team' && (user?.plan === 'professional' || user?.plan === 'white-label') && !user?.team_owner_id ? (
+                    <TeamManagement user={user} />
                   ) : currentView === 'dashboard' ? (
                     <ProfessionalDashboard user={user} />
                   ) : (

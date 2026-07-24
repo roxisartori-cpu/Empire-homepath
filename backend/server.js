@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Stripe from 'stripe';
+import { Resend } from 'resend';
 import { authenticateToken } from './middleware.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -45,6 +46,9 @@ if (!stripeSecretKey) {
 }
 
 const stripe = new Stripe(stripeSecretKey || 'sk_test_placeholder');
+const resend = new Resend(process.env.RESEND_API_KEY);
+const INVITE_FROM_EMAIL = 'Empire HomePath <invites@mail.empirehomepath.com>';
+const APP_URL = process.env.APP_URL || 'https://empirehomepath.com';
 
 console.log(
   `[Stripe] Running in ${STRIPE_MODE.toUpperCase()} mode. ` +
@@ -591,6 +595,158 @@ app.post('/api/login', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: 'Login failed', details: err.message });
+  }
+});
+
+// --- Team / Seats ---
+
+function seatLimitFor(ownerRow) {
+  if (ownerRow.plan === 'professional') return 4;
+  if (ownerRow.plan === 'white-label') return ownerRow.seat_limit;
+  return 0;
+}
+
+app.post('/api/team/invite', authenticateToken, async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email is required' });
+  const cleanEmail = email.trim().toLowerCase();
+
+  try {
+    const ownerRows = await runDb(
+      'SELECT id, email, plan, subscription_status, team_owner_id, seat_limit, white_label_settings FROM users WHERE id = ?',
+      [req.user.id]
+    );
+    const owner = ownerRows[0];
+    if (!owner) return res.status(404).json({ error: 'Account not found' });
+
+    if (owner.team_owner_id) {
+      return res.status(403).json({ error: 'Only the account owner can invite teammates, not another team member.' });
+    }
+    if (owner.subscription_status !== 'active' || (owner.plan !== 'professional' && owner.plan !== 'white-label')) {
+      return res.status(403).json({ error: 'An active Professional or Custom plan is required to invite teammates.' });
+    }
+
+    const limit = seatLimitFor(owner);
+    if (limit === 0) {
+      return res.status(403).json({ error: 'Your plan does not include team seats.' });
+    }
+    if (limit !== null && limit !== undefined) {
+      const countRows = await runDb('SELECT COUNT(*) as cnt FROM users WHERE team_owner_id = ?', [owner.id]);
+      const currentCount = countRows[0]?.cnt ?? 0;
+      if (currentCount >= limit) {
+        return res.status(403).json({ error: `You've reached your seat limit (${limit}). Remove a teammate first, or contact us to add more seats.` });
+      }
+    }
+
+    const existing = await findUserByEmail(cleanEmail);
+    if (existing) {
+      return res.status(400).json({ error: 'That email is already registered on Empire HomePath.' });
+    }
+
+    const id = crypto.randomUUID();
+    const inviteToken = crypto.randomUUID();
+    const placeholderHash = await bcrypt.hash(crypto.randomUUID(), 10);
+
+    await runDb(
+      'INSERT INTO users (id, email, password_hash, created_at, role, team_owner_id, invite_token) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [id, cleanEmail, placeholderHash, new Date().toISOString(), 'user', owner.id, inviteToken]
+    );
+
+    const branding = owner.white_label_settings
+      ? (typeof owner.white_label_settings === 'string' ? JSON.parse(owner.white_label_settings) : owner.white_label_settings)
+      : null;
+    const companyName = branding?.companyName || 'Empire HomePath';
+    const primaryColor = branding?.primaryColor || '#0A1628';
+    const inviteLink = `${APP_URL}/accept-invite?token=${inviteToken}`;
+
+    try {
+      await resend.emails.send({
+        from: INVITE_FROM_EMAIL,
+        to: cleanEmail,
+        subject: `You've been invited to join ${companyName} on Empire HomePath`,
+        html: `
+          <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;">
+            <div style="background:${primaryColor};padding:20px;border-radius:12px 12px 0 0;text-align:center;">
+              <h1 style="color:#fff;font-size:18px;margin:0;">${companyName}</h1>
+            </div>
+            <div style="border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;padding:24px;">
+              <p style="font-size:15px;color:#333;">You've been invited to join <strong>${companyName}</strong> on Empire HomePath — the platform for finding homebuyer assistance programs across New York.</p>
+              <p style="text-align:center;margin:28px 0;">
+                <a href="${inviteLink}" style="background:${primaryColor};color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Accept Invite &amp; Set Password</a>
+              </p>
+              <p style="font-size:12px;color:#999;">If you weren't expecting this invite, you can safely ignore this email.</p>
+            </div>
+          </div>
+        `,
+      });
+    } catch (emailErr) {
+      console.error('Failed to send invite email:', emailErr.message);
+      return res.json({ success: true, emailSent: false, inviteLink });
+    }
+
+    res.json({ success: true, emailSent: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to send invite', details: err.message });
+  }
+});
+
+app.post('/api/team/accept-invite', async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !password) return res.status(400).json({ error: 'Token and password are required' });
+
+  try {
+    const rows = await runDb('SELECT id, email FROM users WHERE invite_token = ?', [token]);
+    if (rows.length === 0) {
+      return res.status(400).json({ error: 'This invite link is invalid or has already been used.' });
+    }
+    const user = rows[0];
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    await runDb('UPDATE users SET password_hash = ?, invite_token = NULL WHERE id = ?', [passwordHash, user.id]);
+
+    const jwtToken = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token: jwtToken, user: { id: user.id, email: user.email } });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to accept invite', details: err.message });
+  }
+});
+
+app.get('/api/team/members', authenticateToken, async (req, res) => {
+  try {
+    const ownerRows = await runDb('SELECT id, plan, seat_limit FROM users WHERE id = ?', [req.user.id]);
+    const owner = ownerRows[0];
+    if (!owner) return res.status(404).json({ error: 'Account not found' });
+
+    const members = await runDb(
+      'SELECT id, email, created_at, invite_token FROM users WHERE team_owner_id = ?',
+      [owner.id]
+    );
+    const limit = seatLimitFor(owner);
+
+    res.json({
+      members: members.map(m => ({ ...m, status: m.invite_token ? 'pending' : 'active' })),
+      seatLimit: limit,
+      seatsUsed: members.length,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch team members', details: err.message });
+  }
+});
+
+app.delete('/api/team/members/:id', authenticateToken, async (req, res) => {
+  try {
+    const memberRows = await runDb('SELECT id, team_owner_id FROM users WHERE id = ?', [req.params.id]);
+    const member = memberRows[0];
+    if (!member || member.team_owner_id !== req.user.id) {
+      return res.status(403).json({ error: 'You can only remove members of your own team.' });
+    }
+    await runDb(
+      "UPDATE users SET team_owner_id = NULL, plan = 'free', subscription_status = NULL WHERE id = ?",
+      [req.params.id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to remove team member', details: err.message });
   }
 });
 
