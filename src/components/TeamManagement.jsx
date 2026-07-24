@@ -36,19 +36,26 @@ const TeamManagement = ({ user }) => {
 
   const handleInvite = async (e) => {
     e.preventDefault();
-    setInviting(true);
     setMessage(null);
+
+    const cleanEmail = inviteEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setMessage({ type: 'error', text: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setInviting(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/team/invite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ email: inviteEmail }),
+        body: JSON.stringify({ email: cleanEmail }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to send invite');
 
       if (data.emailSent) {
-        setMessage({ type: 'success', text: `Invite sent to ${inviteEmail}.` });
+        setMessage({ type: 'success', text: `Invite sent to ${cleanEmail}.` });
       } else {
         setMessage({ type: 'warning', text: `Account created, but the invite email failed to send. Share this link directly: ${data.inviteLink}` });
       }
@@ -95,7 +102,7 @@ const TeamManagement = ({ user }) => {
         <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--white)', marginBottom: '16px' }}>Invite a Teammate</h3>
         <form onSubmit={handleInvite} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <input
-            type="email"
+            type="text"
             required
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
@@ -131,7 +138,7 @@ const TeamManagement = ({ user }) => {
         {loading ? (
           <p style={{ color: 'var(--muted)', fontSize: '13px' }}>Loading...</p>
         ) : members.length === 0 ? (
-          <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No teammates yet \u2014 invite your first one above.</p>
+          <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No teammates yet — invite your first one above.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {members.map((m) => (
