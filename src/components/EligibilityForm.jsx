@@ -10,6 +10,22 @@ const EligibilityForm = ({ formData, handleInputChange, handleSubmit, isSearchin
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '28px' }}>We'll match you with programs you may qualify for.</p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* ZIP Code (auto-fills county/city) */}
+            <div className="field-group">
+              <label htmlFor="zip" className="field-label">ZIP Code (optional, auto-fills county/city)</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                id="zip"
+                name="zip"
+                value={formData.zip}
+                onChange={handleInputChange}
+                placeholder="e.g. 10801"
+                className="field-input"
+                maxLength={5}
+              />
+            </div>
+
             {/* County */}
             <div className="form-row">
               <div className="field-group">

@@ -834,6 +834,10 @@ body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);-we
       <div class="card" style="padding:24px;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:20px;">
           <div>
+            <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">ZIP Code (auto-fills county/city)</label>
+            <input id="searchZip" type="text" inputmode="numeric" maxlength="5" class="search-input" style="width:100%;" placeholder="e.g. 10801" oninput="handleAdminZipInput(this.value)"/>
+          </div>
+          <div>
             <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;">County</label>
             <select id="searchCounty" class="filter-select" style="width:100%;"></select>
           </div>
@@ -1454,6 +1458,27 @@ function populateSearchCounties(){
   sel.innerHTML = NY_COUNTIES.map(c => `<option value="${c}">${c}</option>`).join('');
 }
 populateSearchCounties();
+
+let nyZipLookup = null;
+async function loadZipLookup(){
+  try {
+    const res = await fetch('/ny-zip-lookup.json');
+    nyZipLookup = await res.json();
+  } catch (err) {
+    console.error('Failed to load ZIP lookup:', err);
+  }
+}
+loadZipLookup();
+
+function handleAdminZipInput(rawValue){
+  const cleanZip = rawValue.replace(/\D/g, '').slice(0, 5);
+  document.getElementById('searchZip').value = cleanZip;
+  if (cleanZip.length === 5 && nyZipLookup && nyZipLookup[cleanZip]) {
+    const match = nyZipLookup[cleanZip];
+    document.getElementById('searchCounty').value = match.county;
+    document.getElementById('searchCity').value = match.city;
+  }
+}
 
 async function runAdminSearch(){
   const resultsDiv = document.getElementById('searchResults');

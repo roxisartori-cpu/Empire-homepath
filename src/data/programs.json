@@ -258,5 +258,41 @@
     "property_type_eligibility": "Owner-occupied primary residence; first-time homebuyers only.",
     "official_url": "https://www.homehq.org/homebuyer-lending",
     "data_year": 2026
+  },
+  {
+    "id": "habitat-nys",
+    "category": "Nonprofit",
+    "program_name": "Habitat for Humanity of New York State",
+    "description": "A statewide network of 30 local Habitat affiliates helping income-eligible families become homeowners through affordable, sweat-equity-built or renovated homes. Not a cash grant \u2014 buyers invest hundreds of hours of their own labor alongside volunteers, and homes are sold to them at an affordable rate with an affordable mortgage.",
+    "income_limits": "Varies by local affiliate; generally targets low-to-moderate income households below area median income.",
+    "purchase_price_limits": "Not applicable \u2014 Habitat builds or renovates the home itself at an affordable price point.",
+    "counties_served": "All 62 counties in New York State",
+    "property_type_eligibility": "Single-family homes built or renovated by the local Habitat affiliate.",
+    "official_url": "https://habitatnys.org/find-your-local-affiliate/",
+    "data_year": 2026
+  },
+  {
+    "id": "westchester-homeownership",
+    "category": "Municipal",
+    "program_name": "Westchester County Home Ownership Initiative",
+    "description": "Westchester County's own down payment and closing cost assistance program, providing up to $25,000 to income-eligible first-time homebuyers purchasing a house, condominium, or co-op in the county.",
+    "income_limits": "Income-eligible first-time homebuyers; specific limits set annually by Westchester County.",
+    "purchase_price_limits": "Varies by purchase type (house, condo, co-op); confirm current limits with the county.",
+    "counties_served": "Westchester",
+    "property_type_eligibility": "Single-family homes, condominiums, and co-ops.",
+    "official_url": "https://homes.westchestercountyny.gov/down-payment-and-closing-cost-assistance",
+    "data_year": 2026
+  },
+  {
+    "id": "new-rochelle-dpap",
+    "category": "Municipal",
+    "program_name": "City of New Rochelle Down Payment Assistance Program (DPAP)",
+    "description": "A forgivable, zero-interest second mortgage covering up to 19% of a home's purchase price for eligible first-time homebuyers. Fully forgiven after 5 years of owner-occupancy. As of May 2026, eligibility expanded beyond current residents to also include people who work full-time in New Rochelle, business owners based in the city, and former residents who lived there at least 2 years.",
+    "income_limits": "Household income at or below 80% of Area Median Income (AMI) for Westchester County.",
+    "purchase_price_limits": "Purchase price limits apply per HUD guidelines; confirm current limit with Westchester Residential Opportunities (WRO), the program administrator.",
+    "counties_served": "Westchester (City of New Rochelle only)",
+    "property_type_eligibility": "Owner-occupied single-family homes within New Rochelle city limits.",
+    "official_url": "https://www.newrochelleny.gov/1006/Down-Payment-Assistance-Program",
+    "data_year": 2026
   }
 ]

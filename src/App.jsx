@@ -27,6 +27,7 @@ import DisclaimerPage from './pages/static/DisclaimerPage';
 
 import { matchPrograms } from './matching';
 import programsData from './data/programs.json';
+import nyZipLookup from './data/ny-zip-lookup.json';
 
 const STATIC_ROUTES = STATIC_ROUTE_PATHS;
 
@@ -53,6 +54,7 @@ function App() {
   }, [user]);
 
   const [formData, setFormData] = useState({
+    zip: '',
     county: '',
     city: '',
     income: '',
@@ -191,6 +193,18 @@ function App() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (name === 'zip') {
+      const cleanZip = value.replace(/\D/g, '').slice(0, 5);
+      const match = cleanZip.length === 5 ? nyZipLookup[cleanZip] : null;
+      setFormData(prev => ({
+        ...prev,
+        zip: cleanZip,
+        ...(match ? { county: match.county, city: match.city } : {}),
+      }));
+      return;
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : (name === 'income' || name === 'purchasePrice' || name === 'householdSize' ? (value === '' ? '' : Number(value)) : value)
